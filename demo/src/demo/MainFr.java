@@ -34,7 +34,11 @@ public class MainFr extends javax.swing.JFrame {
         jTable1 = new javax.swing.JTable();
         MENU = new javax.swing.JTabbedPane();
         sanpham = new javax.swing.JPanel();
+        jSplitPane2 = new javax.swing.JSplitPane();
+        jPanel2 = new javax.swing.JPanel();
+        jScrollPane3 = new javax.swing.JScrollPane();
         donhang = new javax.swing.JPanel();
+        jSplitPane1 = new javax.swing.JSplitPane();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable2 = new javax.swing.JTable();
         thongke = new javax.swing.JPanel();
@@ -61,15 +65,29 @@ public class MainFr extends javax.swing.JFrame {
 
         sanpham.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1137, Short.MAX_VALUE)
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 638, Short.MAX_VALUE)
+        );
+
+        jSplitPane2.setRightComponent(jPanel2);
+        jSplitPane2.setLeftComponent(jScrollPane3);
+
         javax.swing.GroupLayout sanphamLayout = new javax.swing.GroupLayout(sanpham);
         sanpham.setLayout(sanphamLayout);
         sanphamLayout.setHorizontalGroup(
             sanphamLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1171, Short.MAX_VALUE)
+            .addComponent(jSplitPane2, javax.swing.GroupLayout.Alignment.TRAILING)
         );
         sanphamLayout.setVerticalGroup(
             sanphamLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 640, Short.MAX_VALUE)
+            .addComponent(jSplitPane2, javax.swing.GroupLayout.Alignment.TRAILING)
         );
 
         MENU.addTab("SẢN PHÂM", sanpham);
@@ -87,15 +105,17 @@ public class MainFr extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(jTable2);
 
+        jSplitPane1.setLeftComponent(jScrollPane1);
+
         javax.swing.GroupLayout donhangLayout = new javax.swing.GroupLayout(donhang);
         donhang.setLayout(donhangLayout);
         donhangLayout.setHorizontalGroup(
             donhangLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1171, Short.MAX_VALUE)
+            .addComponent(jSplitPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1171, Short.MAX_VALUE)
         );
         donhangLayout.setVerticalGroup(
             donhangLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 640, Short.MAX_VALUE)
+            .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 640, Short.MAX_VALUE)
         );
 
         MENU.addTab("ĐƠN HÀNG", donhang);
@@ -159,8 +179,12 @@ public class MainFr extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JSplitPane jSplitPane1;
+    private javax.swing.JSplitPane jSplitPane2;
     private javax.swing.JTable jTable1;
     private javax.swing.JTable jTable2;
     private javax.swing.JPanel sanpham;
