@@ -5,6 +5,7 @@
  */
 package demo;
 
+
 /**
  *
  * @author DELL
@@ -73,6 +74,8 @@ public class passwordFr extends javax.swing.JFrame {
         MainFr mfr = new MainFr();
         mfr.setVisible(true);
         mfr.RefreshTables();
+        mfr.RefreshProList();
+        //System.out.print();
         dispose();
     }//GEN-LAST:event_LoginBtnActionPerformed
 
