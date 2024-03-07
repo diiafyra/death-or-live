@@ -259,7 +259,7 @@ public class product extends javax.swing.JFrame {
                 return false;
             }
         }
-    }            
+    }     
         // Lớp xử lý sự kiện để paste hình ảnh từ Clipboard
         private void pasteImageFromClipboard() {
         try {
@@ -298,10 +298,8 @@ public class product extends javax.swing.JFrame {
         
         String dateFormatString = "dd/MM/yyyy";
 
-        // Create a SimpleDateFormat object with the desired format
         SimpleDateFormat dateFormat = new SimpleDateFormat(dateFormatString);
 
-        // Get the text from the JTextField
         String dateString = ngaynhapF.getText();
 
 

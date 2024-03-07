@@ -26,41 +26,20 @@ public class MainFr extends javax.swing.JFrame {
     private MainFr() {
         initComponents();
     }
-    public void RefreshTables() {
-        cndb db =  cndb.getInstance();
-        db.open();
-        jTable2.setModel(db.allOrdersT());
-        //tbl_order.setModel(db.allOrder());
-        db.close();
-    }
-        public static MainFr getInstance() {
+
+    public static MainFr getInstance() {
         if (instance == null) {
             instance = new MainFr();
         }
         return instance;
     }
-    
-        public class proPanel extends JPanel{
-        public proPanel(byte[] imageData, String name, int price, int instock){
-            setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-            setPreferredSize(new Dimension(300, 400));
-            
-            ImageIcon image = new ImageIcon(imageData);
-            JLabel imageLb = new JLabel(image);
-            imageLb.setPreferredSize(new Dimension(200, 200));
-            add(imageLb);
-            
-            JLabel nameLb = new JLabel(name);
-            JLabel priceLb = new JLabel(String.valueOf(price));
-            JLabel instockLb = new JLabel(String.valueOf(instock));
-            //JLabel chỉ nhận giá trị đối chiếu là String
-            add(nameLb);
-            add(priceLb);
-            add(instockLb);
-        }
-        
-    }
-        
+
+     public void RefreshTables() {
+        cndb db =  cndb.getInstance();
+        db.open();
+        jTable2.setModel(db.allOrdersT());
+        db.close();
+    }       
     public void RefreshProList() {
         //cần phải sửa jPanel1 sang layout grid hoặc flow hoặc box thì mới add được, poe muôn năm :)))
         cndb db =  cndb.getInstance();
@@ -146,13 +125,13 @@ public class MainFr extends javax.swing.JFrame {
         sanpham.setLayout(sanphamLayout);
         sanphamLayout.setHorizontalGroup(
             sanphamLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 908, Short.MAX_VALUE)
+            .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, 708, Short.MAX_VALUE)
+            .addComponent(jScrollPane2)
         );
         sanphamLayout.setVerticalGroup(
             sanphamLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(sanphamLayout.createSequentialGroup()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 532, Short.MAX_VALUE)
+                .addComponent(jScrollPane2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -178,11 +157,11 @@ public class MainFr extends javax.swing.JFrame {
         donhang.setLayout(donhangLayout);
         donhangLayout.setHorizontalGroup(
             donhangLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSplitPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 908, Short.MAX_VALUE)
+            .addComponent(jSplitPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 708, Short.MAX_VALUE)
         );
         donhangLayout.setVerticalGroup(
             donhangLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 582, Short.MAX_VALUE)
+            .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 525, Short.MAX_VALUE)
         );
 
         MENU.addTab("ĐƠN HÀNG", donhang);
@@ -191,11 +170,11 @@ public class MainFr extends javax.swing.JFrame {
         thongke.setLayout(thongkeLayout);
         thongkeLayout.setHorizontalGroup(
             thongkeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 908, Short.MAX_VALUE)
+            .addGap(0, 708, Short.MAX_VALUE)
         );
         thongkeLayout.setVerticalGroup(
             thongkeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 582, Short.MAX_VALUE)
+            .addGap(0, 525, Short.MAX_VALUE)
         );
 
         MENU.addTab("THỐNG KÊ", thongke);
