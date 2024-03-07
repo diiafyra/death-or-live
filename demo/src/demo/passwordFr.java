@@ -71,11 +71,10 @@ public class passwordFr extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void LoginBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LoginBtnActionPerformed
-        MainFr mfr = new MainFr();
+        MainFr mfr = MainFr.getInstance();
         mfr.setVisible(true);
         mfr.RefreshTables();
         mfr.RefreshProList();
-        //System.out.print();
         dispose();
     }//GEN-LAST:event_LoginBtnActionPerformed
 

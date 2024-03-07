@@ -22,7 +22,8 @@ public class MainFr extends javax.swing.JFrame {
     /**
      * Creates new form MainFr
      */
-    public MainFr() {
+    private static MainFr instance;
+    private MainFr() {
         initComponents();
     }
     public void RefreshTables() {
@@ -31,6 +32,12 @@ public class MainFr extends javax.swing.JFrame {
         jTable2.setModel(db.allOrdersT());
         //tbl_order.setModel(db.allOrder());
         db.close();
+    }
+        public static MainFr getInstance() {
+        if (instance == null) {
+            instance = new MainFr();
+        }
+        return instance;
     }
     
         public class proPanel extends JPanel{
@@ -86,6 +93,7 @@ public class MainFr extends javax.swing.JFrame {
         jToolBar1 = new javax.swing.JToolBar();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         jPanel1 = new javax.swing.JPanel();
         donhang = new javax.swing.JPanel();
@@ -123,9 +131,15 @@ public class MainFr extends javax.swing.JFrame {
         jButton2.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         jToolBar1.add(jButton2);
 
+        jButton3.setText("Chỉnh sửa");
+        jButton3.setFocusable(false);
+        jButton3.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButton3.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(jButton3);
+
         jScrollPane2.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
-        jPanel1.setLayout(new java.awt.GridLayout());
+        jPanel1.setLayout(new java.awt.GridLayout(0, 3));
         jScrollPane2.setViewportView(jPanel1);
 
         javax.swing.GroupLayout sanphamLayout = new javax.swing.GroupLayout(sanpham);
@@ -219,7 +233,6 @@ public class MainFr extends javax.swing.JFrame {
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
             try {
         UIManager.setLookAndFeel(new FlatLightLaf());
         } catch (Exception ex) {
@@ -229,6 +242,7 @@ public class MainFr extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new MainFr().setVisible(true);
+
                 
             }
         });
@@ -239,6 +253,7 @@ public class MainFr extends javax.swing.JFrame {
     private javax.swing.JPanel donhang;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;

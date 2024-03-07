@@ -5,8 +5,14 @@
  */
 package demo;
 
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -20,6 +26,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -34,10 +41,10 @@ public class cndb {
         private String desc;
         private byte[] image;
         private int price;
-        private String date;
+        private Date date;
         private String depot;
 
-        public product(String id, String name, int instock, String desc, byte[] image, int price, String date, String depot) {
+        public product(String id, String name, int instock, String desc, byte[] image, int price, Date date, String depot) {
             this.id = id;
             this.name = name;
             this.instock = instock;
@@ -72,7 +79,7 @@ public class cndb {
             return price;
         }
 
-        public String getDate() {
+        public Date getDate() {
             return date;
         }
 
@@ -104,7 +111,7 @@ public class cndb {
             this.price = price;
         }
 
-        public void setDate(String date) {
+        public void setDate(Date date) {
             this.date = date;
         }
 
@@ -211,10 +218,10 @@ public class cndb {
     
     
     //phương thức thêm sản phẩm vào database
-        public int customerInsert(String id, String name, int instock , String desc, byte[] image, int price){
+        public int productInsert(String id, String name, int instock , String desc, byte[] image, int price, String depot, Date date){
         int status = 0;
         try {
-            String sql = "Insert Into products(ID_PRO, NAME_PRO, INSTOCK,DESC,IMAGE,PRICE) values(?, ?, ?, ?, ?, ?)";
+            String sql = "Insert Into products(ID_PRO, NAME_PRO, INSTOCK,DESC,IMAGE,PRICE, depot, date) values(?, ?, ?, ?, ?, ?, ?, ?)";
             pre = conn.prepareStatement(sql);
             pre.setString(1, id);
             pre.setString(2, name);
@@ -222,6 +229,9 @@ public class cndb {
             pre.setString(4, desc);
             pre.setBytes(5, image);
             pre.setInt(6, price);
+            pre.setString(7, depot);
+             
+            pre.setDate(8, date);
             status = pre.executeUpdate();
         } catch (Exception e) {
             System.err.println("customerInsert Error : " + e);
@@ -254,7 +264,7 @@ public class cndb {
                 String desc = rlt.getString("DESC");
                 byte[] image = rlt.getBytes("image");//getByte và getBytes
                 int price = rlt.getInt("price");
-                String date = rlt.getString("date");
+                Date date = rlt.getDate("date");
                 String depot = rlt.getString("depot");
                 product pro = new product(id, name, instock, desc, image, price, date, depot);
                 proList.add(pro);
@@ -264,28 +274,65 @@ public class cndb {
         }
         return proList;
     }
-    
+
     //tạo 1 panel chứa mỗi sản phẩm để gọi giống row defautltablemodel
-    public class proPanel extends JPanel{
-        public proPanel(byte[] imageData, String name, int price, int instock){
-            setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-            setPreferredSize(new Dimension(300, 400));
-            
-            ImageIcon image = new ImageIcon(imageData);
-            JLabel imageLb = new JLabel(image);
-            imageLb.setPreferredSize(new Dimension(200, 200));
-            add(imageLb);
-            
-            JLabel nameLb = new JLabel(name);
-            JLabel priceLb = new JLabel(String.valueOf(price));
-            JLabel instockLb = new JLabel(String.valueOf(instock));
-            //JLabel chỉ nhận giá trị đối chiếu là String
-            add(nameLb);
-            add(priceLb);
-            add(instockLb);
-        }
-        
+
+public class proPanel extends JPanel {
+    private boolean isHighlighted = false;
+
+    public proPanel(byte[] imageData, String name, int price, int instock) {
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        setPreferredSize(new Dimension(250, 300));
+
+        // Sự kiện khi di chuột vào panel
+        addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                setHighlighted(true); // Đánh dấu panel được sáng lên
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                setHighlighted(false); // Đánh dấu panel không được sáng lên
+            }
+        });
+
+        ImageIcon image = new ImageIcon(imageData);
+        JLabel imageLb = new JLabel(image);
+        imageLb.setPreferredSize(new Dimension(200, 200));
+        imageLb.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        add(imageLb);
+
+        JLabel nameLb = new JLabel(name);
+        nameLb.setAlignmentX(Component.CENTER_ALIGNMENT); // Căn giữa theo chiều ngang
+        JLabel priceLb = new JLabel(String.valueOf(price)); // JLabel chỉ nhận giá trị đối chiếu là String
+        priceLb.setAlignmentX(Component.CENTER_ALIGNMENT);
+        JLabel instockLb = new JLabel(String.valueOf(instock));
+        instockLb.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        add(nameLb);
+        add(priceLb);
+        add(instockLb);
     }
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        if (isHighlighted) {
+            // Vẽ một màu nền mờ lên panel khi được sáng lên
+            g.setColor(new Color(255, 255, 255, 100)); // Màu trắng với độ trong suốt 100
+            g.fillRect(0, 0, getWidth(), getHeight()); // Vẽ một hình chữ nhật đậm nguyên màu trên toàn bộ panel
+        }
+    }
+
+    // Phương thức để đặt trạng thái sáng lên của panel
+    public void setHighlighted(boolean highlighted) {
+        isHighlighted = highlighted;
+        repaint(); // Vẽ lại panel để hiển thị trạng thái mới
+    }
+}
+
 
   //phương thức hiển thị sản phẩm đang có trong database ra bảng
     

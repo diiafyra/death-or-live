@@ -5,6 +5,26 @@
  */
 package demo;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.sql.Date;
+import java.awt.Image;
+import java.awt.Toolkit;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import javax.swing.TransferHandler;
+
 /**
  *
  * @author DELL
@@ -15,12 +35,11 @@ public class product extends javax.swing.JFrame {
      * Creates new form product
      */
     public product() {
+
         initComponents();
     }
-
-    product(String id, String name, int instock, String desc, byte image, int price, String date, String depot) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+    
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -32,185 +51,289 @@ public class product extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel4 = new javax.swing.JPanel();
-        jLabel8 = new javax.swing.JLabel();
-        jLabel9 = new javax.swing.JLabel();
-        jLabel10 = new javax.swing.JLabel();
-        jLabel11 = new javax.swing.JLabel();
-        jLabel12 = new javax.swing.JLabel();
-        jLabel13 = new javax.swing.JLabel();
-        jLabel14 = new javax.swing.JLabel();
-        textField6 = new java.awt.TextField();
-        textField7 = new java.awt.TextField();
-        jButton5 = new javax.swing.JButton();
+        maspL = new javax.swing.JLabel();
+        imageL = new javax.swing.JLabel();
+        tenspL = new javax.swing.JLabel();
+        motaL = new javax.swing.JLabel();
+        tonkhoL = new javax.swing.JLabel();
+        khonhapL = new javax.swing.JLabel();
+        giaL = new javax.swing.JLabel();
+        tenspF = new java.awt.TextField();
+        maspF = new java.awt.TextField();
+        brower = new javax.swing.JButton();
         jScrollPane5 = new javax.swing.JScrollPane();
-        jTextArea2 = new javax.swing.JTextArea();
-        textField8 = new java.awt.TextField();
-        textField9 = new java.awt.TextField();
-        textField10 = new java.awt.TextField();
+        motaArea = new javax.swing.JTextArea();
+        tonkhoF = new java.awt.TextField();
+        giaF = new java.awt.TextField();
+        khonhapF = new java.awt.TextField();
+        ngaynhapL = new javax.swing.JLabel();
+        ngaynhapF = new java.awt.TextField();
+        imageLb = new javax.swing.JLabel();
+        add = new javax.swing.JButton();
+        jTextField1 = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jLabel8.setText("Mã SP");
+        jPanel4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel9.setText("Hình ảnh SP");
+        maspL.setText("Mã SP");
+        jPanel4.add(maspL, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, -1, -1));
 
-        jLabel10.setText("Tên SP");
+        imageL.setText("Hình ảnh SP");
+        jPanel4.add(imageL, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 200, -1, -1));
 
-        jLabel11.setText("Mô tả SP");
+        tenspL.setText("Tên SP");
+        jPanel4.add(tenspL, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 10, -1, -1));
 
-        jLabel12.setText("Tồn kho");
+        motaL.setText("Mô tả SP");
+        jPanel4.add(motaL, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 200, -1, -1));
 
-        jLabel13.setText("Kho nhập");
+        tonkhoL.setText("Tồn kho");
+        jPanel4.add(tonkhoL, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 130, -1, 21));
 
-        jLabel14.setText("Giá");
+        khonhapL.setText("Kho nhập");
+        jPanel4.add(khonhapL, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 130, -1, -1));
 
-        textField6.addActionListener(new java.awt.event.ActionListener() {
+        giaL.setText("Giá");
+        jPanel4.add(giaL, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 70, -1, -1));
+
+        tenspF.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                textField6ActionPerformed(evt);
+                tenspFActionPerformed(evt);
             }
         });
+        jPanel4.add(tenspF, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 40, 206, -1));
 
-        textField7.addActionListener(new java.awt.event.ActionListener() {
+        maspF.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                textField7ActionPerformed(evt);
+                maspFActionPerformed(evt);
             }
         });
+        jPanel4.add(maspF, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 40, 206, -1));
 
-        jButton5.setText("Brower");
-        jButton5.addActionListener(new java.awt.event.ActionListener() {
+        brower.setText("Brower");
+        brower.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton5ActionPerformed(evt);
+                browerActionPerformed(evt);
             }
         });
+        jPanel4.add(brower, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 220, -1, -1));
 
-        jTextArea2.setColumns(20);
-        jTextArea2.setRows(5);
-        jScrollPane5.setViewportView(jTextArea2);
+        motaArea.setColumns(20);
+        motaArea.setRows(5);
+        jScrollPane5.setViewportView(motaArea);
 
-        textField8.addActionListener(new java.awt.event.ActionListener() {
+        jPanel4.add(jScrollPane5, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 230, 206, 230));
+
+        tonkhoF.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                textField8ActionPerformed(evt);
+                tonkhoFActionPerformed(evt);
             }
         });
+        jPanel4.add(tonkhoF, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 160, 206, -1));
 
-        textField9.addActionListener(new java.awt.event.ActionListener() {
+        giaF.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                textField9ActionPerformed(evt);
+                giaFActionPerformed(evt);
             }
         });
+        jPanel4.add(giaF, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 100, 206, -1));
 
-        textField10.addActionListener(new java.awt.event.ActionListener() {
+        khonhapF.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                textField10ActionPerformed(evt);
+                khonhapFActionPerformed(evt);
             }
         });
+        jPanel4.add(khonhapF, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 160, 206, -1));
 
-        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
-        jPanel4.setLayout(jPanel4Layout);
-        jPanel4Layout.setHorizontalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(textField8, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jLabel9, javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jLabel10, javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jLabel11, javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jLabel13, javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jLabel14, javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jLabel12, javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel4Layout.createSequentialGroup()
-                            .addGap(10, 10, 10)
-                            .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jButton5)
-                                    .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(textField6, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(textField7, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addComponent(textField9, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(textField10, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addContainerGap(26, Short.MAX_VALUE))
-        );
-        jPanel4Layout.setVerticalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(36, 36, 36)
-                .addComponent(jLabel8)
-                .addGap(9, 9, 9)
-                .addComponent(textField7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel10)
-                .addGap(1, 1, 1)
-                .addComponent(textField6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel9)
-                .addGap(2, 2, 2)
-                .addComponent(jButton5)
-                .addGap(9, 9, 9)
-                .addComponent(jLabel11)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(1, 1, 1)
-                .addComponent(textField8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel13)
-                .addGap(2, 2, 2)
-                .addComponent(textField10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel14)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(textField9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(36, Short.MAX_VALUE))
-        );
+        ngaynhapL.setText("Ngày nhập");
+        jPanel4.add(ngaynhapL, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 70, -1, -1));
+
+        ngaynhapF.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ngaynhapFActionPerformed(evt);
+            }
+        });
+        jPanel4.add(ngaynhapF, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 100, 206, -1));
+
+        imageLb.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        imageLb.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        imageLb.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                imageLbKeyTyped(evt);
+            }
+        });
+        jPanel4.add(imageLb, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 260, 200, 200));
+
+        add.setText("Thêm");
+        add.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addActionPerformed(evt);
+            }
+        });
+        jPanel4.add(add, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 490, 120, 40));
+
+        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField1ActionPerformed(evt);
+            }
+        });
+        jTextField1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jTextField1KeyPressed(evt);
+            }
+        });
+        jPanel4.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 220, 90, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(44, Short.MAX_VALUE)
-                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(41, 41, 41))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, 517, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(21, 21, 21)
+                .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, 531, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void textField6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textField6ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_textField6ActionPerformed
+    private void tenspFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tenspFActionPerformed
+        
+    }//GEN-LAST:event_tenspFActionPerformed
 
-    private void textField7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textField7ActionPerformed
+    private void maspFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_maspFActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_textField7ActionPerformed
+    }//GEN-LAST:event_maspFActionPerformed
 
-    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+    private void browerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_browerActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton5ActionPerformed
+    }//GEN-LAST:event_browerActionPerformed
 
-    private void textField8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textField8ActionPerformed
+    private void tonkhoFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tonkhoFActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_textField8ActionPerformed
+    }//GEN-LAST:event_tonkhoFActionPerformed
 
-    private void textField9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textField9ActionPerformed
+    private void giaFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_giaFActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_textField9ActionPerformed
+    }//GEN-LAST:event_giaFActionPerformed
 
-    private void textField10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textField10ActionPerformed
+    private void khonhapFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_khonhapFActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_textField10ActionPerformed
+    }//GEN-LAST:event_khonhapFActionPerformed
+
+    private void ngaynhapFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ngaynhapFActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ngaynhapFActionPerformed
+        
+    ImageIcon currentImage;
+        // Lớp xử lý sự kiện để paste hình ảnh từ Clipboard
+    class ImageTransferHandler extends TransferHandler {
+        @Override
+        public boolean canImport(TransferHandler.TransferSupport support) {
+            return support.isDataFlavorSupported(DataFlavor.imageFlavor);
+        }
+
+        @Override
+        public boolean importData(TransferHandler.TransferSupport support) {
+            if (!canImport(support)) {
+                return false;
+            }
+
+            try {
+                Transferable transferable = support.getTransferable();
+                Image image = (Image) transferable.getTransferData(DataFlavor.imageFlavor);
+                ImageIcon icon = new ImageIcon(image);
+                imageLb.setIcon(icon);
+                currentImage = icon; // Lưu ImageIcon hiện tại
+                return true;
+            } catch (UnsupportedFlavorException | IOException ex) {
+                ex.printStackTrace();
+                return false;
+            }
+        }
+    }            
+        // Lớp xử lý sự kiện để paste hình ảnh từ Clipboard
+        private void pasteImageFromClipboard() {
+        try {
+            Transferable transferable = Toolkit.getDefaultToolkit().getSystemClipboard().getContents(null);
+            if (transferable != null && transferable.isDataFlavorSupported(DataFlavor.imageFlavor)) {
+                Image image = (Image) transferable.getTransferData(DataFlavor.imageFlavor);
+                ImageIcon icon = new ImageIcon(image);
+                imageLb.setIcon(icon);
+                currentImage = icon; // Lưu ImageIcon hiện tại
+            }
+        } catch (UnsupportedFlavorException | IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+       private byte[] getByteArray(Image image) throws IOException {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ImageIO.write((BufferedImage) image, "jpg", baos);
+        return baos.toByteArray();
+    }
+        
+    private void addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addActionPerformed
+        String id = maspF.getText();
+        String name = tenspF.getText();
+        int instock = Integer.parseInt(tonkhoF.getText());
+        String desc = motaArea.getText();
+        byte[] imageData = null;
+        if (currentImage != null) {
+            try {
+                imageData = getByteArray(currentImage.getImage());
+            } catch (IOException ex) {
+                Logger.getLogger(product.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        int price = Integer.parseInt(giaF.getText());
+        String depot = khonhapF.getText();
+        
+        String dateFormatString = "dd/MM/yyyy";
+
+        // Create a SimpleDateFormat object with the desired format
+        SimpleDateFormat dateFormat = new SimpleDateFormat(dateFormatString);
+
+        // Get the text from the JTextField
+        String dateString = ngaynhapF.getText();
+
+
+        Date date = null;
+        try {
+            java.util.Date utilDate = dateFormat.parse(dateString);
+            date = new Date(utilDate.getTime());
+        } catch (ParseException ex) {
+            Logger.getLogger(product.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        cndb db = cndb.getInstance();
+        db.open();
+        db.productInsert(id, name, instock, desc, imageData, price, depot, date);
+        MainFr mfr = MainFr.getInstance();
+        mfr.RefreshProList();
+        db.close();
+    }//GEN-LAST:event_addActionPerformed
+
+    private void imageLbKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_imageLbKeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_imageLbKeyTyped
+
+    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField1ActionPerformed
+
+    private void jTextField1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyPressed
+        if (evt.isControlDown() && evt.getKeyCode() == KeyEvent.VK_V) {
+            pasteImageFromClipboard();
+        }
+    }//GEN-LAST:event_jTextField1KeyPressed
 
     /**
      * @param args the command line arguments
@@ -248,21 +371,26 @@ public class product extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton5;
-    private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel13;
-    private javax.swing.JLabel jLabel14;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
+    private javax.swing.JButton add;
+    private javax.swing.JButton brower;
+    private java.awt.TextField giaF;
+    private javax.swing.JLabel giaL;
+    private javax.swing.JLabel imageL;
+    private javax.swing.JLabel imageLb;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane5;
-    private javax.swing.JTextArea jTextArea2;
-    private java.awt.TextField textField10;
-    private java.awt.TextField textField6;
-    private java.awt.TextField textField7;
-    private java.awt.TextField textField8;
-    private java.awt.TextField textField9;
+    private javax.swing.JTextField jTextField1;
+    private java.awt.TextField khonhapF;
+    private javax.swing.JLabel khonhapL;
+    private java.awt.TextField maspF;
+    private javax.swing.JLabel maspL;
+    private javax.swing.JTextArea motaArea;
+    private javax.swing.JLabel motaL;
+    private java.awt.TextField ngaynhapF;
+    private javax.swing.JLabel ngaynhapL;
+    private java.awt.TextField tenspF;
+    private javax.swing.JLabel tenspL;
+    private java.awt.TextField tonkhoF;
+    private javax.swing.JLabel tonkhoL;
     // End of variables declaration//GEN-END:variables
 }
