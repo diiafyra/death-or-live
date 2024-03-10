@@ -1,11 +1,7 @@
 package demo;
 
-import javax.swing.JOptionPane;
 import javax.swing.UIManager;
-import com.formdev.flatlaf.FlatLightLaf;
-import static com.sun.org.apache.xalan.internal.lib.ExsltDatetime.date;
-import java.util.List;
-import java.util.Map;
+import javax.swing.UnsupportedLookAndFeelException;
 
 
 
@@ -17,7 +13,7 @@ public class Demo {
 
         try {
             UIManager.setLookAndFeel(new com.formdev.flatlaf.FlatLightLaf());
-        } catch (Exception ex) {
+        } catch (UnsupportedLookAndFeelException ex) {
             ex.printStackTrace();
         }  
 

@@ -5,36 +5,28 @@
  */
 package demo;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import static demo.Handler.getByteArray;
+import static demo.Handler.getDate;
+import static demo.Handler.intError;
+import static demo.Handler.pasteImageFromClipboard;
 import java.sql.Date;
-import java.awt.Image;
-import java.awt.Toolkit;
-import java.awt.datatransfer.DataFlavor;
-import java.awt.datatransfer.Transferable;
-import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.KeyEvent;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
-import javax.swing.JLabel;
-import javax.swing.TransferHandler;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author DELL
  */
-public class product extends javax.swing.JFrame {
+public class productF extends javax.swing.JFrame {
 
     /**
      * Creates new form product
      */
-    public product() {
+    public productF() {
 
         initComponents();
     }
@@ -65,51 +57,54 @@ public class product extends javax.swing.JFrame {
         motaArea = new javax.swing.JTextArea();
         tonkhoF = new java.awt.TextField();
         giaF = new java.awt.TextField();
-        khonhapF = new java.awt.TextField();
-        ngaynhapL = new javax.swing.JLabel();
+        gianhapF = new java.awt.TextField();
+        gianhapL = new javax.swing.JLabel();
         ngaynhapF = new java.awt.TextField();
         imageLb = new javax.swing.JLabel();
         add = new javax.swing.JButton();
         jTextField1 = new javax.swing.JTextField();
+        ngaynhapL = new javax.swing.JLabel();
+        khonhapF = new java.awt.TextField();
+        errorMess = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanel4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         maspL.setText("Mã SP");
-        jPanel4.add(maspL, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, -1, -1));
+        jPanel4.add(maspL, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 50, -1, -1));
 
         imageL.setText("Hình ảnh SP");
-        jPanel4.add(imageL, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 200, -1, -1));
+        jPanel4.add(imageL, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 240, -1, -1));
 
         tenspL.setText("Tên SP");
-        jPanel4.add(tenspL, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 10, -1, -1));
+        jPanel4.add(tenspL, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 50, -1, -1));
 
         motaL.setText("Mô tả SP");
-        jPanel4.add(motaL, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 200, -1, -1));
+        jPanel4.add(motaL, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 300, -1, -1));
 
         tonkhoL.setText("Tồn kho");
-        jPanel4.add(tonkhoL, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 130, -1, 21));
+        jPanel4.add(tonkhoL, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 170, -1, 21));
 
         khonhapL.setText("Kho nhập");
-        jPanel4.add(khonhapL, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 130, -1, -1));
+        jPanel4.add(khonhapL, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 170, -1, -1));
 
-        giaL.setText("Giá");
-        jPanel4.add(giaL, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 70, -1, -1));
+        giaL.setText("Giá bán");
+        jPanel4.add(giaL, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 110, -1, -1));
 
         tenspF.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 tenspFActionPerformed(evt);
             }
         });
-        jPanel4.add(tenspF, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 40, 206, -1));
+        jPanel4.add(tenspF, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 80, 206, -1));
 
         maspF.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 maspFActionPerformed(evt);
             }
         });
-        jPanel4.add(maspF, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 40, 206, -1));
+        jPanel4.add(maspF, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 80, 206, -1));
 
         brower.setText("Brower");
         brower.addActionListener(new java.awt.event.ActionListener() {
@@ -117,44 +112,59 @@ public class product extends javax.swing.JFrame {
                 browerActionPerformed(evt);
             }
         });
-        jPanel4.add(brower, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 220, -1, -1));
+        jPanel4.add(brower, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 260, -1, -1));
 
         motaArea.setColumns(20);
         motaArea.setRows(5);
         jScrollPane5.setViewportView(motaArea);
 
-        jPanel4.add(jScrollPane5, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 230, 206, 230));
+        jPanel4.add(jScrollPane5, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 330, 206, 170));
 
         tonkhoF.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 tonkhoFActionPerformed(evt);
             }
         });
-        jPanel4.add(tonkhoF, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 160, 206, -1));
+        tonkhoF.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                tonkhoFKeyTyped(evt);
+            }
+        });
+        jPanel4.add(tonkhoF, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 200, 206, -1));
 
         giaF.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 giaFActionPerformed(evt);
             }
         });
-        jPanel4.add(giaF, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 100, 206, -1));
-
-        khonhapF.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                khonhapFActionPerformed(evt);
+        giaF.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                giaFKeyTyped(evt);
             }
         });
-        jPanel4.add(khonhapF, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 160, 206, -1));
+        jPanel4.add(giaF, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 140, 206, -1));
 
-        ngaynhapL.setText("Ngày nhập");
-        jPanel4.add(ngaynhapL, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 70, -1, -1));
+        gianhapF.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                gianhapFActionPerformed(evt);
+            }
+        });
+        gianhapF.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                gianhapFKeyTyped(evt);
+            }
+        });
+        jPanel4.add(gianhapF, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 260, 206, -1));
+
+        gianhapL.setText("Giá nhập");
+        jPanel4.add(gianhapL, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 230, -1, -1));
 
         ngaynhapF.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 ngaynhapFActionPerformed(evt);
             }
         });
-        jPanel4.add(ngaynhapF, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 100, 206, -1));
+        jPanel4.add(ngaynhapF, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 140, 206, -1));
 
         imageLb.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         imageLb.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -163,7 +173,7 @@ public class product extends javax.swing.JFrame {
                 imageLbKeyTyped(evt);
             }
         });
-        jPanel4.add(imageLb, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 260, 200, 200));
+        jPanel4.add(imageLb, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 300, 200, 200));
 
         add.setText("Thêm");
         add.addActionListener(new java.awt.event.ActionListener() {
@@ -171,7 +181,7 @@ public class product extends javax.swing.JFrame {
                 addActionPerformed(evt);
             }
         });
-        jPanel4.add(add, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 490, 120, 40));
+        jPanel4.add(add, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 520, 120, 40));
 
         jTextField1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -183,7 +193,21 @@ public class product extends javax.swing.JFrame {
                 jTextField1KeyPressed(evt);
             }
         });
-        jPanel4.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 220, 90, -1));
+        jPanel4.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 260, 90, -1));
+
+        ngaynhapL.setText("Ngày nhập");
+        jPanel4.add(ngaynhapL, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 110, -1, -1));
+
+        khonhapF.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                khonhapFActionPerformed(evt);
+            }
+        });
+        jPanel4.add(khonhapF, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 200, 206, -1));
+
+        errorMess.setForeground(new java.awt.Color(255, 51, 51));
+        errorMess.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jPanel4.add(errorMess, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 20, 320, 20));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -196,9 +220,9 @@ public class product extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(21, 21, 21)
-                .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, 531, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, 583, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -225,60 +249,15 @@ public class product extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_giaFActionPerformed
 
-    private void khonhapFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_khonhapFActionPerformed
+    private void gianhapFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_gianhapFActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_khonhapFActionPerformed
+    }//GEN-LAST:event_gianhapFActionPerformed
 
     private void ngaynhapFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ngaynhapFActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_ngaynhapFActionPerformed
         
     ImageIcon currentImage;
-        // Lớp xử lý sự kiện để paste hình ảnh từ Clipboard
-    class ImageTransferHandler extends TransferHandler {
-        @Override
-        public boolean canImport(TransferHandler.TransferSupport support) {
-            return support.isDataFlavorSupported(DataFlavor.imageFlavor);
-        }
-
-        @Override
-        public boolean importData(TransferHandler.TransferSupport support) {
-            if (!canImport(support)) {
-                return false;
-            }
-
-            try {
-                Transferable transferable = support.getTransferable();
-                Image image = (Image) transferable.getTransferData(DataFlavor.imageFlavor);
-                ImageIcon icon = new ImageIcon(image);
-                imageLb.setIcon(icon);
-                currentImage = icon; // Lưu ImageIcon hiện tại
-                return true;
-            } catch (UnsupportedFlavorException | IOException ex) {
-                ex.printStackTrace();
-                return false;
-            }
-        }
-    }     
-        // Lớp xử lý sự kiện để paste hình ảnh từ Clipboard
-        private void pasteImageFromClipboard() {
-        try {
-            Transferable transferable = Toolkit.getDefaultToolkit().getSystemClipboard().getContents(null);
-            if (transferable != null && transferable.isDataFlavorSupported(DataFlavor.imageFlavor)) {
-                Image image = (Image) transferable.getTransferData(DataFlavor.imageFlavor);
-                ImageIcon icon = new ImageIcon(image);
-                imageLb.setIcon(icon);
-                currentImage = icon; // Lưu ImageIcon hiện tại
-            }
-        } catch (UnsupportedFlavorException | IOException ex) {
-            ex.printStackTrace();
-        }
-    }
-       private byte[] getByteArray(Image image) throws IOException {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        ImageIO.write((BufferedImage) image, "jpg", baos);
-        return baos.toByteArray();
-    }
         
     private void addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addActionPerformed
         String id = maspF.getText();
@@ -290,30 +269,23 @@ public class product extends javax.swing.JFrame {
             try {
                 imageData = getByteArray(currentImage.getImage());
             } catch (IOException ex) {
-                Logger.getLogger(product.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(productF.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        int price = Integer.parseInt(giaF.getText());
+        int price_s = Integer.parseInt(giaF.getText());
+        int price_i = Integer.parseInt(gianhapF.getText());
         String depot = khonhapF.getText();
-        
-        String dateFormatString = "dd/MM/yyyy";
 
-        SimpleDateFormat dateFormat = new SimpleDateFormat(dateFormatString);
-
-        String dateString = ngaynhapF.getText();
-
-
-        Date date = null;
-        try {
-            java.util.Date utilDate = dateFormat.parse(dateString);
-            date = new Date(utilDate.getTime());
-        } catch (ParseException ex) {
-            Logger.getLogger(product.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        Date date = getDate(ngaynhapF);
 
         cndb db = cndb.getInstance();
         db.open();
-        db.productInsert(id, name, instock, desc, imageData, price, depot, date);
+        int insertStatus = db.productInsert(id, name, instock, desc, imageData, price_i, price_s, depot, date);
+        if(insertStatus!=-1){
+            JOptionPane.showMessageDialog(null, "Thêm sản phẩm thành công!");
+        }
+        System.out.print(insertStatus);
+        
         MainFr mfr = MainFr.getInstance();
         mfr.RefreshProList();
         db.close();
@@ -329,9 +301,26 @@ public class product extends javax.swing.JFrame {
 
     private void jTextField1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyPressed
         if (evt.isControlDown() && evt.getKeyCode() == KeyEvent.VK_V) {
-            pasteImageFromClipboard();
+            currentImage = pasteImageFromClipboard();
+            imageLb.setIcon(currentImage);
         }
     }//GEN-LAST:event_jTextField1KeyPressed
+
+    private void khonhapFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_khonhapFActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_khonhapFActionPerformed
+String errorMessage;
+    private void giaFKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_giaFKeyTyped
+        errorMess.setText(intError(evt));
+    }//GEN-LAST:event_giaFKeyTyped
+
+    private void tonkhoFKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tonkhoFKeyTyped
+        errorMess.setText(intError(evt));
+    }//GEN-LAST:event_tonkhoFKeyTyped
+
+    private void gianhapFKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_gianhapFKeyTyped
+        errorMess.setText(intError(evt));
+    }//GEN-LAST:event_gianhapFKeyTyped
 
     /**
      * @param args the command line arguments
@@ -350,20 +339,21 @@ public class product extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(product.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(productF.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(product.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(productF.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(product.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(productF.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(product.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(productF.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new product().setVisible(true);
+                new productF().setVisible(true);
             }
         });
     }
@@ -371,8 +361,11 @@ public class product extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton add;
     private javax.swing.JButton brower;
+    private javax.swing.JLabel errorMess;
     private java.awt.TextField giaF;
     private javax.swing.JLabel giaL;
+    private java.awt.TextField gianhapF;
+    private javax.swing.JLabel gianhapL;
     private javax.swing.JLabel imageL;
     private javax.swing.JLabel imageLb;
     private javax.swing.JPanel jPanel4;
