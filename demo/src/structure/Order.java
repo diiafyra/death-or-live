@@ -19,11 +19,11 @@ public class Order {
     private Date date_o;
     private String addr;
     private String pay_type;
-    private String del_stt;
-    private Map<String, Integer> order_detail;//String là key là id_p hoặc name_p, Interger là value = qual
+    private int del_stt;
+    private Map<String, Integer> order_detail;//String là key là id_p , Interger là value = qual
     private int total_amount;
 
-    public Order(String id_o, String name_c, Date date_o, String addr, String pay_type, String del_stt, Map<String, Integer> order_detail, int total_amount) {
+    public Order(String id_o, String name_c, Date date_o, String addr, String pay_type, int del_stt, Map<String, Integer> order_detail, int total_amount) {
         this.id_o = id_o;
         this.name_c = name_c;
         this.date_o = date_o;
@@ -54,7 +54,7 @@ public class Order {
         return pay_type;
     }
 
-    public String getDel_stt() {
+    public int getDel_stt() {
         return del_stt;
     }
 
@@ -86,7 +86,7 @@ public class Order {
         this.pay_type = pay_type;
     }
 
-    public void setDel_stt(String del_stt) {
+    public void setDel_stt(int del_stt) {
         this.del_stt = del_stt;
     }
 
@@ -97,6 +97,7 @@ public class Order {
     public void setTotal_amount(int total_amount) {
         this.total_amount = total_amount;
     }
-
+    
     
 }
+     

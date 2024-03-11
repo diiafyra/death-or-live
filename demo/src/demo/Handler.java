@@ -47,19 +47,13 @@ public class Handler {
             String id = order.getId_o();
             String name = order.getName_c();
             int cost = order.getTotal_amount();
-            String deliveryStt = order.getDel_stt();
+            int deliveryStt = order.getDel_stt();
             Object[] row = {id, name, cost, deliveryStt};
             dTM.addRow(row);
             }
         return dTM;
     }
-    //phương thức hiển thị chi tiết đơn hàng khi nhấn vào
-    
-    //phương thức thêm đơn hàng vào bảng
-    
-    //phương thức sửa đơn hàng
-    
-    //phương thức xóa đơn hàng
+   
     
     //phương thức tìm kiếm đơn hàng theo tên khách hàng hoặc sản phẩm
     
@@ -137,9 +131,6 @@ public class Handler {
     }
     //phương thức hiển thị chi tiết sản phẩm khi nhấn vào
     
-    //phương thức chỉnh sửa sản phẩm
-    
-    // phương thức xóa sản phẩm
     
     //phương thức tìm kiếm sản phẩm theo tên
     

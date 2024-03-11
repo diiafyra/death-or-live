@@ -80,7 +80,7 @@ public class cndb {
         List<Order> allOrders = new ArrayList<>();
         
          try{
-            String sql = "SELECT o.ID_O, c.NAME_C, o.DATE_O, o.ADDR, o.PAY_TYPE, o.DEL_STT, od.ID_P, p.NAME_P, od.QUAL, p.PRICE_S "
+            String sql = "SELECT o.ID_O, c.NAME_C, o.DATE_O, o.ADDR, o.PAY_TYPE, o.DEL_STT, od.ID_P, p.ID_P, od.QUAL, p.PRICE_S "
                     + "FROM ORDERS o "
                     + "JOIN CUSTOMERS c ON o.ID_C = c.ID_C "
                     + "JOIN ORDERS_DETAIL od ON o.ID_O = od.ID_O "
@@ -96,11 +96,11 @@ public class cndb {
                 //Nếu dòng tiếp theo có orderId không có trong map chưa nếu chưa thì thêm ..
                 if (!orderMap.containsKey(orderId)) {
                     orderMap.put(orderId, new Order(orderId, rlt.getString("NAME_C"), rlt.getDate("DATE_O"),
-                            rlt.getString("ADDR"), rlt.getString("PAY_TYPE"), rlt.getString("DEL_STT"),
+                            rlt.getString("ADDR"), rlt.getString("PAY_TYPE"), rlt.getInt("DEL_STT"),
                             new HashMap<>(), 0));
                 }
                 Order order = orderMap.get(orderId);
-                String productName = rlt.getString("NAME_P");
+                String productName = rlt.getString("ID_P");
                 int quantity = rlt.getInt("QUAL");
                 order.getOrder_detail().put(productName, quantity);
                 order.setTotal_amount(order.getTotal_amount() + quantity * rlt.getInt("PRICE_S"));
@@ -209,4 +209,11 @@ public class cndb {
         return proList;
     }
     
+    //Phương thức xóa sản phẩm 
+    
+    //Phương thức xóa đơn hàng
+    
+    //Phương thức chỉnh sửa sản phẩm
+    
+    //Phương thức chỉnh sửa đơn hàng
 }
