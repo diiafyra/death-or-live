@@ -119,7 +119,7 @@ public class Handler {
     }
     
     public static Date getDate(TextField label){
-        String dateFormatString = "dd/MM/yyyy";
+        String dateFormatString = "yyyy-MM-dd";
 
         SimpleDateFormat dateFormat = new SimpleDateFormat(dateFormatString);
 

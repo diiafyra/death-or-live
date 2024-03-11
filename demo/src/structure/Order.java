@@ -5,6 +5,8 @@
  */
 package structure;
 
+
+import java.sql.Date;
 import java.util.Map;
 
 /**
@@ -14,14 +16,14 @@ import java.util.Map;
 public class Order {
     private String id_o;
     private String name_c;
-    private String date_o;
+    private Date date_o;
     private String addr;
     private String pay_type;
     private String del_stt;
-    private Map<String, Integer> order_detail;
+    private Map<String, Integer> order_detail;//String là key là id_p hoặc name_p, Interger là value = qual
     private int total_amount;
 
-    public Order(String id_o, String name_c, String date_o, String addr, String pay_type, String del_stt, Map<String, Integer> order_detail, int total_amount) {
+    public Order(String id_o, String name_c, Date date_o, String addr, String pay_type, String del_stt, Map<String, Integer> order_detail, int total_amount) {
         this.id_o = id_o;
         this.name_c = name_c;
         this.date_o = date_o;
@@ -40,7 +42,7 @@ public class Order {
         return name_c;
     }
 
-    public String getDate_o() {
+    public Date getDate_o() {
         return date_o;
     }
 
@@ -72,7 +74,7 @@ public class Order {
         this.name_c = name_c;
     }
 
-    public void setDate_o(String date_o) {
+    public void setDate_o(Date date_o) {
         this.date_o = date_o;
     }
 

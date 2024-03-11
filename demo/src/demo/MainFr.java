@@ -5,6 +5,7 @@
  */
 package demo;
 import com.formdev.flatlaf.FlatLightLaf;
+import static demo.Handler.allOrdersT;
 import static demo.Handler.allProP;
 import java.util.List;
 import javax.swing.UIManager;
@@ -36,7 +37,7 @@ public class MainFr extends javax.swing.JFrame {
         cndb db =  cndb.getInstance();
         db.open();
         List<Order> allOders = db.allOrders();
-        jTable2.setModel(Handler.allOrdersT(allOders));
+        jTable2.setModel(allOrdersT(allOders));
         db.close();
     }       
     public void RefreshProList() {
@@ -46,6 +47,7 @@ public class MainFr extends javax.swing.JFrame {
         List<Product> allPro = db.allProducts();
        
         List<proPanel> proPanels = allProP(allPro);
+        jPanel1.removeAll();
         //System.out.print(""+ allPro.get(0).getName());
         for(proPanel proP: proPanels){
             /*JLabel nameLabel = (JLabel) proP.getComponent(1); // Lấy JLabel t2 trong proPanel (chứa tên)

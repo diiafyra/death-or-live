@@ -5,31 +5,18 @@
  */
 package demo;
 
-import java.awt.Image;
-import java.awt.TextField;
-import java.awt.Toolkit;
-import java.awt.datatransfer.DataFlavor;
-import java.awt.datatransfer.Transferable;
-import java.awt.datatransfer.UnsupportedFlavorException;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import structure.Order;
 import structure.Product;
@@ -88,6 +75,7 @@ public class cndb {
     }
 
     private PreparedStatement pre;
+    //Truy vấn đơn hàng trong database lưu vào 1 list Order
     public List<Order> allOrders(){
         List<Order> allOrders = new ArrayList<>();
         
@@ -103,9 +91,11 @@ public class cndb {
             Map<String, Order> orderMap = new HashMap<>();
             while (rlt.next()) {
                 String orderId = rlt.getString("ID_O");
+                Date date = rlt.getDate("DATE_O");
+                //System.out.print(""+date);
                 //Nếu dòng tiếp theo có orderId không có trong map chưa nếu chưa thì thêm ..
                 if (!orderMap.containsKey(orderId)) {
-                    orderMap.put(orderId, new Order(orderId, rlt.getString("NAME_C"), rlt.getString("DATE_O"),
+                    orderMap.put(orderId, new Order(orderId, rlt.getString("NAME_C"), rlt.getDate("DATE_O"),
                             rlt.getString("ADDR"), rlt.getString("PAY_TYPE"), rlt.getString("DEL_STT"),
                             new HashMap<>(), 0));
                 }
@@ -122,9 +112,50 @@ public class cndb {
         return allOrders;
     }
     
+    
     //phương thức thêm đơn hàng vào database
-    
-    
+    private Map<String, Integer> orderDetailIdCounters = new HashMap<>();
+
+    private String generateOrderDetailId(String id_o) {
+        int counter = orderDetailIdCounters.getOrDefault(id_o, 0) + 1;
+        orderDetailIdCounters.put(id_o, counter);
+        String paddedCounter = String.format("%03d", counter % 1000); // Đảm bảo số có 3 chữ số bằng cách thêm số 0 vào trước nếu cần
+        return id_o + paddedCounter;
+    }
+        public int orderInsert(String id_o, String name_c, Date date_o , String addr, String pay_type, String del_stt, Map<String, Integer> order_detail){
+            
+        int status = 0;
+        try {
+            String sql = "Insert Into orders(ID_O, NAME_C, DATE_O, ADDR, PAY_TYPE, DEL_STT) values(?, ?, ?, ?, ?, ?)";
+            pre = conn.prepareStatement(sql);
+            pre.setString(1, id_o);
+            pre.setString(2, name_c);
+            pre.setDate(3, date_o);
+            pre.setString(4, addr);
+            pre.setString(5, pay_type);
+            pre.setString(6, del_stt);
+            
+            status = pre.executeUpdate();
+            
+        String orderDetailSql = "INSERT INTO order_detail (ID_O, ID_O_D, ID_P, QUAL) VALUES (?, ?, ?, ?)";
+        PreparedStatement orderDetailStmt = conn.prepareStatement(orderDetailSql);
+        for (Map.Entry<String, Integer> entry : order_detail.entrySet()) {
+            orderDetailStmt.setString(1, id_o);
+            orderDetailStmt.setString(2, generateOrderDetailId(id_o)); //tạo id_o_p
+            orderDetailStmt.setString(3, entry.getKey()); // key là String = id_p, 
+            orderDetailStmt.setInt(4, entry.getValue());// value là Integer = qual
+            orderDetailStmt.addBatch();
+        }
+        orderDetailStmt.executeBatch();
+        
+        } catch (Exception e) {
+            System.err.println("customerInsert Error : " + e);
+            JOptionPane.showMessageDialog(null, "Lỗi: " + e.getMessage(), "Thông báo lỗi", JOptionPane.ERROR_MESSAGE);
+            status = -1;
+        }
+
+        return status;
+    }
     
     //phương thức thêm sản phẩm vào database
         public int productInsert(String id_p, String name_p, int stock , String desc, byte[] image,int price_i, int price_s, String depot, Date date){
