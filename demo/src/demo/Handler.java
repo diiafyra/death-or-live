@@ -11,6 +11,7 @@ import java.awt.Toolkit;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
+import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
@@ -19,6 +20,7 @@ import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -58,8 +60,7 @@ public class Handler {
     //phương thức tìm kiếm đơn hàng theo tên khách hàng hoặc sản phẩm
     
     
-      //phương thức hiển thị sản phẩm đang có trong database ra bảng
-    
+    //phương thức hiển thị sản phẩm đang có trong database ra bảng   
     public static List<proPanel> allProP(List<Product> allPro) {
         List<proPanel> proPanels = new ArrayList<>();
         for (Product product : allPro) {
@@ -72,9 +73,9 @@ public class Handler {
         }
         return proPanels;
     }
-    
+    //xác định lỗi khi người dùng nhập vào không phải là số
     public static String intError(KeyEvent evt){
-        String errorMessage;
+        String errorMessage=" ";
         char ch = evt.getKeyChar();
         if(!Character.isDigit(ch)){
             errorMessage = "HÃY NHẬP VÀO SỐ";
@@ -89,7 +90,28 @@ public class Handler {
         return errorMessage;
     }
     
-            // Lớp xử lý sự kiện để paste hình ảnh từ Clipboard
+    //xác định lỗi khi người dùng nhập vào không phải là date aaaa-bb-cc 
+    public static int x=0;
+    public static String dateError(KeyEvent evt, int i){
+        String errorMessage="";
+        char ch = evt.getKeyChar();
+            if(i==4 || i==7 ) {
+                if(ch!='-'){
+                    errorMessage="Không hợp lệ. Định dạng là aaaa-bb-cc";
+                }
+            }else{
+                if(ch=='\n'){
+                    errorMessage = "";
+                }else if(!Character.isDigit(ch)){
+                    errorMessage="Không hợp lệ. Định dạng là aaaa-bb-cc";               
+                }
+            }
+        
+        x++;
+        return errorMessage; 
+    }
+
+    // Lớp xử lý sự kiện để paste hình ảnh từ Clipboard
     public static ImageIcon pasteImageFromClipboard() {
         ImageIcon currentImage = null;
         try {
@@ -106,12 +128,13 @@ public class Handler {
         return currentImage;
     }
     
+    //nhận một đối tượng hình ảnh (Image) và chuyển đổi nó thành một mảng byte
     public static byte[] getByteArray(Image image) throws IOException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ImageIO.write((BufferedImage) image, "jpg", baos);
         return baos.toByteArray();
     }
-    
+    //chuyển textField sang Date 
     public static Date getDate(TextField label){
         String dateFormatString = "yyyy-MM-dd";
 
@@ -129,6 +152,8 @@ public class Handler {
         }
         return date;
     }
+
+
     //phương thức hiển thị chi tiết sản phẩm khi nhấn vào
     
     

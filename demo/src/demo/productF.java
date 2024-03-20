@@ -7,11 +7,12 @@ package demo;
 
 import static demo.Handler.getByteArray;
 import static demo.Handler.getDate;
-import static demo.Handler.intError;
+import static demo.Handler.*;
 import static demo.Handler.pasteImageFromClipboard;
 import java.sql.Date;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
+import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
@@ -66,6 +67,7 @@ public class productF extends javax.swing.JFrame {
         ngaynhapL = new javax.swing.JLabel();
         khonhapF = new java.awt.TextField();
         errorMess = new javax.swing.JLabel();
+        tenspL1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -164,6 +166,11 @@ public class productF extends javax.swing.JFrame {
                 ngaynhapFActionPerformed(evt);
             }
         });
+        ngaynhapF.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                ngaynhapFKeyTyped(evt);
+            }
+        });
         jPanel4.add(ngaynhapF, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 140, 206, -1));
 
         imageLb.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -209,6 +216,9 @@ public class productF extends javax.swing.JFrame {
         errorMess.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jPanel4.add(errorMess, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 20, 320, 20));
 
+        tenspL1.setText("Tên SP");
+        jPanel4.add(tenspL1, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 50, -1, -1));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -252,9 +262,9 @@ public class productF extends javax.swing.JFrame {
     private void gianhapFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_gianhapFActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_gianhapFActionPerformed
-
+    //    String errorMessage;
     private void ngaynhapFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ngaynhapFActionPerformed
-        // TODO add your handling code here:
+
     }//GEN-LAST:event_ngaynhapFActionPerformed
         
     ImageIcon currentImage;
@@ -289,6 +299,7 @@ public class productF extends javax.swing.JFrame {
         MainFr mfr = MainFr.getInstance();
         mfr.RefreshProList();
         db.close();
+        dispose();
     }//GEN-LAST:event_addActionPerformed
 
     private void imageLbKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_imageLbKeyTyped
@@ -309,7 +320,7 @@ public class productF extends javax.swing.JFrame {
     private void khonhapFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_khonhapFActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_khonhapFActionPerformed
-String errorMessage;
+    
     private void giaFKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_giaFKeyTyped
         errorMess.setText(intError(evt));
     }//GEN-LAST:event_giaFKeyTyped
@@ -321,10 +332,12 @@ String errorMessage;
     private void gianhapFKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_gianhapFKeyTyped
         errorMess.setText(intError(evt));
     }//GEN-LAST:event_gianhapFKeyTyped
+    int a1=0;
+    private void ngaynhapFKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_ngaynhapFKeyTyped
+        errorMess.setText(dateError(evt, a1));
+        a1++;        
+    }//GEN-LAST:event_ngaynhapFKeyTyped
 
-    /**
-     * @param args the command line arguments
-     */
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -381,6 +394,7 @@ String errorMessage;
     private javax.swing.JLabel ngaynhapL;
     private java.awt.TextField tenspF;
     private javax.swing.JLabel tenspL;
+    private javax.swing.JLabel tenspL1;
     private java.awt.TextField tonkhoF;
     private javax.swing.JLabel tonkhoL;
     // End of variables declaration//GEN-END:variables

@@ -27,29 +27,29 @@ import structure.proPanel;
  * @author DELL
  */
 public class MainFr extends javax.swing.JFrame {
-
-    /**
-     * Creates new form MainFr
-     */
-    private static MainFr instance;
-    private MainFr() {
+    public MainFr() {
         initComponents();
+        //Giao diện lớn bằng cả màn hình 
+        setExtendedState(MainFr.MAXIMIZED_BOTH);
     }
-
-    public static MainFr getInstance() {
+    //triển khai một pattern Singleton để đảm bảo rằng một lớp chỉ có một thể hiện duy nhất
+   private static MainFr instance;
+   public static MainFr getInstance() {
         if (instance == null) {
             instance = new MainFr();
         }
         return instance;
     }
-
+   
+    //Cập nhật dữ liệu trên jTable2 
      public void RefreshTables() {
         cndb db =  cndb.getInstance();
         db.open();
         List<Order> allOders = db.allOrders();
         jTable2.setModel(allOrdersT(allOders));
         db.close();
-    }       
+    }
+     
     public void RefreshProList() {
         //cần phải sửa jPanel1 sang layout grid hoặc flow hoặc box thì mới add được, poe muôn năm :)))
         cndb db =  cndb.getInstance();
@@ -57,19 +57,9 @@ public class MainFr extends javax.swing.JFrame {
         List<Product> allPro = db.allProducts();
        
         List<proPanel> proPanels = allProP(allPro);
-        jPanel1.removeAll();
-        //System.out.print(""+ allPro.get(0).getName());
+        panel_sp.removeAll();
         for(proPanel proP: proPanels){
-            /*JLabel nameLabel = (JLabel) proP.getComponent(1); // Lấy JLabel t2 trong proPanel (chứa tên)
-            JLabel priceLabel = (JLabel) proP.getComponent(2); // Lấy JLabel t3 trong proPanel (chứa giá)
-            JLabel instockLabel = (JLabel) proP.getComponent(3); // Lấy JLabel t4 trong proPanel (chứa số lượng tồn)
-
-            String name = nameLabel.getText(); // Lấy giá trị của JLabel chứa tên
-            String price = priceLabel.getText(); // Lấy giá trị của JLabel chứa giá
-            String instock = instockLabel.getText(); // Lấy giá trị của JLabel chứa số lượng tồn
-
-            System.out.println("Name: " + name + ", Price: " + price + ", Instock: " + instock);*/
-            jPanel1.add(proP);
+            panel_sp.add(proP);
         }
         db.close();
     }
@@ -81,13 +71,11 @@ public class MainFr extends javax.swing.JFrame {
         MENU = new javax.swing.JTabbedPane();
         sanpham = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jPanel1 = new javax.swing.JPanel();
+        panel_sp = new javax.swing.JPanel();
         jPanel6 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton12 = new javax.swing.JButton();
-        jTextField1 = new javax.swing.JTextField();
+        nut_them_sp = new javax.swing.JButton();
+        nut_tim_kiem_sp = new javax.swing.JButton();
+        txt_tim_kiem_sp = new javax.swing.JTextField();
         donhang = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         jSplitPane1 = new javax.swing.JSplitPane();
@@ -134,37 +122,27 @@ public class MainFr extends javax.swing.JFrame {
 
         jScrollPane2.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
-        jPanel1.setLayout(new java.awt.GridLayout(0, 6));
-        jScrollPane2.setViewportView(jPanel1);
+        panel_sp.setLayout(new java.awt.GridLayout(0, 6));
+        jScrollPane2.setViewportView(panel_sp);
 
-        jButton1.setText("Thêm");
-        jButton1.setFocusable(false);
-        jButton1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        nut_them_sp.setText("Thêm");
+        nut_them_sp.setFocusable(false);
+        nut_them_sp.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        nut_them_sp.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        nut_them_sp.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                nut_them_spActionPerformed(evt);
             }
         });
 
-        jButton2.setText("Xóa");
-        jButton2.setFocusable(false);
-        jButton2.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton2.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        nut_tim_kiem_sp.setText("Tìm kiếm");
+        nut_tim_kiem_sp.setFocusable(false);
+        nut_tim_kiem_sp.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        nut_tim_kiem_sp.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
 
-        jButton3.setText("Chỉnh sửa");
-        jButton3.setFocusable(false);
-        jButton3.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton3.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-
-        jButton12.setText("Tìm kiếm");
-        jButton12.setFocusable(false);
-        jButton12.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton12.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+        txt_tim_kiem_sp.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
+                txt_tim_kiem_spActionPerformed(evt);
             }
         });
 
@@ -174,28 +152,21 @@ public class MainFr extends javax.swing.JFrame {
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jButton1)
+                .addComponent(nut_them_sp)
+                .addGap(276, 276, 276)
+                .addComponent(nut_tim_kiem_sp)
                 .addGap(18, 18, 18)
-                .addComponent(jButton2)
-                .addGap(18, 18, 18)
-                .addComponent(jButton3)
-                .addGap(104, 104, 104)
-                .addComponent(jButton12)
-                .addGap(18, 18, 18)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 478, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(31, Short.MAX_VALUE))
+                .addComponent(txt_tim_kiem_sp, javax.swing.GroupLayout.PREFERRED_SIZE, 478, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(51, Short.MAX_VALUE))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addGap(3, 3, 3)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton12)
-                    .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jButton1, javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(jButton2, javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(jButton3, javax.swing.GroupLayout.Alignment.TRAILING))
-                    .addComponent(jTextField1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(nut_tim_kiem_sp, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(nut_them_sp)
+                    .addComponent(txt_tim_kiem_sp, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -210,8 +181,8 @@ public class MainFr extends javax.swing.JFrame {
             sanphamLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, sanphamLayout.createSequentialGroup()
                 .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 534, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 523, Short.MAX_VALUE))
         );
 
         MENU.addTab("SẢN PHÂM", sanpham);
@@ -590,14 +561,14 @@ public class MainFr extends javax.swing.JFrame {
         model.addRow(new Object[]{null, null, null, null});
     }//GEN-LAST:event_jButton8ActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void nut_them_spActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nut_them_spActionPerformed
         productF pro = new productF();
         pro.setVisible(true);
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_nut_them_spActionPerformed
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+    private void txt_tim_kiem_spActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_tim_kiem_spActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
+    }//GEN-LAST:event_txt_tim_kiem_spActionPerformed
 
     private void jTextField4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField4ActionPerformed
         // TODO add your handling code here:
@@ -624,7 +595,7 @@ public class MainFr extends javax.swing.JFrame {
         completed.setBackground(Color.white);
     }
     
-        private static JComboBox<String> createProComboBox() {
+    private static JComboBox<String> createProComboBox() {
         JComboBox<String> comboBox = new JComboBox<>();
         cndb db = cndb.getInstance();
         db.open();
@@ -664,18 +635,10 @@ public class MainFr extends javax.swing.JFrame {
     private javax.swing.JTextField date_o_f;
     private javax.swing.JPanel donhang;
     private javax.swing.JTextField id_o_f;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton12;
-    private javax.swing.JButton jButton15;
-    private javax.swing.JButton jButton16;
-    private javax.swing.JButton jButton17;
-    private javax.swing.JButton jButton18;
     private javax.swing.JButton jButton19;
-    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton20;
     private javax.swing.JButton jButton21;
     private javax.swing.JButton jButton22;
-    private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton7;
     private javax.swing.JButton jButton8;
     private javax.swing.JLabel jLabel1;
@@ -687,27 +650,27 @@ public class MainFr extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
-    private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JSplitPane jSplitPane1;
     private javax.swing.JTable jTable2;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField3;
     private javax.swing.JTextField jTextField4;
     private javax.swing.JTextField name_c_f;
+    private javax.swing.JButton nut_them_sp;
+    private javax.swing.JButton nut_tim_kiem_sp;
     private javax.swing.JTable orderdetail;
+    private javax.swing.JPanel panel_sp;
     private javax.swing.JComboBox<String> pay_type;
     private javax.swing.JPanel sanpham;
     private javax.swing.JPanel thongke;
     private javax.swing.JButton toReceive;
     private javax.swing.JButton toShip;
+    private javax.swing.JTextField txt_tim_kiem_sp;
     // End of variables declaration//GEN-END:variables
 }
