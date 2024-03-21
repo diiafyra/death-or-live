@@ -75,14 +75,14 @@ public class cndb {
     }
 
     private PreparedStatement pre;
+    
     //Truy vấn đơn hàng trong database lưu vào 1 list Order
     public List<Order> allOrders(){
         List<Order> allOrders = new ArrayList<>();
         
          try{
-            String sql = "SELECT o.ID_O, c.NAME_C, o.DATE_O, o.ADDR, o.PAY_TYPE, o.DEL_STT, od.ID_P, p.ID_P, od.QUAL, p.PRICE_S "
+            String sql = "SELECT o.ID_O, o.NAME_C, o.DATE_O, o.ADDR, o.PAY_TYPE, o.DEL_STT, od.ID_P, od.ID_P, od.QUAL, p.PRICE_S "
                     + "FROM ORDERS o "
-                    + "JOIN CUSTOMERS c ON o.ID_C = c.ID_C "
                     + "JOIN ORDERS_DETAIL od ON o.ID_O = od.ID_O "
                     + "JOIN PRODUCTS p ON od.ID_P = p.ID_P";//truy vấn sql 
             pre = conn.prepareStatement(sql); //pre một lệnh truy vấn sql select chuẩn bị thực thi trên database
@@ -113,7 +113,7 @@ public class cndb {
     }
     
     
-    //phương thức thêm đơn hàng vào database
+//phương thức thêm đơn hàng vào database
     private Map<String, Integer> orderDetailIdCounters = new HashMap<>();
 
     private String generateOrderDetailId(String id_o) {
@@ -122,7 +122,15 @@ public class cndb {
         String paddedCounter = String.format("%03d", counter % 1000); // Đảm bảo số có 3 chữ số bằng cách thêm số 0 vào trước nếu cần
         return id_o + paddedCounter;
     }
-        public int orderInsert(String id_o, String name_c, Date date_o , String addr, String pay_type, String del_stt, Map<String, Integer> order_detail){
+    public String generateOrderId(Date date) {
+        List<Order> allOr = allOrders();
+        int counter = allOr.size();
+        String paddedCounter = String.format("%03d", counter % 1000); 
+        String orderId = date + paddedCounter;
+        return orderId;
+    }
+
+        public int orderInsert(String id_o, String name_c, Date date_o , String addr, String pay_type, int del_stt, Map<String, Integer> order_detail){
             
         int status = 0;
         try {
@@ -133,19 +141,25 @@ public class cndb {
             pre.setDate(3, date_o);
             pre.setString(4, addr);
             pre.setString(5, pay_type);
-            pre.setString(6, del_stt);
+            pre.setInt(6, del_stt);
             
             status = pre.executeUpdate();
-            
-        String orderDetailSql = "INSERT INTO order_detail (ID_O, ID_O_D, ID_P, QUAL) VALUES (?, ?, ?, ?)";
-        PreparedStatement orderDetailStmt = conn.prepareStatement(orderDetailSql);
-        for (Map.Entry<String, Integer> entry : order_detail.entrySet()) {
-            orderDetailStmt.setString(1, id_o);
-            orderDetailStmt.setString(2, generateOrderDetailId(id_o)); //tạo id_o_p
-            orderDetailStmt.setString(3, entry.getKey()); // key là String = id_p, 
-            orderDetailStmt.setInt(4, entry.getValue());// value là Integer = qual
-            orderDetailStmt.addBatch();
-        }
+            /*if(id_o == null){
+                id_o = generateCusId();
+               String cusSql = "INSERT INTO CUSTOMERS (ID_C, NAME_C) VALUES (?, ?)";
+               PreparedStatement cusStmt = conn.prepareStatement(cusSql);
+               cusStmt.setString(1, id_c);
+               cusStmt.setString(2, name_c);
+           }*/
+           String orderDetailSql = "INSERT INTO orders_detail (ID_O, ID_O_D, ID_P, QUAL) VALUES (?, ?, ?, ?)";
+           PreparedStatement orderDetailStmt = conn.prepareStatement(orderDetailSql);
+           for (Map.Entry<String, Integer> entry : order_detail.entrySet()) {
+               orderDetailStmt.setString(1, id_o);
+               orderDetailStmt.setString(2, generateOrderDetailId(id_o)); //tạo id_o_p
+               orderDetailStmt.setString(3, entry.getKey()); // key là String = id_p, 
+               orderDetailStmt.setInt(4, entry.getValue());// value là Integer = qual
+               orderDetailStmt.addBatch();
+           }
         orderDetailStmt.executeBatch();
         
         } catch (Exception e) {
@@ -155,7 +169,7 @@ public class cndb {
         }
 
         return status;
-    }
+        }
     
     //phương thức thêm sản phẩm vào database
         public int productInsert(String id_p, String name_p, int stock , String desc, byte[] image,int price_i, int price_s, String depot, Date date){

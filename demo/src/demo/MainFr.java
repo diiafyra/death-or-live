@@ -8,15 +8,15 @@ import com.formdev.flatlaf.FlatLightLaf;
 import static demo.Handler.allOrdersT;
 import static demo.Handler.allProP;
 import java.awt.Color;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
+import java.sql.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javax.swing.BorderFactory;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JComboBox;
 import javax.swing.UIManager;
-import javax.swing.border.Border;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import structure.Order;
@@ -103,7 +103,7 @@ public class MainFr extends javax.swing.JFrame {
         jButton8 = new javax.swing.JButton();
         jButton7 = new javax.swing.JButton();
         jPanel9 = new javax.swing.JPanel();
-        jButton19 = new javax.swing.JButton();
+        addB = new javax.swing.JButton();
         jButton20 = new javax.swing.JButton();
         jButton21 = new javax.swing.JButton();
         jButton22 = new javax.swing.JButton();
@@ -242,15 +242,57 @@ public class MainFr extends javax.swing.JFrame {
         ));
         TableColumn productColumn = orderdetail.getColumnModel().getColumn(0);
         productColumn.setCellEditor(new DefaultCellEditor(createProComboBox()));
+        orderdetail.getModel().addTableModelListener(new TableModelListener() {
+            @Override
+            public void tableChanged(TableModelEvent e) {
+                if (e.getType() == TableModelEvent.UPDATE) {
+                    int column = e.getColumn();
+                    if (column == 0 || column == 1) { // Check if changed column is quantity or price
+                        int row = e.getFirstRow();
+                        if( orderdetail.getValueAt(row, 0) !=null && orderdetail.getValueAt(row, 1)!=null){
+                            int quantity = Integer.parseInt(orderdetail.getValueAt(row, 1).toString());
+                            float price = Float.valueOf(orderdetail.getValueAt(row, 2).toString());
+                            float totalPrice = quantity * price;
+                            orderdetail.setValueAt(totalPrice, row, 3); // Update total price column
+                        }
+                    }
+                }
+            }
+        });
+        orderdetail.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                orderdetailMouseReleased(evt);
+            }
+        });
         jScrollPane3.setViewportView(orderdetail);
 
         completed.setText("Đã giao");
+        completed.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                completedActionPerformed(evt);
+            }
+        });
 
         cancel.setText("Hủy Đơn");
+        cancel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cancelActionPerformed(evt);
+            }
+        });
 
         toShip.setText("Chờ Lấy Hàng");
+        toShip.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                toShipActionPerformed(evt);
+            }
+        });
 
         toReceive.setText("Đang Giao");
+        toReceive.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                toReceiveActionPerformed(evt);
+            }
+        });
 
         jButton8.setText("+");
         jButton8.addActionListener(new java.awt.event.ActionListener() {
@@ -339,6 +381,11 @@ public class MainFr extends javax.swing.JFrame {
         );
 
         jButton7.setText("Lưu");
+        jButton7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton7ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -365,13 +412,13 @@ public class MainFr extends javax.swing.JFrame {
 
         jSplitPane1.setRightComponent(jPanel2);
 
-        jButton19.setText("Thêm");
-        jButton19.setFocusable(false);
-        jButton19.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton19.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jButton19.addActionListener(new java.awt.event.ActionListener() {
+        addB.setText("Thêm");
+        addB.setFocusable(false);
+        addB.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        addB.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        addB.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton19ActionPerformed(evt);
+                addBActionPerformed(evt);
             }
         });
 
@@ -402,7 +449,7 @@ public class MainFr extends javax.swing.JFrame {
             jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel9Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jButton19)
+                .addComponent(addB)
                 .addGap(18, 18, 18)
                 .addComponent(jButton20)
                 .addGap(18, 18, 18)
@@ -420,7 +467,7 @@ public class MainFr extends javax.swing.JFrame {
                 .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jButton22)
                     .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jButton19, javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(addB, javax.swing.GroupLayout.Alignment.TRAILING)
                         .addComponent(jButton20, javax.swing.GroupLayout.Alignment.TRAILING)
                         .addComponent(jButton21, javax.swing.GroupLayout.Alignment.TRAILING))
                     .addComponent(jTextField4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -439,7 +486,7 @@ public class MainFr extends javax.swing.JFrame {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 533, Short.MAX_VALUE))
+                .addComponent(jSplitPane1))
         );
 
         javax.swing.GroupLayout donhangLayout = new javax.swing.GroupLayout(donhang);
@@ -574,17 +621,65 @@ public class MainFr extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField4ActionPerformed
 
-    private void jButton19ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton19ActionPerformed
-        defaultStt();
-        id_o_f.setText(null);
-        name_c_f.setText(null);
-        date_o_f.setText(null);
-        addr_f.setText(null);
-        DefaultTableModel model = (DefaultTableModel) orderdetail.getModel();
-        model.setRowCount(0);
-        model.addRow(new Object[]{null, null, null, null});
+    private void addBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addBActionPerformed
+        addDefault();
+        defaultOrder();
 
-    }//GEN-LAST:event_jButton19ActionPerformed
+    }//GEN-LAST:event_addBActionPerformed
+
+    private void orderdetailMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_orderdetailMouseReleased
+
+
+    }//GEN-LAST:event_orderdetailMouseReleased
+public int del_stt;
+    private void toShipActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_toShipActionPerformed
+        defaultStt();
+        toShip.setBackground(Color.pink);
+        del_stt=1;
+    }//GEN-LAST:event_toShipActionPerformed
+
+    private void toReceiveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_toReceiveActionPerformed
+        defaultStt();
+        toReceive.setBackground(Color.pink);
+        del_stt=2;
+    }//GEN-LAST:event_toReceiveActionPerformed
+
+    private void completedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_completedActionPerformed
+        defaultStt();
+        completed.setBackground(Color.pink);
+        del_stt=3;
+    }//GEN-LAST:event_completedActionPerformed
+
+    private void cancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelActionPerformed
+        defaultStt();
+        cancel.setBackground(Color.pink);
+        del_stt=0;
+    }//GEN-LAST:event_cancelActionPerformed
+
+    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+        String id_o = id_o_f.getText().trim();
+        String name_c = name_c_f.getText().trim();
+        Date date_o = Handler.getDate(date_o_f);
+        String addr =addr_f.getText().trim();
+        String pay = (String) pay_type.getSelectedItem();
+        
+        //System.out.print(pay);
+        cndb db = cndb.getInstance();
+        db.open();
+        Map<String, Integer> order_detail = new HashMap<>();
+        for (int row = 0; row < orderdetail.getRowCount(); row++) {
+            List<Product> proList = db.allProducts();
+            String key = proList.get(indexP).getId_p();
+            int value = Integer.parseInt(orderdetail.getValueAt(row, 1).toString());
+            System.out.println("thunghiem"+value);
+            
+            order_detail.put(key, value); 
+        } 
+
+        db.orderInsert(id_o, name_c, date_o, addr, pay, del_stt , order_detail);
+        db.close();
+        RefreshTables();
+    }//GEN-LAST:event_jButton7ActionPerformed
 
     private void defaultStt() {
         //Border border = BorderFactory.createLineBorder(Color.pink, 3);
@@ -595,7 +690,37 @@ public class MainFr extends javax.swing.JFrame {
         completed.setBackground(Color.white);
     }
     
-    private static JComboBox<String> createProComboBox() {
+
+        private void addDefault(){
+        id_o_f.setEditable(true);
+        name_c_f.setEditable(true);
+        date_o_f.setEditable(true);
+        addr_f.setEditable(true);
+        //orderdetail.getCellEditor().isCellEditable(anEvent)
+        
+    }
+        
+    private void displayDefault(){
+        id_o_f.setEditable(false);
+        name_c_f.setEditable(false);
+        date_o_f.setEditable(false);
+        addr_f.setEditable(false);
+        //orderdetail.getCellEditor().isCellEditable(anEvent)
+        
+    }
+    private void defaultOrder(){
+        defaultStt();
+        id_o_f.setText(null);
+        name_c_f.setText(null);
+        date_o_f.setText(null);
+        addr_f.setText(null);
+        DefaultTableModel model = (DefaultTableModel) orderdetail.getModel();
+        model.setRowCount(0);
+        model.addRow(new Object[]{null, null, null, null});
+    }
+    
+    int indexP;
+    private  JComboBox<String> createProComboBox() {
         JComboBox<String> comboBox = new JComboBox<>();
         cndb db = cndb.getInstance();
         db.open();
@@ -604,8 +729,19 @@ public class MainFr extends javax.swing.JFrame {
             comboBox.addItem(pro.getName_p());
         }
         db.close();
+        comboBox.addActionListener(e -> {
+            int selectedRow = orderdetail.getSelectedRow();
+            if (selectedRow != -1 ) {
+               indexP =  comboBox.getSelectedIndex();
+                if (indexP != -1 ) {                
+                    Product selectedProduct = allPro.get(indexP);
+                    orderdetail.setValueAt(selectedProduct.getPrice_s(), selectedRow, 2);
+                }
+            }
+        });
         return comboBox;
     }
+    
     
     public int index;
     /**
@@ -629,13 +765,13 @@ public class MainFr extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTabbedPane MENU;
+    private javax.swing.JButton addB;
     private javax.swing.JTextField addr_f;
     private javax.swing.JButton cancel;
     private javax.swing.JButton completed;
     private javax.swing.JTextField date_o_f;
     private javax.swing.JPanel donhang;
     private javax.swing.JTextField id_o_f;
-    private javax.swing.JButton jButton19;
     private javax.swing.JButton jButton20;
     private javax.swing.JButton jButton21;
     private javax.swing.JButton jButton22;
