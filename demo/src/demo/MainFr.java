@@ -599,6 +599,7 @@ public class MainFr extends javax.swing.JFrame {
             Object[] row = {name, qual, price, price*qual};
             model.addRow(row);
         }
+        displayDefault();
         /*Object[] row = {null, null, null, null};
         model.addRow(row);*/
     }//GEN-LAST:event_jTable2MouseReleased

@@ -29,23 +29,22 @@ public class productF extends javax.swing.JFrame {
         tonkhoL = new javax.swing.JLabel();
         khonhapL = new javax.swing.JLabel();
         giaL = new javax.swing.JLabel();
-        tenspF = new java.awt.TextField();
-        maspF = new java.awt.TextField();
         brower = new javax.swing.JButton();
         jScrollPane5 = new javax.swing.JScrollPane();
         motaArea = new javax.swing.JTextArea();
-        tonkhoF = new java.awt.TextField();
-        giaF = new java.awt.TextField();
-        gianhapF = new java.awt.TextField();
         gianhapL = new javax.swing.JLabel();
-        ngaynhapF = new java.awt.TextField();
         imageLb = new javax.swing.JLabel();
         add = new javax.swing.JButton();
         jTextField1 = new javax.swing.JTextField();
         ngaynhapL = new javax.swing.JLabel();
-        khonhapF = new java.awt.TextField();
         errorMess = new javax.swing.JLabel();
-        tenspL1 = new javax.swing.JLabel();
+        maspF = new javax.swing.JTextField();
+        ngaynhapF = new javax.swing.JTextField();
+        tenspF = new javax.swing.JTextField();
+        khonhapF = new javax.swing.JTextField();
+        gianhapF = new javax.swing.JTextField();
+        tonkhoF = new javax.swing.JTextField();
+        giaF = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -72,20 +71,6 @@ public class productF extends javax.swing.JFrame {
         giaL.setText("Giá bán");
         jPanel4.add(giaL, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 110, -1, -1));
 
-        tenspF.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                tenspFActionPerformed(evt);
-            }
-        });
-        jPanel4.add(tenspF, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 80, 206, -1));
-
-        maspF.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                maspFActionPerformed(evt);
-            }
-        });
-        jPanel4.add(maspF, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 80, 206, -1));
-
         brower.setText("Brower");
         brower.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -100,56 +85,8 @@ public class productF extends javax.swing.JFrame {
 
         jPanel4.add(jScrollPane5, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 330, 206, 170));
 
-        tonkhoF.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                tonkhoFActionPerformed(evt);
-            }
-        });
-        tonkhoF.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                tonkhoFKeyTyped(evt);
-            }
-        });
-        jPanel4.add(tonkhoF, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 200, 206, -1));
-
-        giaF.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                giaFActionPerformed(evt);
-            }
-        });
-        giaF.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                giaFKeyTyped(evt);
-            }
-        });
-        jPanel4.add(giaF, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 140, 206, -1));
-
-        gianhapF.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                gianhapFActionPerformed(evt);
-            }
-        });
-        gianhapF.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                gianhapFKeyTyped(evt);
-            }
-        });
-        jPanel4.add(gianhapF, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 260, 206, -1));
-
         gianhapL.setText("Giá nhập");
         jPanel4.add(gianhapL, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 230, -1, -1));
-
-        ngaynhapF.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ngaynhapFActionPerformed(evt);
-            }
-        });
-        ngaynhapF.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                ngaynhapFKeyTyped(evt);
-            }
-        });
-        jPanel4.add(ngaynhapF, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 140, 206, -1));
 
         imageLb.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         imageLb.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -183,19 +120,16 @@ public class productF extends javax.swing.JFrame {
         ngaynhapL.setText("Ngày nhập");
         jPanel4.add(ngaynhapL, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 110, -1, -1));
 
-        khonhapF.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                khonhapFActionPerformed(evt);
-            }
-        });
-        jPanel4.add(khonhapF, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 200, 206, -1));
-
         errorMess.setForeground(new java.awt.Color(255, 51, 51));
         errorMess.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jPanel4.add(errorMess, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 20, 320, 20));
-
-        tenspL1.setText("Tên SP");
-        jPanel4.add(tenspL1, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 50, -1, -1));
+        jPanel4.add(maspF, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 80, 210, 20));
+        jPanel4.add(ngaynhapF, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 140, 210, 20));
+        jPanel4.add(tenspF, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 80, 210, 20));
+        jPanel4.add(khonhapF, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 200, 210, 20));
+        jPanel4.add(gianhapF, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 260, 210, 20));
+        jPanel4.add(tonkhoF, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 200, 210, 20));
+        jPanel4.add(giaF, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 140, 210, 20));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -217,39 +151,17 @@ public class productF extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void tenspFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tenspFActionPerformed
-        
-    }//GEN-LAST:event_tenspFActionPerformed
-
-    private void maspFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_maspFActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_maspFActionPerformed
-
     private void browerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_browerActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_browerActionPerformed
 
-    private void tonkhoFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tonkhoFActionPerformed
+    private void imageLbKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_imageLbKeyTyped
         // TODO add your handling code here:
-    }//GEN-LAST:event_tonkhoFActionPerformed
+    }//GEN-LAST:event_imageLbKeyTyped
 
-    private void giaFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_giaFActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_giaFActionPerformed
-
-    private void gianhapFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_gianhapFActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_gianhapFActionPerformed
-    //    String errorMessage;
-    private void ngaynhapFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ngaynhapFActionPerformed
-
-    }//GEN-LAST:event_ngaynhapFActionPerformed
-        
-    ImageIcon currentImage;
-        
     private void addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addActionPerformed
         String id = maspF.getText();
-        String name = tenspF.getText();
+        String name = maspF.getText();
         int instock = Integer.parseInt(tonkhoF.getText());
         String desc = motaArea.getText();
         byte[] imageData = null;
@@ -273,16 +185,11 @@ public class productF extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Thêm sản phẩm thành công!");
         }
         System.out.print(insertStatus);
-        
+
         MainFr mfr = MainFr.getInstance();
         mfr.RefreshProList();
         db.close();
-        dispose();
     }//GEN-LAST:event_addActionPerformed
-
-    private void imageLbKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_imageLbKeyTyped
-
-    }//GEN-LAST:event_imageLbKeyTyped
 
     private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
         // TODO add your handling code here:
@@ -295,27 +202,9 @@ public class productF extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jTextField1KeyPressed
 
-    private void khonhapFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_khonhapFActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_khonhapFActionPerformed
-    
-    private void giaFKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_giaFKeyTyped
-        errorMess.setText(intError(evt));
-    }//GEN-LAST:event_giaFKeyTyped
-
-    private void tonkhoFKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tonkhoFKeyTyped
-        errorMess.setText(intError(evt));
-    }//GEN-LAST:event_tonkhoFKeyTyped
-
-    private void gianhapFKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_gianhapFKeyTyped
-        errorMess.setText(intError(evt));
-    }//GEN-LAST:event_gianhapFKeyTyped
-    int a1=0;
-    private void ngaynhapFKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_ngaynhapFKeyTyped
-        errorMess.setText(dateError(evt, a1));
-        a1++;        
-    }//GEN-LAST:event_ngaynhapFKeyTyped
-
+       
+    ImageIcon currentImage;
+                int a1=0;
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -353,27 +242,26 @@ public class productF extends javax.swing.JFrame {
     private javax.swing.JButton add;
     private javax.swing.JButton brower;
     private javax.swing.JLabel errorMess;
-    private java.awt.TextField giaF;
+    private javax.swing.JTextField giaF;
     private javax.swing.JLabel giaL;
-    private java.awt.TextField gianhapF;
+    private javax.swing.JTextField gianhapF;
     private javax.swing.JLabel gianhapL;
     private javax.swing.JLabel imageL;
     private javax.swing.JLabel imageLb;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JTextField jTextField1;
-    private java.awt.TextField khonhapF;
+    private javax.swing.JTextField khonhapF;
     private javax.swing.JLabel khonhapL;
-    private java.awt.TextField maspF;
+    private javax.swing.JTextField maspF;
     private javax.swing.JLabel maspL;
     private javax.swing.JTextArea motaArea;
     private javax.swing.JLabel motaL;
-    private java.awt.TextField ngaynhapF;
+    private javax.swing.JTextField ngaynhapF;
     private javax.swing.JLabel ngaynhapL;
-    private java.awt.TextField tenspF;
+    private javax.swing.JTextField tenspF;
     private javax.swing.JLabel tenspL;
-    private javax.swing.JLabel tenspL1;
-    private java.awt.TextField tonkhoF;
+    private javax.swing.JTextField tonkhoF;
     private javax.swing.JLabel tonkhoL;
     // End of variables declaration//GEN-END:variables
 }

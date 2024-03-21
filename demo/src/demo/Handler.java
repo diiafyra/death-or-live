@@ -27,6 +27,7 @@ import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import structure.Order;
 import structure.Product;
@@ -135,7 +136,7 @@ public class Handler {
         return baos.toByteArray();
     }
     //chuyển textField sang Date 
-    public static Date getDate(TextField label){
+    public static Date getDate(JTextField label){
         String dateFormatString = "yyyy-MM-dd";
 
         SimpleDateFormat dateFormat = new SimpleDateFormat(dateFormatString);
