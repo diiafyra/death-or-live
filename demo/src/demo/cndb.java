@@ -239,31 +239,31 @@ public class cndb {
             JOptionPane.showMessageDialog(null, "Lỗi khi xóa sản phẩm: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
         }    
     }
-    //PT xóa sản phẩm theo id 
-    public void xoa_san_pham_theo_ID(String id_p) {
-        // Kết nối cơ sở dữ liệu
-        PreparedStatement statement = null;
-
-        try {
-            // Tạo truy vấn SQL để xóa sản phẩm dựa trên ID_P
-            String sql = "DELETE FROM PRODUCTS WHERE ID_P = ?";
-            statement = conn.prepareStatement(sql);
-            statement.setString(1, id_p);
-            System.out.println("1");
-            // Thực hiện truy vấn xóa
-            int rowsDeleted = statement.executeUpdate();
-
-            // Kiểm tra xem sản phẩm đã được xóa thành công hay không
-            if (rowsDeleted > 0) {
-                JOptionPane.showMessageDialog(null, "Sản phẩm đã được xóa thành công!");
-            } else {
-                JOptionPane.showMessageDialog(null, "Không thể xóa sản phẩm!");
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Lỗi khi xóa sản phẩm: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
-        }    
-    }
+//    //PT xóa sản phẩm theo id 
+//    public void xoa_san_pham_theo_ID(String id_p) {
+//        // Kết nối cơ sở dữ liệu
+//        PreparedStatement statement = null;
+//
+//        try {
+//            // Tạo truy vấn SQL để xóa sản phẩm dựa trên ID_P
+//            String sql = "DELETE FROM PRODUCTS WHERE ID_P = ?";
+//            statement = conn.prepareStatement(sql);
+//            statement.setString(1, id_p);
+//            System.out.println("1");
+//            // Thực hiện truy vấn xóa
+//            int rowsDeleted = statement.executeUpdate();
+//
+//            // Kiểm tra xem sản phẩm đã được xóa thành công hay không
+//            if (rowsDeleted > 0) {
+//                JOptionPane.showMessageDialog(null, "Sản phẩm đã được xóa thành công!");
+//            } else {
+//                JOptionPane.showMessageDialog(null, "Không thể xóa sản phẩm!");
+//            }
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//            JOptionPane.showMessageDialog(null, "Lỗi khi xóa sản phẩm: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+//        }    
+//    }
     
     
     //Phương thức bổ trợ hiện chi tiết sản phẩm 
@@ -345,17 +345,17 @@ public class cndb {
         return depot;
     }
 
-    // Phương thức đóng kết nối CSDL
-    public void disconnect() {
-        try {
-            if (conn != null && !conn.isClosed()) {
-                conn.close();
-                System.out.println("Đã đóng kết nối đến CSDL!");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }         
-    }
+//    // Phương thức đóng kết nối CSDL
+//    public void disconnect() {
+//        try {
+//            if (conn != null && !conn.isClosed()) {
+//                conn.close();
+//                System.out.println("Đã đóng kết nối đến CSDL!");
+//            }
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }         
+//    }
     //Phương thức chỉnh sửa sản phẩm
     
     //Phương thức chỉnh sửa đơn hàng
