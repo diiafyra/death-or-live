@@ -46,8 +46,9 @@ public class MainFr extends javax.swing.JFrame {
         cndb db =  cndb.getInstance();
         db.open();
         List<Order> allOders = db.allOrders();
-        jTable2.setModel(allOrdersT(allOders));
         db.close();
+        jTable2.setModel(allOrdersT(allOders));
+//        db.close();
     }
      
     public void RefreshProList() {
@@ -554,7 +555,7 @@ public class MainFr extends javax.swing.JFrame {
         db.open();
         List<Order> allOrders = db.allOrders();
         List<Product> allPro = db.allProducts();
-        db.close();
+//        db.close();
         //System.out.print(""+ allOrders.get(index).getName_c());
         id_o_f.setText(allOrders.get(index).getId_o());
         name_c_f.setText(allOrders.get(index).getName_c());
@@ -602,6 +603,7 @@ public class MainFr extends javax.swing.JFrame {
         displayDefault();
         /*Object[] row = {null, null, null, null};
         model.addRow(row);*/
+        db.close();
     }//GEN-LAST:event_jTable2MouseReleased
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
@@ -632,7 +634,7 @@ public class MainFr extends javax.swing.JFrame {
 
 
     }//GEN-LAST:event_orderdetailMouseReleased
-public int del_stt;
+    public int del_stt;
     private void toShipActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_toShipActionPerformed
         defaultStt();
         toShip.setBackground(Color.pink);
@@ -729,7 +731,7 @@ public int del_stt;
         for(Product pro : allPro){
             comboBox.addItem(pro.getName_p());
         }
-        db.close();
+//        db.close();
         comboBox.addActionListener(e -> {
             int selectedRow = orderdetail.getSelectedRow();
             if (selectedRow != -1 ) {
@@ -740,6 +742,7 @@ public int del_stt;
                 }
             }
         });
+        db.close();
         return comboBox;
     }
     

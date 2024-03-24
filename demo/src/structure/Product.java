@@ -24,6 +24,9 @@ public class Product {
         this.date_p = date_p;
         this.depot = depot;
     }
+    
+    
+ 
 
     public String getId_p() {
         return id_p;

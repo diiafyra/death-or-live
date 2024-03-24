@@ -5,6 +5,7 @@
  */
 package demo;
 
+import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.TextField;
 import java.awt.Toolkit;
@@ -38,7 +39,7 @@ import structure.proPanel;
  * @author DELL
  */
 public class Handler {
-//phương thức hiển thị tất cả sản phẩm hiện có trong list vào bảng đơn hàng trong ứng dụng
+    //phương thức hiển thị tất cả sản phẩm hiện có trong list vào bảng đơn hàng trong ứng dụng
     public static DefaultTableModel allOrdersT(List<Order> allOrders){
         DefaultTableModel dTM = new DefaultTableModel();
         dTM.addColumn("Mã Đơn Hàng");
@@ -74,6 +75,7 @@ public class Handler {
         }
         return proPanels;
     }
+    
     //xác định lỗi khi người dùng nhập vào không phải là số
     public static String intError(KeyEvent evt){
         String errorMessage=" ";
@@ -128,6 +130,23 @@ public class Handler {
         }
         return currentImage;
     }
+    //chuyển đổi từ ToolkitImage sang BufferedImage
+    public static BufferedImage convertToBufferedImage(ImageIcon icon) {
+        Image image = icon.getImage();
+        if (image instanceof BufferedImage) {
+            return (BufferedImage) image;
+        }
+
+        // Tạo BufferedImage mới có kích thước tương ứng với hình ảnh
+        BufferedImage bufferedImage = new BufferedImage(image.getWidth(null), image.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+
+        // Vẽ hình ảnh lên BufferedImage
+        Graphics2D g2d = bufferedImage.createGraphics();
+        g2d.drawImage(image, 0, 0, null);
+        g2d.dispose();
+
+        return bufferedImage;
+    }
     
     //nhận một đối tượng hình ảnh (Image) và chuyển đổi nó thành một mảng byte
     public static byte[] getByteArray(Image image) throws IOException {
@@ -135,6 +154,7 @@ public class Handler {
         ImageIO.write((BufferedImage) image, "jpg", baos);
         return baos.toByteArray();
     }
+    
     //chuyển textField sang Date 
     public static Date getDate(JTextField label){
         String dateFormatString = "yyyy-MM-dd";
