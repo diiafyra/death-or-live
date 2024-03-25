@@ -206,6 +206,14 @@
           </Events>
         </Component>
         <Component class="javax.swing.JTextField" name="tenspF">
+<<<<<<< HEAD
+=======
+          <Properties>
+            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="ff" green="ff" red="ff" type="rgb"/>
+            </Property>
+          </Properties>
+>>>>>>> 6d77d173c2c0357b32a4876f0b13377e91cc1b52
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="tenspFActionPerformed"/>
             <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="tenspFKeyTyped"/>
@@ -228,6 +236,14 @@
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="gianhapF">
+<<<<<<< HEAD
+=======
+          <Properties>
+            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="ff" green="ff" red="ff" type="rgb"/>
+            </Property>
+          </Properties>
+>>>>>>> 6d77d173c2c0357b32a4876f0b13377e91cc1b52
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="gianhapFActionPerformed"/>
             <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="gianhapFKeyTyped"/>
@@ -249,6 +265,14 @@
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="giabanF">
+<<<<<<< HEAD
+=======
+          <Properties>
+            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="ff" green="ff" red="ff" type="rgb"/>
+            </Property>
+          </Properties>
+>>>>>>> 6d77d173c2c0357b32a4876f0b13377e91cc1b52
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="giabanFActionPerformed"/>
             <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="giabanFKeyTyped"/>
@@ -290,6 +314,14 @@
           </Events>
         </Component>
         <Component class="javax.swing.JTextField" name="maspF">
+<<<<<<< HEAD
+=======
+          <Properties>
+            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="ff" green="ff" red="ff" type="rgb"/>
+            </Property>
+          </Properties>
+>>>>>>> 6d77d173c2c0357b32a4876f0b13377e91cc1b52
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="maspFActionPerformed"/>
             <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="maspFKeyTyped"/>
@@ -316,6 +348,14 @@
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="khonhapF">
+<<<<<<< HEAD
+=======
+          <Properties>
+            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="ff" green="ff" red="ff" type="rgb"/>
+            </Property>
+          </Properties>
+>>>>>>> 6d77d173c2c0357b32a4876f0b13377e91cc1b52
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="khonhapFActionPerformed"/>
             <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="khonhapFKeyTyped"/>
@@ -325,6 +365,14 @@
           </AuxValues>
         </Component>
         <Component class="javax.swing.JTextField" name="tonkhoF">
+<<<<<<< HEAD
+=======
+          <Properties>
+            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="ff" green="ff" red="ff" type="rgb"/>
+            </Property>
+          </Properties>
+>>>>>>> 6d77d173c2c0357b32a4876f0b13377e91cc1b52
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="tonkhoFActionPerformed"/>
             <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="tonkhoFKeyTyped"/>
@@ -339,6 +387,14 @@
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="ngaynhapF">
+<<<<<<< HEAD
+=======
+          <Properties>
+            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="ff" green="ff" red="ff" type="rgb"/>
+            </Property>
+          </Properties>
+>>>>>>> 6d77d173c2c0357b32a4876f0b13377e91cc1b52
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="ngaynhapFActionPerformed"/>
             <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="ngaynhapFKeyTyped"/>

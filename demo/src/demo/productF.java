@@ -241,8 +241,13 @@ public class productF extends javax.swing.JFrame {
     }//GEN-LAST:event_gianhapFKeyTyped
 
     private void ngaynhapFKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_ngaynhapFKeyTyped
+<<<<<<< HEAD
         errorMess.setText(dateError(evt, ngaynhapF));
 //        a1++; 
+=======
+        errorMess.setText(dateError(evt, a1));
+        a1++; 
+>>>>>>> 6d77d173c2c0357b32a4876f0b13377e91cc1b52
     }//GEN-LAST:event_ngaynhapFKeyTyped
 
        

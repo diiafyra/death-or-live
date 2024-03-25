@@ -25,6 +25,9 @@ public class Product {
         this.date_p = formatDate(date_P);
         this.depot = depot;
     }
+    
+    
+ 
 
     public String getId_p() {
         return id_p;

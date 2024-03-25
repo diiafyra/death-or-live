@@ -97,7 +97,11 @@ public class proPanel extends JPanel {
                             byte[] image=mn.getImage();
                             int price_i=mn.getPrice_i();
                             int price_s=mn.getPrice_s();
+<<<<<<< HEAD
                             String date_p=mn.getDate_p();
+=======
+                            Date date_p=mn.getDate_p();
+>>>>>>> 6d77d173c2c0357b32a4876f0b13377e91cc1b52
                             String depot=mn.getDepot();   
                             
                             proF2 c=new proF2();
@@ -111,9 +115,15 @@ public class proPanel extends JPanel {
                             c.chua_hinh_anh.setIcon(icon);
                             c.gianhapF.setText(Integer.toString(price_i));
                             c.giabanF.setText(Integer.toString(price_s));            
+<<<<<<< HEAD
 //                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd"); // Định dạng ngày tháng
 //                            String formattedDate = sdf.format(date_p); // Chuyển đổi Date thành chuỗi
                             c.ngaynhapF.setText(date_p); // Thiết lập giá trị cho ngaynhapF                            
+=======
+                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd"); // Định dạng ngày tháng
+                            String formattedDate = sdf.format(date_p); // Chuyển đổi Date thành chuỗi
+                            c.ngaynhapF.setText(formattedDate); // Thiết lập giá trị cho ngaynhapF                            
+>>>>>>> 6d77d173c2c0357b32a4876f0b13377e91cc1b52
                             c.khonhapF.setText(depot);
                             c.setVisible(true);
                             mn.close();

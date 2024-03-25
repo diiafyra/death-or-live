@@ -90,6 +90,10 @@ public class proF2 extends javax.swing.JFrame {
             }
         });
 
+<<<<<<< HEAD
+=======
+        tenspF.setBackground(new java.awt.Color(255, 255, 255));
+>>>>>>> 6d77d173c2c0357b32a4876f0b13377e91cc1b52
         tenspF.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 tenspFActionPerformed(evt);
@@ -106,6 +110,10 @@ public class proF2 extends javax.swing.JFrame {
 
         ngaynhapL.setText("Ngày nhập");
 
+<<<<<<< HEAD
+=======
+        gianhapF.setBackground(new java.awt.Color(255, 255, 255));
+>>>>>>> 6d77d173c2c0357b32a4876f0b13377e91cc1b52
         gianhapF.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 gianhapFActionPerformed(evt);
@@ -133,6 +141,10 @@ public class proF2 extends javax.swing.JFrame {
 
         maspL.setText("Mã SP");
 
+<<<<<<< HEAD
+=======
+        giabanF.setBackground(new java.awt.Color(255, 255, 255));
+>>>>>>> 6d77d173c2c0357b32a4876f0b13377e91cc1b52
         giabanF.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 giabanFActionPerformed(evt);
@@ -162,6 +174,10 @@ public class proF2 extends javax.swing.JFrame {
             }
         });
 
+<<<<<<< HEAD
+=======
+        maspF.setBackground(new java.awt.Color(255, 255, 255));
+>>>>>>> 6d77d173c2c0357b32a4876f0b13377e91cc1b52
         maspF.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 maspFActionPerformed(evt);
@@ -183,6 +199,10 @@ public class proF2 extends javax.swing.JFrame {
 
         motaL.setText("Mô tả SP");
 
+<<<<<<< HEAD
+=======
+        khonhapF.setBackground(new java.awt.Color(255, 255, 255));
+>>>>>>> 6d77d173c2c0357b32a4876f0b13377e91cc1b52
         khonhapF.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 khonhapFActionPerformed(evt);
@@ -194,6 +214,10 @@ public class proF2 extends javax.swing.JFrame {
             }
         });
 
+<<<<<<< HEAD
+=======
+        tonkhoF.setBackground(new java.awt.Color(255, 255, 255));
+>>>>>>> 6d77d173c2c0357b32a4876f0b13377e91cc1b52
         tonkhoF.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 tonkhoFActionPerformed(evt);
@@ -207,6 +231,10 @@ public class proF2 extends javax.swing.JFrame {
 
         tonkhoL.setText("Tồn kho");
 
+<<<<<<< HEAD
+=======
+        ngaynhapF.setBackground(new java.awt.Color(255, 255, 255));
+>>>>>>> 6d77d173c2c0357b32a4876f0b13377e91cc1b52
         ngaynhapF.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 ngaynhapFActionPerformed(evt);
@@ -425,7 +453,11 @@ public class proF2 extends javax.swing.JFrame {
 
         String masp = maspF.getText().trim();
         String tensp = tenspF.getText().trim();
+<<<<<<< HEAD
         String date = Handler.getDate(ngaynhapF);
+=======
+        Date date = Handler.getDate(ngaynhapF);
+>>>>>>> 6d77d173c2c0357b32a4876f0b13377e91cc1b52
         int stock = Integer.parseInt(tonkhoF.getText().trim());
         String desc = motaArea.getText().trim();
         byte[] image = null;
@@ -465,8 +497,13 @@ public class proF2 extends javax.swing.JFrame {
     }//GEN-LAST:event_ngaynhapFActionPerformed
 
     private void ngaynhapFKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_ngaynhapFKeyTyped
+<<<<<<< HEAD
         errorMess.setText(dateError(evt, ngaynhapF));
 //        a1++; 
+=======
+        errorMess.setText(dateError(evt, a1));
+        a1++; 
+>>>>>>> 6d77d173c2c0357b32a4876f0b13377e91cc1b52
     }//GEN-LAST:event_ngaynhapFKeyTyped
 
     private void tenspFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tenspFActionPerformed
@@ -548,7 +585,11 @@ public class proF2 extends javax.swing.JFrame {
     }
     
     ImageIcon currentImage;
+<<<<<<< HEAD
 //    int a1=0;
+=======
+    int a1=0;
+>>>>>>> 6d77d173c2c0357b32a4876f0b13377e91cc1b52
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public javax.swing.JLabel chua_hinh_anh;
     private javax.swing.JLabel errorMess;

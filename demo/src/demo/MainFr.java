@@ -171,10 +171,16 @@ public class MainFr extends javax.swing.JFrame {
      public void RefreshTables() {
         cndb db =  cndb.getInstance();
         db.open();
+<<<<<<< HEAD
         List<Order> allOrders = db.allOrders();
         //System.out.print(allOrders.get(22).getDate_o());
         orderTable.setModel(allOrdersT(allOrders));
+=======
+        List<Order> allOders = db.allOrders();
+>>>>>>> 6d77d173c2c0357b32a4876f0b13377e91cc1b52
         db.close();
+        jTable2.setModel(allOrdersT(allOders));
+//        db.close();
     }
      
     public void RefreshProList() {
@@ -789,7 +795,7 @@ public class MainFr extends javax.swing.JFrame {
             allOrders = db.allOrdersFilter(sqlEx, key, closeSearch);
         }
         List<Product> allPro = db.allProducts();
-        db.close();
+//        db.close();
         //System.out.print(""+ allOrders.get(index).getName_c());
         id_o_f.setText(allOrders.get(index).getId_o());
         name_c_f.setText(allOrders.get(index).getName_c());
@@ -840,7 +846,15 @@ public class MainFr extends javax.swing.JFrame {
             model.addRow(row);
             isEditMode = true;
         }
+<<<<<<< HEAD
     }//GEN-LAST:event_orderTableMouseReleased
+=======
+        displayDefault();
+        /*Object[] row = {null, null, null, null};
+        model.addRow(row);*/
+        db.close();
+    }//GEN-LAST:event_jTable2MouseReleased
+>>>>>>> 6d77d173c2c0357b32a4876f0b13377e91cc1b52
 
     private void addODActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addODActionPerformed
         DefaultTableModel m = (DefaultTableModel) orderdetail.getModel();
@@ -878,7 +892,11 @@ public class MainFr extends javax.swing.JFrame {
 
 
     }//GEN-LAST:event_orderdetailMouseReleased
+<<<<<<< HEAD
 
+=======
+    public int del_stt;
+>>>>>>> 6d77d173c2c0357b32a4876f0b13377e91cc1b52
     private void toShipActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_toShipActionPerformed
         if(canEditDS){
             defaultStt();
@@ -1042,6 +1060,7 @@ public class MainFr extends javax.swing.JFrame {
     private void pie_chartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pie_chartActionPerformed
         cndb db = cndb.getInstance();
         db.open();
+<<<<<<< HEAD
         DefaultPieDataset a= db.salesReportsdts("03", "2024",true, false);
         System.out.println(a.getValue(0));
  
@@ -1052,6 +1071,29 @@ public class MainFr extends javax.swing.JFrame {
     }//GEN-LAST:event_pie_chartActionPerformed
 
 
+=======
+        List<Product> allPro = db.allProducts();
+        for(Product pro : allPro){
+            comboBox.addItem(pro.getName_p());
+        }
+//        db.close();
+        comboBox.addActionListener(e -> {
+            int selectedRow = orderdetail.getSelectedRow();
+            if (selectedRow != -1 ) {
+               indexP =  comboBox.getSelectedIndex();
+                if (indexP != -1 ) {                
+                    Product selectedProduct = allPro.get(indexP);
+                    orderdetail.setValueAt(selectedProduct.getPrice_s(), selectedRow, 2);
+                }
+            }
+        });
+        db.close();
+        return comboBox;
+    }
+    
+    
+    public int index;
+>>>>>>> 6d77d173c2c0357b32a4876f0b13377e91cc1b52
     /**
      * @param args the command line arguments
      */
