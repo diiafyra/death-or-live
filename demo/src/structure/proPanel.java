@@ -1,11 +1,13 @@
 package structure;
 
+import demo.Handler;
 import demo.MainFr;
 import demo.cndb;
 import demo.proF2;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
@@ -14,8 +16,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
+import java.util.List;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -25,13 +29,11 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import sun.applet.Main;
 
-/**
- *
- * @author DELL
- */
 public class proPanel extends JPanel {
     private boolean isHighlighted = false;
     public static ImageIcon icon;
+    public static int index;
+    
     public proPanel(byte[] imageData, String name, int price, int instock) {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setPreferredSize(new Dimension(250, 300));
@@ -48,8 +50,14 @@ public class proPanel extends JPanel {
                 setHighlighted(false); // Đánh dấu panel không được sáng lên
             }
              //Sự kiện khi nhấp 2 lần liên tiếp vào sp 
+            List<Product> allPro ;
             @Override
             public void mouseClicked(MouseEvent e) {
+                //Lấy chỉ số index của panel để xóa sp theo chỉ số của propanels 
+                Component source = e.getComponent();
+                Container parent = source.getParent();
+                index = parent.getComponentZOrder(source);
+                
                 // Kiểm tra xem đây có phải là sự kiện nhấp đúp
                 if (e.getClickCount() == 2) {
                     // Lấy tọa độ của sự kiện chuột
@@ -71,7 +79,8 @@ public class proPanel extends JPanel {
                             // Thêm xử lý khi nhấn nút Xóa ở đây
                             cndb mn=cndb.getInstance();
                             mn.open();
-                            mn.xoa_san_pham(e, imageData);    
+                            allPro = mn.allProducts();
+                            mn.xoa_san_pham_theo_thu_tu_propanels(index,allPro);
                             a.dispose();
                             
                             //2 dòng này để cập nhật lại giao diện sp sau khi xóa 
@@ -89,32 +98,25 @@ public class proPanel extends JPanel {
                             // Thêm xử lý khi nhấn nút Chi tiết ở đây
                             cndb mn=cndb.getInstance();
                             mn.open();
-                            mn.chi_tiet_san_pham(imageData);
-                            String id_p = mn.getId_p();
-                            String name_p= mn.getName_p();
-                            int stock=mn.getStock();
-                            String desc=mn.getDesc();
-                            byte[] image=mn.getImage();
-                            int price_i=mn.getPrice_i();
-                            int price_s=mn.getPrice_s();
-                            String date_p=mn.getDate_p();
-                            String depot=mn.getDepot();   
-                            
+                            allPro = mn.allProducts();
+                            mn.chi_tiet_san_pham(index,allPro);                            
                             proF2 c=new proF2();
-                            c.maspF.setText(id_p); // Thiết lập giá trị id_p cho maspF
-                            c.tenspF.setText(name_p);
-                            c.tonkhoF.setText(Integer.toString(stock));
-                            c.motaArea.setText(desc);                           
+                            c.maspF.setText(mn.id_p); // Thiết lập giá trị id_p cho maspF
+                            c.tenspF.setText(mn.name_p);
+                            c.tonkhoF.setText(Integer.toString(mn.stock));
+                            c.motaArea.setText(mn.desc);                           
                             // Chuyển đổi mảng byte thành một hình ảnh
-                            icon = new ImageIcon(image);
+                            icon = new ImageIcon(mn.image);
                             // Thiết lập hình ảnh cho JLabel
                             c.chua_hinh_anh.setIcon(icon);
-                            c.gianhapF.setText(Integer.toString(price_i));
-                            c.giabanF.setText(Integer.toString(price_s));            
+                            proF2.currentImage=icon;
+                            
+                            c.gianhapF.setText(Integer.toString(mn.price_i));
+                            c.giabanF.setText(Integer.toString(mn.price_s));            
 //                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd"); // Định dạng ngày tháng
 //                            String formattedDate = sdf.format(date_p); // Chuyển đổi Date thành chuỗi
-                            c.ngaynhapF.setText(date_p); // Thiết lập giá trị cho ngaynhapF                            
-                            c.khonhapF.setText(depot);
+                            c.ngaynhapF.setText(mn.date_p); // Thiết lập giá trị cho ngaynhapF                            
+                            c.khonhapF.setText(mn.depot);
                             c.setVisible(true);
                             mn.close();
                         }

@@ -14,6 +14,7 @@ import java.awt.Image;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageProducer;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.sql.Date;
 import javax.swing.ImageIcon;
@@ -391,16 +392,6 @@ public class proF2 extends javax.swing.JFrame {
             chua_hinh_anh.setIcon(currentImage);
             System.out.println("image no-null");
         }
-        else if ( !chua_hinh_anh.getText().isEmpty()){
-            BufferedImage bufferedImage = convertToBufferedImage(proPanel.icon);
-            // Bây giờ bạn có thể sử dụng bufferedImage như bạn muốn!evt.isControlDown() || evt.getKeyCode() != KeyEvent.VK_V
-            
-            currentImage = proPanel.icon;
-            if(currentImage==null){
-                System.out.println("image null");
-            }
-            chua_hinh_anh.setIcon((Icon)bufferedImage);            
-        }
     }//GEN-LAST:event_txt_hinh_anhKeyPressed
 
     private void nut_editKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_nut_editKeyTyped
@@ -431,7 +422,8 @@ public class proF2 extends javax.swing.JFrame {
         byte[] image = null;
         if (currentImage != null) {
             try {
-                image = getByteArray(currentImage.getImage());
+//                image = getByteArray(currentImage.getImage());
+                  image = getImageBytes(currentImage.getImage());  
             } catch (IOException ex) {
                 Logger.getLogger(productF.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -451,7 +443,38 @@ public class proF2 extends javax.swing.JFrame {
         
         setVisible(false);
     }//GEN-LAST:event_nut_luu_chinh_suaActionPerformed
+    public byte[] getImageBytes(Image image) throws IOException {
+        BufferedImage bufferedImage = convertToBufferedImage(image);
+        return getByteArray(bufferedImage);
+    }
 
+    private BufferedImage convertToBufferedImage(Image image) {
+        if (image instanceof BufferedImage) {
+            return (BufferedImage) image;
+        }
+        BufferedImage bufferedImage = new BufferedImage(image.getWidth(null), image.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+        bufferedImage.getGraphics().drawImage(image, 0, 0, null);
+        return bufferedImage;
+    }
+
+    private byte[] getByteArray(BufferedImage image) throws IOException {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        javax.imageio.ImageIO.write(image, "png", baos);
+        return baos.toByteArray();
+    }
+
+    private byte[] getByteArray(Image image) throws IOException {
+        BufferedImage bufferedImage = convertToBufferedImage(image);
+        return getByteArray(bufferedImage);
+    }
+
+    // Sử dụng phương thức này để chuyển đổi từ ToolkitImage sang BufferedImage
+    private BufferedImage convertToolkitImageToBufferedImage(Image image) {
+        BufferedImage bufferedImage = new BufferedImage(image.getWidth(null), image.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+        bufferedImage.getGraphics().drawImage(image, 0, 0, null);
+        return bufferedImage;
+    }
+    
     private void maspFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_maspFActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_maspFActionPerformed
@@ -547,7 +570,7 @@ public class proF2 extends javax.swing.JFrame {
         });
     }
     
-    ImageIcon currentImage;
+    public static ImageIcon currentImage;
 //    int a1=0;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public javax.swing.JLabel chua_hinh_anh;
