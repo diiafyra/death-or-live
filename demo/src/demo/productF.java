@@ -124,11 +124,35 @@ public class productF extends javax.swing.JFrame {
         errorMess.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jPanel4.add(errorMess, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 20, 320, 20));
         jPanel4.add(maspF, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 80, 210, 20));
+
+        ngaynhapF.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                ngaynhapFKeyTyped(evt);
+            }
+        });
         jPanel4.add(ngaynhapF, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 140, 210, 20));
         jPanel4.add(tenspF, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 80, 210, 20));
         jPanel4.add(khonhapF, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 200, 210, 20));
+
+        gianhapF.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                gianhapFKeyTyped(evt);
+            }
+        });
         jPanel4.add(gianhapF, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 260, 210, 20));
+
+        tonkhoF.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                tonkhoFKeyTyped(evt);
+            }
+        });
         jPanel4.add(tonkhoF, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 200, 210, 20));
+
+        giaF.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                giaFKeyTyped(evt);
+            }
+        });
         jPanel4.add(giaF, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 140, 210, 20));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -161,7 +185,7 @@ public class productF extends javax.swing.JFrame {
 
     private void addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addActionPerformed
         String id = maspF.getText();
-        String name = maspF.getText();
+        String name = tenspF.getText();
         int instock = Integer.parseInt(tonkhoF.getText());
         String desc = motaArea.getText();
         byte[] imageData = null;
@@ -176,7 +200,7 @@ public class productF extends javax.swing.JFrame {
         int price_i = Integer.parseInt(gianhapF.getText());
         String depot = khonhapF.getText();
 
-        Date date = getDate(ngaynhapF);
+        String date = getDate(ngaynhapF);
 
         cndb db = cndb.getInstance();
         db.open();
@@ -188,6 +212,8 @@ public class productF extends javax.swing.JFrame {
 
         MainFr mfr = MainFr.getInstance();
         mfr.RefreshProList();
+        
+        setVisible(false);
         db.close();
     }//GEN-LAST:event_addActionPerformed
 
@@ -202,9 +228,26 @@ public class productF extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jTextField1KeyPressed
 
+    private void giaFKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_giaFKeyTyped
+        errorMess.setText(intError(evt));
+    }//GEN-LAST:event_giaFKeyTyped
+
+    private void tonkhoFKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tonkhoFKeyTyped
+        errorMess.setText(intError(evt));
+    }//GEN-LAST:event_tonkhoFKeyTyped
+
+    private void gianhapFKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_gianhapFKeyTyped
+        errorMess.setText(intError(evt));
+    }//GEN-LAST:event_gianhapFKeyTyped
+
+    private void ngaynhapFKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_ngaynhapFKeyTyped
+        errorMess.setText(dateError(evt, ngaynhapF));
+//        a1++; 
+    }//GEN-LAST:event_ngaynhapFKeyTyped
+
        
     ImageIcon currentImage;
-                int a1=0;
+    int a1=0;
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -227,6 +270,8 @@ public class productF extends javax.swing.JFrame {
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(productF.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
 

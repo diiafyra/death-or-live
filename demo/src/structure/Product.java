@@ -1,5 +1,6 @@
 package structure;
 
+import static demo.Handler.formatDate;
 import java.sql.Date;
 
 public class Product {
@@ -10,10 +11,10 @@ public class Product {
     private byte[] image;
     private int price_i;
     private int price_s;
-    private Date date_p;
+    private String date_p;
     private String depot;
 
-    public Product(String id_p, String name_p, int stock, String desc, byte[] image, int price_i, int price_s, Date date_p, String depot) {
+    public Product(String id_p, String name_p, int stock, String desc, byte[] image, int price_i, int price_s, String date_P, String depot) {
         this.id_p = id_p;
         this.name_p = name_p;
         this.stock = stock;
@@ -21,7 +22,7 @@ public class Product {
         this.image = image;
         this.price_i = price_i;
         this.price_s = price_s;
-        this.date_p = date_p;
+        this.date_p = formatDate(date_P);
         this.depot = depot;
     }
 
@@ -53,7 +54,7 @@ public class Product {
         return price_s;
     }
 
-    public Date getDate_p() {
+    public String getDate_p() {
         return date_p;
     }
 
@@ -89,13 +90,15 @@ public class Product {
         this.price_s = price_s;
     }
 
-    public void setDate_p(Date date_p) {
+    public void setDate_p(String date_p) {
         this.date_p = date_p;
     }
 
     public void setDepot(String depot) {
         this.depot = depot;
     }
-    
-    
+
+
+
 }
+

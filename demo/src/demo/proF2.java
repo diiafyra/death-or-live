@@ -5,9 +5,25 @@
  */
 package demo;
 
+import static demo.Handler.convertToBufferedImage;
+import static demo.Handler.dateError;
+import static demo.Handler.getByteArray;
+import static demo.Handler.intError;
+import static demo.Handler.pasteImageFromClipboard;
+import java.awt.Image;
+import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
+import java.awt.image.ImageProducer;
+import java.io.IOException;
 import java.sql.Date;
+import javax.swing.ImageIcon;
 import javax.swing.JTextField;
 import structure.proPanel;
+import java.sql.Date;
+import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.Icon;
 
 /**
  *
@@ -17,98 +33,78 @@ public class proF2 extends javax.swing.JFrame {
 
     public proF2() {
         initComponents();
+        // Đặt JFrame ở giữa màn hình
+        setLocationRelativeTo(null);
+        
+        // Không cho phép xóa nội dung ban đầu của các textfield 
+        maspF.setEditable(false);
+        tenspF.setEditable(false);
+        maspF.setEditable(false);
+        giabanF.setEditable(false);
+        khonhapF.setEditable(false);
+        tonkhoF.setEditable(false);
+        gianhapF.setEditable(false);
+        motaArea.setEditable(false);
+        ngaynhapF.setEditable(false);
+        
+        //Ẩn nút cho đến khi nhấn nut_chinh_sua
+        nut_luu_chinh_sua.setVisible(false);
+        txt_hinh_anh.setVisible(false);
     }   
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        maspL = new javax.swing.JLabel();
-        imageLb = new javax.swing.JLabel();
-        maspF = new java.awt.TextField();
+        jLayeredPane1 = new javax.swing.JLayeredPane();
+        giaL = new javax.swing.JLabel();
+        nut_luu_chinh_sua = new javax.swing.JButton();
+        tenspF = new javax.swing.JTextField();
+        errorMess = new javax.swing.JLabel();
         ngaynhapL = new javax.swing.JLabel();
-        ngaynhapF = new java.awt.TextField();
-        tonkhoL = new javax.swing.JLabel();
-        tonkhoF = new java.awt.TextField();
+        gianhapF = new javax.swing.JTextField();
+        txt_hinh_anh = new javax.swing.JTextField();
+        maspL = new javax.swing.JLabel();
+        giabanF = new javax.swing.JTextField();
         khonhapL = new javax.swing.JLabel();
-        khonhapF = new java.awt.TextField();
-        gianhapL = new javax.swing.JLabel();
-        gianhapF = new java.awt.TextField();
-        motaL = new javax.swing.JLabel();
         jScrollPane5 = new javax.swing.JScrollPane();
         motaArea = new javax.swing.JTextArea();
+        nut_edit = new javax.swing.JButton();
+        maspF = new javax.swing.JTextField();
+        chua_hinh_anh = new javax.swing.JLabel();
+        motaL = new javax.swing.JLabel();
+        khonhapF = new javax.swing.JTextField();
+        tonkhoF = new javax.swing.JTextField();
+        tonkhoL = new javax.swing.JLabel();
+        ngaynhapF = new javax.swing.JTextField();
+        gianhapL = new javax.swing.JLabel();
         tenspL = new javax.swing.JLabel();
-        tenspF = new java.awt.TextField();
-        giaL = new javax.swing.JLabel();
-        giaF = new java.awt.TextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        maspL.setText("Mã SP");
+        giaL.setText("Giá bán");
 
-        imageLb.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        imageLb.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        imageLb.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                imageLbKeyTyped(evt);
-            }
-        });
-
-        maspF.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
-            public void mouseDragged(java.awt.event.MouseEvent evt) {
-                maspFMouseDragged(evt);
-            }
-        });
-        maspF.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                maspFFocusGained(evt);
-            }
-        });
-        maspF.addActionListener(new java.awt.event.ActionListener() {
+        nut_luu_chinh_sua.setText("Lưu chỉnh sửa");
+        nut_luu_chinh_sua.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                maspFActionPerformed(evt);
+                nut_luu_chinh_suaActionPerformed(evt);
             }
         });
-        maspF.addKeyListener(new java.awt.event.KeyAdapter() {
+
+        tenspF.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tenspFActionPerformed(evt);
+            }
+        });
+        tenspF.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
-                maspFKeyTyped(evt);
+                tenspFKeyTyped(evt);
             }
         });
+
+        errorMess.setForeground(new java.awt.Color(255, 51, 51));
+        errorMess.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
 
         ngaynhapL.setText("Ngày nhập");
-
-        ngaynhapF.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ngaynhapFActionPerformed(evt);
-            }
-        });
-        ngaynhapF.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                ngaynhapFKeyTyped(evt);
-            }
-        });
-
-        tonkhoL.setText("Tồn kho");
-
-        tonkhoF.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                tonkhoFActionPerformed(evt);
-            }
-        });
-        tonkhoF.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                tonkhoFKeyTyped(evt);
-            }
-        });
-
-        khonhapL.setText("Kho nhập");
-
-        khonhapF.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                khonhapFActionPerformed(evt);
-            }
-        });
-
-        gianhapL.setText("Giá nhập");
 
         gianhapF.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -121,183 +117,401 @@ public class proF2 extends javax.swing.JFrame {
             }
         });
 
-        motaL.setText("Mô tả SP");
+        txt_hinh_anh.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txt_hinh_anhActionPerformed(evt);
+            }
+        });
+        txt_hinh_anh.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txt_hinh_anhKeyPressed(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txt_hinh_anhKeyTyped(evt);
+            }
+        });
+
+        maspL.setText("Mã SP");
+
+        giabanF.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                giabanFActionPerformed(evt);
+            }
+        });
+        giabanF.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                giabanFKeyTyped(evt);
+            }
+        });
+
+        khonhapL.setText("Kho nhập");
 
         motaArea.setColumns(20);
         motaArea.setRows(5);
         jScrollPane5.setViewportView(motaArea);
 
+        nut_edit.setText("Edit ?");
+        nut_edit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                nut_editActionPerformed(evt);
+            }
+        });
+        nut_edit.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                nut_editKeyTyped(evt);
+            }
+        });
+
+        maspF.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                maspFActionPerformed(evt);
+            }
+        });
+        maspF.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                maspFKeyTyped(evt);
+            }
+        });
+
+        chua_hinh_anh.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        chua_hinh_anh.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        chua_hinh_anh.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                chua_hinh_anhKeyTyped(evt);
+            }
+        });
+
+        motaL.setText("Mô tả SP");
+
+        khonhapF.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                khonhapFActionPerformed(evt);
+            }
+        });
+        khonhapF.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                khonhapFKeyTyped(evt);
+            }
+        });
+
+        tonkhoF.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tonkhoFActionPerformed(evt);
+            }
+        });
+        tonkhoF.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                tonkhoFKeyTyped(evt);
+            }
+        });
+
+        tonkhoL.setText("Tồn kho");
+
+        ngaynhapF.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ngaynhapFActionPerformed(evt);
+            }
+        });
+        ngaynhapF.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                ngaynhapFKeyTyped(evt);
+            }
+        });
+
+        gianhapL.setText("Giá nhập");
+
         tenspL.setText("Tên SP");
 
-        tenspF.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                tenspFActionPerformed(evt);
-            }
-        });
+        jLayeredPane1.setLayer(giaL, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jLayeredPane1.setLayer(nut_luu_chinh_sua, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jLayeredPane1.setLayer(tenspF, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jLayeredPane1.setLayer(errorMess, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jLayeredPane1.setLayer(ngaynhapL, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jLayeredPane1.setLayer(gianhapF, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jLayeredPane1.setLayer(txt_hinh_anh, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jLayeredPane1.setLayer(maspL, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jLayeredPane1.setLayer(giabanF, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jLayeredPane1.setLayer(khonhapL, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jLayeredPane1.setLayer(jScrollPane5, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jLayeredPane1.setLayer(nut_edit, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jLayeredPane1.setLayer(maspF, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jLayeredPane1.setLayer(chua_hinh_anh, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jLayeredPane1.setLayer(motaL, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jLayeredPane1.setLayer(khonhapF, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jLayeredPane1.setLayer(tonkhoF, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jLayeredPane1.setLayer(tonkhoL, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jLayeredPane1.setLayer(ngaynhapF, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jLayeredPane1.setLayer(gianhapL, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jLayeredPane1.setLayer(tenspL, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
-        giaL.setText("Giá bán");
-
-        giaF.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                giaFActionPerformed(evt);
-            }
-        });
-        giaF.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                giaFKeyTyped(evt);
-            }
-        });
+        javax.swing.GroupLayout jLayeredPane1Layout = new javax.swing.GroupLayout(jLayeredPane1);
+        jLayeredPane1.setLayout(jLayeredPane1Layout);
+        jLayeredPane1Layout.setHorizontalGroup(
+            jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jLayeredPane1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jLayeredPane1Layout.createSequentialGroup()
+                        .addGroup(jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(khonhapL)
+                            .addComponent(gianhapL)
+                            .addComponent(motaL)
+                            .addComponent(maspL)
+                            .addComponent(ngaynhapL))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jLayeredPane1Layout.createSequentialGroup()
+                                .addComponent(txt_hinh_anh, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(87, 87, 87)
+                                .addComponent(chua_hinh_anh, javax.swing.GroupLayout.PREFERRED_SIZE, 315, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 166, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jLayeredPane1Layout.createSequentialGroup()
+                                .addGroup(jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(khonhapF, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(ngaynhapF, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(maspF, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(gianhapF, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(jLayeredPane1Layout.createSequentialGroup()
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 212, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(nut_luu_chinh_sua))
+                                    .addGroup(jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(jLayeredPane1Layout.createSequentialGroup()
+                                            .addGap(1, 1, 1)
+                                            .addGroup(jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                .addGroup(jLayeredPane1Layout.createSequentialGroup()
+                                                    .addComponent(giaL)
+                                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                    .addComponent(giabanF, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                .addGroup(jLayeredPane1Layout.createSequentialGroup()
+                                                    .addComponent(tenspL)
+                                                    .addGap(75, 75, 75)
+                                                    .addComponent(tenspF, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                        .addGroup(jLayeredPane1Layout.createSequentialGroup()
+                                            .addComponent(tonkhoL)
+                                            .addGroup(jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addGroup(jLayeredPane1Layout.createSequentialGroup()
+                                                    .addGap(218, 218, 218)
+                                                    .addComponent(nut_edit))
+                                                .addGroup(jLayeredPane1Layout.createSequentialGroup()
+                                                    .addGap(72, 72, 72)
+                                                    .addComponent(tonkhoF, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE)))))))))
+                    .addGroup(jLayeredPane1Layout.createSequentialGroup()
+                        .addGap(231, 231, 231)
+                        .addComponent(errorMess, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 261, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
+        );
+        jLayeredPane1Layout.setVerticalGroup(
+            jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jLayeredPane1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(chua_hinh_anh, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txt_hinh_anh, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(errorMess, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(27, 27, 27)
+                .addGroup(jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jLayeredPane1Layout.createSequentialGroup()
+                        .addGroup(jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(maspL)
+                            .addComponent(maspF, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(41, 41, 41)
+                        .addGroup(jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(ngaynhapL)
+                            .addComponent(ngaynhapF, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(47, 47, 47)
+                        .addGroup(jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(khonhapL)
+                            .addComponent(khonhapF, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(35, 35, 35)
+                        .addGroup(jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(gianhapL)
+                            .addComponent(gianhapF, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(36, 36, 36)
+                        .addGroup(jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jLayeredPane1Layout.createSequentialGroup()
+                                .addGap(58, 58, 58)
+                                .addComponent(motaL)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jLayeredPane1Layout.createSequentialGroup()
+                        .addGroup(jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(tenspL)
+                            .addComponent(tenspF, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(41, 41, 41)
+                        .addGroup(jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(giaL)
+                            .addComponent(giabanF, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(40, 40, 40)
+                        .addGroup(jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(tonkhoL, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(tonkhoF, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 279, Short.MAX_VALUE)
+                        .addComponent(nut_edit)
+                        .addGap(31, 31, 31)
+                        .addComponent(nut_luu_chinh_sua)))
+                .addContainerGap())
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(37, 37, 37)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(khonhapL)
-                    .addComponent(gianhapL)
-                    .addComponent(motaL)
-                    .addComponent(maspL)
-                    .addComponent(ngaynhapL))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 55, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(ngaynhapF, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(maspF, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 85, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(giaL)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(giaF, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(tenspL)
-                                .addGap(75, 75, 75)
-                                .addComponent(tenspF, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(khonhapF, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(gianhapF, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addComponent(tonkhoL)
-                                .addGap(72, 72, 72)))
-                        .addComponent(tonkhoF, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(90, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(268, 268, 268)
-                .addComponent(imageLb, javax.swing.GroupLayout.PREFERRED_SIZE, 315, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(64, 64, 64)
+                .addComponent(jLayeredPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(37, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(imageLb, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(34, 34, 34)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(maspL)
-                        .addComponent(maspF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(tenspL))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(tenspF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(5, 5, 5)))
-                .addGap(34, 34, 34)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(ngaynhapL)
-                        .addComponent(giaL))
-                    .addComponent(giaF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(ngaynhapF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(43, 43, 43)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(tonkhoL, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(tonkhoF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(53, 53, 53)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(khonhapL)
-                            .addComponent(khonhapF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(43, 43, 43)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(gianhapL)
-                            .addComponent(gianhapF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(38, 38, 38)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(58, 58, 58)
-                                .addComponent(motaL)))))
-                .addContainerGap(130, Short.MAX_VALUE))
+                .addGap(29, 29, 29)
+                .addComponent(jLayeredPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(55, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
     
-    private void imageLbKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_imageLbKeyTyped
+    private void chua_hinh_anhKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_chua_hinh_anhKeyTyped
         // TODO add your handling code here:
-    }//GEN-LAST:event_imageLbKeyTyped
+    }//GEN-LAST:event_chua_hinh_anhKeyTyped
+
+    private void txt_hinh_anhActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_hinh_anhActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txt_hinh_anhActionPerformed
+
+    private void txt_hinh_anhKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_hinh_anhKeyPressed
+        if (evt.isControlDown() && evt.getKeyCode() == KeyEvent.VK_V) {
+            currentImage = pasteImageFromClipboard();
+            chua_hinh_anh.setIcon(currentImage);
+            System.out.println("image no-null");
+        }
+        else if ( !chua_hinh_anh.getText().isEmpty()){
+            BufferedImage bufferedImage = convertToBufferedImage(proPanel.icon);
+            // Bây giờ bạn có thể sử dụng bufferedImage như bạn muốn!evt.isControlDown() || evt.getKeyCode() != KeyEvent.VK_V
+            
+            currentImage = proPanel.icon;
+            if(currentImage==null){
+                System.out.println("image null");
+            }
+            chua_hinh_anh.setIcon((Icon)bufferedImage);            
+        }
+    }//GEN-LAST:event_txt_hinh_anhKeyPressed
+
+    private void nut_editKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_nut_editKeyTyped
+
+    }//GEN-LAST:event_nut_editKeyTyped
+
+    private void nut_editActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nut_editActionPerformed
+        nut_edit.setVisible(false);
+        nut_luu_chinh_sua.setVisible(true);
+        txt_hinh_anh.setVisible(true);
+        chua_hinh_anh.setVisible(true); 
+        tenspF.setEditable(true);
+        giabanF.setEditable(true);
+        khonhapF.setEditable(true);
+        tonkhoF.setEditable(true);
+        gianhapF.setEditable(true);
+        motaArea.setEditable(true);
+        ngaynhapF.setEditable(true);
+    }//GEN-LAST:event_nut_editActionPerformed
+
+    private void nut_luu_chinh_suaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nut_luu_chinh_suaActionPerformed
+
+        String masp = maspF.getText().trim();
+        String tensp = tenspF.getText().trim();
+        String date = Handler.getDate(ngaynhapF);
+        int stock = Integer.parseInt(tonkhoF.getText().trim());
+        String desc = motaArea.getText().trim();
+        byte[] image = null;
+        if (currentImage != null) {
+            try {
+                image = getByteArray(currentImage.getImage());
+            } catch (IOException ex) {
+                Logger.getLogger(productF.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }        
+        int price_i= Integer.parseInt(gianhapF.getText().trim());
+        int price_s=Integer.parseInt(giabanF.getText().trim());
+        String depot=khonhapF.getText().trim();
+        cndb a=cndb.getInstance();
+        a.open();        
+        a.productUpdate(masp, tensp, stock, desc, image, price_i, price_s, depot, date);
+
+        //2 dòng này để cập nhật lại giao diện sp sau khi xóa 
+        MainFr mfr = MainFr.getInstance();
+        mfr.RefreshProList(); 
+        
+        a.close();
+        
+        setVisible(false);
+    }//GEN-LAST:event_nut_luu_chinh_suaActionPerformed
 
     private void maspFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_maspFActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_maspFActionPerformed
 
-    private void ngaynhapFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ngaynhapFActionPerformed
+    private void maspFKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_maspFKeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_maspFKeyTyped
 
+    private void ngaynhapFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ngaynhapFActionPerformed
+        // TODO add your handling code here:
     }//GEN-LAST:event_ngaynhapFActionPerformed
 
     private void ngaynhapFKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_ngaynhapFKeyTyped
-
+        errorMess.setText(dateError(evt, ngaynhapF));
+//        a1++; 
     }//GEN-LAST:event_ngaynhapFKeyTyped
 
-    private void tonkhoFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tonkhoFActionPerformed
+    private void tenspFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tenspFActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_tonkhoFActionPerformed
+    }//GEN-LAST:event_tenspFActionPerformed
 
-    private void tonkhoFKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tonkhoFKeyTyped
-    }//GEN-LAST:event_tonkhoFKeyTyped
+    private void tenspFKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tenspFKeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tenspFKeyTyped
 
     private void khonhapFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_khonhapFActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_khonhapFActionPerformed
+
+    private void khonhapFKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_khonhapFKeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_khonhapFKeyTyped
 
     private void gianhapFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_gianhapFActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_gianhapFActionPerformed
 
     private void gianhapFKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_gianhapFKeyTyped
+        errorMess.setText(intError(evt));
     }//GEN-LAST:event_gianhapFKeyTyped
 
-    private void tenspFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tenspFActionPerformed
-
-    }//GEN-LAST:event_tenspFActionPerformed
-
-    private void giaFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_giaFActionPerformed
+    private void tonkhoFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tonkhoFActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_giaFActionPerformed
+    }//GEN-LAST:event_tonkhoFActionPerformed
 
-    private void giaFKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_giaFKeyTyped
-    }//GEN-LAST:event_giaFKeyTyped
-    private void maspFKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_maspFKeyTyped
+    private void tonkhoFKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tonkhoFKeyTyped
+        errorMess.setText(intError(evt));
+    }//GEN-LAST:event_tonkhoFKeyTyped
 
-    }//GEN-LAST:event_maspFKeyTyped
-
-    private void maspFFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_maspFFocusGained
-
-    }//GEN-LAST:event_maspFFocusGained
-
-    private void maspFMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_maspFMouseDragged
+    private void giabanFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_giabanFActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_maspFMouseDragged
+    }//GEN-LAST:event_giabanFActionPerformed
+
+    private void giabanFKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_giabanFKeyTyped
+        errorMess.setText(intError(evt));
+    }//GEN-LAST:event_giabanFKeyTyped
+
+    private void txt_hinh_anhKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_hinh_anhKeyTyped
+          
+    }//GEN-LAST:event_txt_hinh_anhKeyTyped
 
 
     public static void main(String args[]) {
@@ -323,6 +537,7 @@ public class proF2 extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(proF2.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
+        //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -332,24 +547,31 @@ public class proF2 extends javax.swing.JFrame {
         });
     }
     
+    ImageIcon currentImage;
+//    int a1=0;
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    public java.awt.TextField giaF;
+    public javax.swing.JLabel chua_hinh_anh;
+    private javax.swing.JLabel errorMess;
     private javax.swing.JLabel giaL;
-    public java.awt.TextField gianhapF;
+    public javax.swing.JTextField giabanF;
+    public javax.swing.JTextField gianhapF;
     private javax.swing.JLabel gianhapL;
-    public javax.swing.JLabel imageLb;
+    private javax.swing.JLayeredPane jLayeredPane1;
     private javax.swing.JScrollPane jScrollPane5;
-    public java.awt.TextField khonhapF;
+    public javax.swing.JTextField khonhapF;
     private javax.swing.JLabel khonhapL;
-    public java.awt.TextField maspF;
+    public javax.swing.JTextField maspF;
     private javax.swing.JLabel maspL;
     public static javax.swing.JTextArea motaArea;
     private javax.swing.JLabel motaL;
-    public java.awt.TextField ngaynhapF;
+    public javax.swing.JTextField ngaynhapF;
     private javax.swing.JLabel ngaynhapL;
-    public java.awt.TextField tenspF;
+    private javax.swing.JButton nut_edit;
+    private javax.swing.JButton nut_luu_chinh_sua;
+    public javax.swing.JTextField tenspF;
     private javax.swing.JLabel tenspL;
-    public java.awt.TextField tonkhoF;
+    public javax.swing.JTextField tonkhoF;
     private javax.swing.JLabel tonkhoL;
+    private javax.swing.JTextField txt_hinh_anh;
     // End of variables declaration//GEN-END:variables
 }

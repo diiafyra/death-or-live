@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package structure;
 
 import demo.MainFr;
@@ -36,7 +31,7 @@ import sun.applet.Main;
  */
 public class proPanel extends JPanel {
     private boolean isHighlighted = false;
-
+    public static ImageIcon icon;
     public proPanel(byte[] imageData, String name, int price, int instock) {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setPreferredSize(new Dimension(250, 300));
@@ -67,7 +62,6 @@ public class proPanel extends JPanel {
                     a.setLocation(z1.x, z1.y);
                     // JPanel chứa các nút
                     JPanel a1 = new JPanel();
-//                    JPanel a2 = new JPanel();
                     
                     // Nút Xóa
                     JButton a11 = new JButton("Xóa");
@@ -75,13 +69,15 @@ public class proPanel extends JPanel {
                     a11.addActionListener(new ActionListener() {
                         public void actionPerformed(ActionEvent e) {
                             // Thêm xử lý khi nhấn nút Xóa ở đây
-                            cndb mn=new cndb();
+                            cndb mn=cndb.getInstance();
+                            mn.open();
                             mn.xoa_san_pham(e, imageData);    
                             a.dispose();
                             
                             //2 dòng này để cập nhật lại giao diện sp sau khi xóa 
                             MainFr mfr = MainFr.getInstance();
                             mfr.RefreshProList();
+                            mn.close();
                         }
                     });
 
@@ -91,7 +87,8 @@ public class proPanel extends JPanel {
                     a22.addActionListener(new ActionListener() {
                         public void actionPerformed(ActionEvent e) {
                             // Thêm xử lý khi nhấn nút Chi tiết ở đây
-                            cndb mn=new cndb();
+                            cndb mn=cndb.getInstance();
+                            mn.open();
                             mn.chi_tiet_san_pham(imageData);
                             String id_p = mn.getId_p();
                             String name_p= mn.getName_p();
@@ -100,28 +97,26 @@ public class proPanel extends JPanel {
                             byte[] image=mn.getImage();
                             int price_i=mn.getPrice_i();
                             int price_s=mn.getPrice_s();
-                            Date date_p=mn.getDate_p();
-                            String depot=mn.getDepot();                            
+                            String date_p=mn.getDate_p();
+                            String depot=mn.getDepot();   
+                            
                             proF2 c=new proF2();
                             c.maspF.setText(id_p); // Thiết lập giá trị id_p cho maspF
                             c.tenspF.setText(name_p);
                             c.tonkhoF.setText(Integer.toString(stock));
-                            c.motaArea.setText(desc);
-                            
+                            c.motaArea.setText(desc);                           
                             // Chuyển đổi mảng byte thành một hình ảnh
-                            ImageIcon icon = new ImageIcon(image);
+                            icon = new ImageIcon(image);
                             // Thiết lập hình ảnh cho JLabel
-                            c.imageLb.setIcon(icon);
-
+                            c.chua_hinh_anh.setIcon(icon);
                             c.gianhapF.setText(Integer.toString(price_i));
-                            c.giaF.setText(Integer.toString(price_s));
-                            
-                            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy"); // Định dạng ngày tháng
-                            String formattedDate = sdf.format(date_p); // Chuyển đổi Date thành chuỗi
-                            c.ngaynhapF.setText(formattedDate); // Thiết lập giá trị cho ngaynhapF
-                            
+                            c.giabanF.setText(Integer.toString(price_s));            
+//                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd"); // Định dạng ngày tháng
+//                            String formattedDate = sdf.format(date_p); // Chuyển đổi Date thành chuỗi
+                            c.ngaynhapF.setText(date_p); // Thiết lập giá trị cho ngaynhapF                            
                             c.khonhapF.setText(depot);
                             c.setVisible(true);
+                            mn.close();
                         }
                     });
 

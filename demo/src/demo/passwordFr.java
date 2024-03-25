@@ -17,6 +17,8 @@ public class passwordFr extends javax.swing.JFrame {
      */
     public passwordFr() {
         initComponents();
+        // Đặt JFrame ở giữa màn hình
+        setLocationRelativeTo(null);
     }
 
     /**
