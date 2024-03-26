@@ -30,14 +30,16 @@ import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.event.TableModelEvent;
 import javax.swing.table.DefaultTableModel;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.data.general.DefaultPieDataset;
-import structure.Order;
-import structure.Product;
-import structure.proPanel;
+import models.Order;
+import models.Product;
+import models.proPanel;
 
 /**
  *
@@ -79,6 +81,22 @@ public class Handler {
             proPanels.add(proP);
         }
         return proPanels;
+    }
+    
+    //xác định lỗi khi người dùng nhập vào bảng không phải số
+    public static String intErrorTable(JTable table, TableModelEvent e) {
+        String errorMessage = " ";
+        int row = e.getFirstRow();
+        int column = e.getColumn();
+        String value = (String) table.getValueAt(row, column);
+
+        if ( value != null && !value.matches("\\d+")) { // Kiểm tra nếu giá trị không phải là số nguyên dương
+            errorMessage = "HÃY NHẬP VÀO SỐ";
+            table.setValueAt(null, row, column);
+        } else {
+            errorMessage = "";
+        }
+        return errorMessage;
     }
     
     //xác định lỗi khi người dùng nhập vào không phải là số
@@ -129,7 +147,6 @@ public class Handler {
     }
 
 
-   
     // Lớp xử lý sự kiện để paste hình ảnh từ Clipboard
     public static ImageIcon pasteImageFromClipboard() {
         ImageIcon currentImage = null;

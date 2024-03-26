@@ -1,4 +1,4 @@
-package structure;
+package models;
 
 import static demo.Handler.formatDate;
 import java.sql.Date;

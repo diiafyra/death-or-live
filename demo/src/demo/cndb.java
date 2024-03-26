@@ -23,9 +23,9 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import org.jfree.data.general.DefaultPieDataset;
-import structure.Order;
-import structure.Product;
-import structure.ProductEx;
+import models.Order;
+import models.Product;
+import models.ProductEx;
 
 /**
  *
@@ -61,6 +61,8 @@ public class cndb {
     
 //singleton pattern nhằm chỉ tạo ra 1 đối tượng cndb duy nhất trong quá trình chạy
     private static cndb instance;    
+    //1
+    //singleton pattern nhằm chỉ tạo ra 1 đối tượng cndb duy nhất trong quá trình chạy
     public static cndb getInstance(){
         if(instance == null){
             instance = new cndb();
@@ -264,6 +266,19 @@ public class cndb {
             return status;
     }
         
+        public int getEarliestYear(){
+            int eYear = 0;
+            try {
+                String sql = "SELECT MIN(strftime('%Y', DATE_O)) AS EARLIEST_YEAR FROM ORDERS";
+
+                pre = conn.prepareStatement(sql);
+                ResultSet rlt = pre.executeQuery();
+                eYear = rlt.getInt("EARLIEST_YEAR");
+            } catch (SQLException ex) {
+                Logger.getLogger(cndb.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            return eYear;
+        }
         public List<ProductEx> salesReports(String month, String year){
                         List<ProductEx> proExs = new ArrayList<>();
             try {
@@ -410,7 +425,7 @@ public class cndb {
                 //System.out.print(""+date);
                 //Nếu dòng tiếp theo có orderId không có trong map chưa nếu chưa thì thêm ..
                 if (!orderMap.containsKey(orderId)) {
-                    orderMap.put(orderId, new Order(orderId, rlt.getString("NAME_C"), rlt.getString("DATE_O"), rlt.getString("DATE_P"),
+                    orderMap.put(orderId, new Order(orderId, rlt.getString("NAME_C"), rlt.getString("DATE_O"), rlt.getString("DATE_D"),
                             rlt.getString("ADDR"), rlt.getString("PAY_TYPE"), rlt.getInt("DEL_STT"),
                             new HashMap<>(), 0));
                 }
@@ -446,7 +461,7 @@ public class cndb {
                 sqlA = btn ? "o.ID_O = ?" + sqlB : "o.ID_O LIKE ? ";
                 break;
             case 2:
-                sqlA = btn ? "p.ID_P = ? OR p_NAME_P = ? " + sqlB : "p.ID_P LIKE ? OR p_NAME_P LIKE ? ";
+                sqlA = btn ? "p.ID_P = ? OR p.NAME_P = ? " + sqlB : "p.ID_P LIKE ? OR p.NAME_P LIKE ? ";
                 break;
             case 3:
                 sqlA = btn ? "o.DEL_STT = ? " : "o.DEL_STT = ? ";
@@ -462,7 +477,21 @@ public class cndb {
         return sqlEx;
     }
 
-
+    public int getStock(String id_p){
+        int stock = 0;
+        try {
+            String sql = "SELECT STOCK FROM PRODUCTS WHERE ID_P =?";
+            pre = conn.prepareStatement(sql);
+            pre.setString(1, id_p);
+            ResultSet rlt = pre.executeQuery();
+            if (rlt.next()) { // Di chuyển con trỏ đến dòng đầu tiên
+                stock = rlt.getInt("STOCK"); // Lấy giá trị từ cột STOCK
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(cndb.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return stock;
+    }
 
     //phương thức thêm sản phẩm vào database
         public int productInsert(String id_p, String name_p, int stock , String desc, byte[] image,int price_i, int price_s, String depot, String date){
@@ -521,6 +550,7 @@ public class cndb {
         return proList;
     }
 
+    
     //Phương thức xóa sản phẩm theo hình ảnh 
     public void xoa_san_pham(java.awt.event.ActionEvent e, byte[] image){
         // Kết nối cơ sở dữ liệu
@@ -545,6 +575,8 @@ public class cndb {
         }    
     }
     
+
+    
     //Phương thức bổ trợ hiện chi tiết sản phẩm 
     public String id_p;
     public String name_p;
@@ -554,8 +586,8 @@ public class cndb {
     public int price_i;
     public int price_s;
     public String date_p;
-    public String depot;    
-    
+    public String depot;   
+
     public void chi_tiet_san_pham(int index, List<Product> allPro) {         
         try {
             // Lấy ID của sản phẩm cần xóa từ danh sách sản phẩm
@@ -650,7 +682,24 @@ public class cndb {
             JOptionPane.showMessageDialog(null, "Lỗi khi xóa sản phẩm: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
         }    
     }
- 
+    
+    //PT update tồn kho sản phẩm theo ID 
+    public int stockUpdate(String id_p, int qual){
+        int status = 0;
+        try {
+            String sql = "UPDATE PRODUCTS SET STOCK = STOCK - ? WHERE ID_P =?";
+            pre = conn.prepareStatement(sql);
+            pre.setInt(1, qual);
+            pre.setString(2, id_p);
+            status = pre.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(cndb.class.getName()).log(Level.SEVERE, null, ex);
+            status = -1;
+        }
+        return status;
+    }
+    
+
     
 }
 

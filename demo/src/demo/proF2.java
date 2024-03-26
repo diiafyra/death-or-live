@@ -19,7 +19,7 @@ import java.io.IOException;
 import java.sql.Date;
 import javax.swing.ImageIcon;
 import javax.swing.JTextField;
-import structure.proPanel;
+import models.proPanel;
 import java.sql.Date;
 import java.util.HashMap;
 import java.util.logging.Level;
@@ -559,6 +559,8 @@ public class proF2 extends javax.swing.JFrame {
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(proF2.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
 
