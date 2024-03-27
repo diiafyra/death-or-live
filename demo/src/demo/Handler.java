@@ -57,7 +57,7 @@ public class Handler {
         for(Order order: allOrders){
             String id = order.getId_o();
             String name = order.getName_c();
-            int cost = order.getTotal_amount();
+            double cost = order.getTotal_amount();
             int deliveryStt = order.getDel_stt();
             Object[] row = {id, name, cost, deliveryStt};
             dTM.addRow(row);

@@ -87,7 +87,7 @@
                   <Group type="102" alignment="1" attributes="0">
                       <Component id="jPanel6" min="-2" pref="32" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
-                      <Component id="jScrollPane2" pref="523" max="32767" attributes="0"/>
+                      <Component id="jScrollPane2" pref="560" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -121,7 +121,7 @@
                           <Component id="b_search_product" min="-2" max="-2" attributes="0"/>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
                           <Component id="txt_search_product" min="-2" pref="478" max="-2" attributes="0"/>
-                          <EmptySpace pref="64" max="32767" attributes="0"/>
+                          <EmptySpace pref="2330" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -307,7 +307,7 @@
                                               </Group>
                                               <EmptySpace max="-2" attributes="0"/>
                                           </Group>
-                                          <Component id="jScrollPane3" pref="667" max="32767" attributes="0"/>
+                                          <Component id="jScrollPane3" pref="2740" max="32767" attributes="0"/>
                                           <Group type="102" attributes="0">
                                               <Group type="103" groupAlignment="0" max="-2" attributes="0">
                                                   <Component id="jLabel6" alignment="0" max="32767" attributes="0"/>
@@ -324,7 +324,7 @@
                                                   <Component id="name_c_f" alignment="0" max="32767" attributes="0"/>
                                                   <Component id="date_o_f" alignment="0" max="32767" attributes="0"/>
                                                   <Component id="addr_f" max="32767" attributes="0"/>
-                                                  <Component id="pay_type" alignment="0" pref="507" max="32767" attributes="0"/>
+                                                  <Component id="pay_type" alignment="0" pref="2580" max="32767" attributes="0"/>
                                                   <Group type="102" alignment="0" attributes="0">
                                                       <Component id="addOD" min="-2" max="-2" attributes="0"/>
                                                       <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
@@ -389,7 +389,7 @@
                                           <Component id="addOD" alignment="3" min="-2" max="-2" attributes="0"/>
                                       </Group>
                                       <EmptySpace min="-2" max="-2" attributes="0"/>
-                                      <Component id="jScrollPane3" pref="86" max="32767" attributes="0"/>
+                                      <Component id="jScrollPane3" pref="123" max="32767" attributes="0"/>
                                   </Group>
                               </Group>
                             </DimensionLayout>
@@ -465,7 +465,7 @@
                                 <Component class="javax.swing.JTable" name="orderdetail">
                                   <Properties>
                                     <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor" postCode="TableColumn productColumn = orderdetail.getColumnModel().getColumn(1);&#xa;JComboBox comboBox = createProComboBox(orderdetail);&#xa;productColumn.setCellEditor(new DefaultCellEditor(comboBox));">
-                                      <Connection code="new javax.swing.table.DefaultTableModel(&#xa;    new Object [][] {&#xa;    },&#xa;    new String [] {&#xa;        &quot;M&#xe3; s&#x1ea3;n ph&#x1ea9;m&quot;,&quot;S&#x1ea3;n ph&#x1ea9;m&quot;, &quot;S&#x1ed1; l&#x1b0;&#x1ee3;ng&quot;, &quot;&#x110;&#x1a1;n gi&#xe1;&quot;,&quot;Gi&#xe1;&quot;&#xa;    }&#xa;)" type="code"/>
+                                      <Connection code="new javax.swing.table.DefaultTableModel(&#xa;    new Object [][] {&#xa;    },&#xa;    new String [] {&#xa;        &quot;M&#xe3; s&#x1ea3;n ph&#x1ea9;m&quot;,&quot;S&#x1ea3;n ph&#x1ea9;m&quot;, &quot;S&#x1ed1; l&#x1b0;&#x1ee3;ng&quot;, &quot;&#x110;&#x1a1;n gi&#xe1;&quot;,&quot;Gi&#xe1;&quot;, &quot;Gi&#x1ea3;m gi&#xe1;&quot;&#xa;    }&#xa;)" type="code"/>
                                     </Property>
                                   </Properties>
                                   <Events>
@@ -707,7 +707,7 @@
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="jScrollPane4" alignment="0" pref="573" max="32767" attributes="0"/>
+                  <Component id="jScrollPane4" alignment="0" pref="610" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
           </Layout>
@@ -741,14 +741,14 @@
                               <Group type="102" alignment="0" attributes="0">
                                   <EmptySpace min="-2" pref="32" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="jPanel1" alignment="0" pref="1119" max="32767" attributes="0"/>
+                                      <Component id="jPanel1" alignment="0" max="32767" attributes="0"/>
                                       <Group type="102" attributes="0">
                                           <Component id="jLabel9" min="-2" max="-2" attributes="0"/>
                                           <EmptySpace type="separate" max="-2" attributes="0"/>
                                           <Component id="cb_month" min="-2" pref="100" max="-2" attributes="0"/>
                                           <EmptySpace type="separate" max="-2" attributes="0"/>
                                           <Component id="cb_year" min="-2" pref="117" max="-2" attributes="0"/>
-                                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                                          <EmptySpace min="0" pref="2824" max="32767" attributes="0"/>
                                       </Group>
                                   </Group>
                                   <EmptySpace min="-2" pref="39" max="-2" attributes="0"/>
@@ -791,253 +791,236 @@
                           </Layout>
                           <SubComponents>
                             <Container class="javax.swing.JPanel" name="jPanel4">
+                              <AuxValues>
+                                <AuxValue name="JavaCodeGenerator_LayoutCodePre" type="java.lang.String" value="// Th&#xea;m MouseListener v&#xe0;o jPanel4&#xa;        jPanel4.addMouseListener(new MouseAdapter() {&#xa;            @Override&#xa;            public void mouseEntered(MouseEvent e) {&#xa;                // Thay &#x111;&#x1ed5;i m&#xe0;u n&#x1ec1;n khi di chu&#x1ed9;t v&#xe0;o&#xa;                jPanel4.setBackground(Color.WHITE);&#xa;            }&#xa;&#xa;            @Override&#xa;            public void mouseExited(MouseEvent e) {&#xa;                // Thay &#x111;&#x1ed5;i m&#xe0;u n&#x1ec1;n khi di chu&#x1ed9;t ra kh&#x1ecf;i&#xa;                jPanel4.setBackground(Color.GRAY); // Thay &#x111;&#x1ed5;i m&#xe0;u n&#x1ec1;n khi di chu&#x1ed9;t ra kh&#x1ecf;i&#xa;            }&#xa;        });"/>
+                              </AuxValues>
 
-                              <Layout>
-                                <DimensionLayout dim="0">
-                                  <Group type="103" groupAlignment="0" attributes="0">
-                                      <Group type="102" attributes="0">
-                                          <Group type="103" groupAlignment="0" attributes="0">
-                                              <Group type="102" attributes="0">
-                                                  <EmptySpace min="-2" pref="91" max="-2" attributes="0"/>
-                                                  <Component id="jLabel11" min="-2" max="-2" attributes="0"/>
-                                              </Group>
-                                              <Group type="102" alignment="0" attributes="0">
-                                                  <EmptySpace min="-2" pref="108" max="-2" attributes="0"/>
-                                                  <Component id="jLabel12" min="-2" pref="53" max="-2" attributes="0"/>
-                                              </Group>
-                                          </Group>
-                                          <EmptySpace pref="110" max="32767" attributes="0"/>
-                                      </Group>
-                                  </Group>
-                                </DimensionLayout>
-                                <DimensionLayout dim="1">
-                                  <Group type="103" groupAlignment="0" attributes="0">
-                                      <Group type="102" alignment="1" attributes="0">
-                                          <EmptySpace pref="85" max="32767" attributes="0"/>
-                                          <Component id="jLabel12" min="-2" pref="20" max="-2" attributes="0"/>
-                                          <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
-                                          <Component id="jLabel11" min="-2" max="-2" attributes="0"/>
-                                          <EmptySpace min="-2" pref="38" max="-2" attributes="0"/>
-                                      </Group>
-                                  </Group>
-                                </DimensionLayout>
+                              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                                <Property name="columns" type="int" value="1"/>
+                                <Property name="rows" type="int" value="0"/>
+                                <Property name="verticalGap" type="int" value="25"/>
                               </Layout>
                               <SubComponents>
-                                <Component class="javax.swing.JLabel" name="jLabel11">
+                                <Component class="javax.swing.JLabel" name="jLabel12">
                                   <Properties>
-                                    <Property name="text" type="java.lang.String" value="Ch&#x1edd; L&#x1ea5;y H&#xe0;ng"/>
+                                    <Property name="horizontalAlignment" type="int" value="0"/>
+                                    <Property name="text" type="java.lang.String" value="pp"/>
+                                    <Property name="verticalAlignment" type="int" value="3"/>
+                                    <Property name="horizontalTextPosition" type="int" value="0"/>
                                   </Properties>
                                 </Component>
-                                <Component class="javax.swing.JLabel" name="jLabel12">
+                                <Component class="javax.swing.JLabel" name="jLabel11">
+                                  <Properties>
+                                    <Property name="horizontalAlignment" type="int" value="0"/>
+                                    <Property name="text" type="java.lang.String" value="Ch&#x1edd; L&#x1ea5;y H&#xe0;ng"/>
+                                    <Property name="verticalAlignment" type="int" value="1"/>
+                                    <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+                                      <Color id="Default Cursor"/>
+                                    </Property>
+                                    <Property name="horizontalTextPosition" type="int" value="0"/>
+                                  </Properties>
                                 </Component>
                               </SubComponents>
                             </Container>
                             <Container class="javax.swing.JPanel" name="jPanel7">
 
-                              <Layout>
-                                <DimensionLayout dim="0">
-                                  <Group type="103" groupAlignment="0" attributes="0">
-                                      <Group type="102" alignment="1" attributes="0">
-                                          <EmptySpace pref="117" max="32767" attributes="0"/>
-                                          <Component id="jLabel13" min="-2" max="-2" attributes="0"/>
-                                          <EmptySpace min="-2" pref="103" max="-2" attributes="0"/>
-                                      </Group>
-                                  </Group>
-                                </DimensionLayout>
-                                <DimensionLayout dim="1">
-                                  <Group type="103" groupAlignment="0" attributes="0">
-                                      <Group type="102" alignment="1" attributes="0">
-                                          <EmptySpace pref="127" max="32767" attributes="0"/>
-                                          <Component id="jLabel13" min="-2" max="-2" attributes="0"/>
-                                          <EmptySpace min="-2" pref="42" max="-2" attributes="0"/>
-                                      </Group>
-                                  </Group>
-                                </DimensionLayout>
+                              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                                <Property name="columns" type="int" value="1"/>
+                                <Property name="rows" type="int" value="0"/>
+                                <Property name="verticalGap" type="int" value="25"/>
                               </Layout>
                               <SubComponents>
                                 <Component class="javax.swing.JLabel" name="jLabel13">
                                   <Properties>
+                                    <Property name="horizontalAlignment" type="int" value="0"/>
+                                    <Property name="text" type="java.lang.String" value="pp"/>
+                                    <Property name="verticalAlignment" type="int" value="3"/>
+                                    <Property name="horizontalTextPosition" type="int" value="0"/>
+                                  </Properties>
+                                </Component>
+                                <Component class="javax.swing.JLabel" name="jLabel14">
+                                  <Properties>
+                                    <Property name="horizontalAlignment" type="int" value="0"/>
                                     <Property name="text" type="java.lang.String" value="&#x110;ang Giao"/>
+                                    <Property name="verticalAlignment" type="int" value="1"/>
+                                    <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+                                      <Color id="Default Cursor"/>
+                                    </Property>
+                                    <Property name="horizontalTextPosition" type="int" value="0"/>
                                   </Properties>
                                 </Component>
                               </SubComponents>
                             </Container>
                             <Container class="javax.swing.JPanel" name="jPanel8">
 
-                              <Layout>
-                                <DimensionLayout dim="0">
-                                  <Group type="103" groupAlignment="0" attributes="0">
-                                      <Group type="102" alignment="0" attributes="0">
-                                          <EmptySpace min="-2" pref="105" max="-2" attributes="0"/>
-                                          <Component id="jLabel14" min="-2" max="-2" attributes="0"/>
-                                          <EmptySpace pref="105" max="32767" attributes="0"/>
-                                      </Group>
-                                  </Group>
-                                </DimensionLayout>
-                                <DimensionLayout dim="1">
-                                  <Group type="103" groupAlignment="0" attributes="0">
-                                      <Group type="102" alignment="1" attributes="0">
-                                          <EmptySpace pref="127" max="32767" attributes="0"/>
-                                          <Component id="jLabel14" min="-2" max="-2" attributes="0"/>
-                                          <EmptySpace min="-2" pref="42" max="-2" attributes="0"/>
-                                      </Group>
-                                  </Group>
-                                </DimensionLayout>
+                              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                                <Property name="columns" type="int" value="1"/>
+                                <Property name="rows" type="int" value="0"/>
+                                <Property name="verticalGap" type="int" value="25"/>
                               </Layout>
                               <SubComponents>
-                                <Component class="javax.swing.JLabel" name="jLabel14">
+                                <Component class="javax.swing.JLabel" name="jLabel15">
                                   <Properties>
+                                    <Property name="horizontalAlignment" type="int" value="0"/>
+                                    <Property name="text" type="java.lang.String" value="pp"/>
+                                    <Property name="verticalAlignment" type="int" value="3"/>
+                                    <Property name="horizontalTextPosition" type="int" value="0"/>
+                                  </Properties>
+                                </Component>
+                                <Component class="javax.swing.JLabel" name="jLabel16">
+                                  <Properties>
+                                    <Property name="horizontalAlignment" type="int" value="0"/>
                                     <Property name="text" type="java.lang.String" value="Ho&#xe0;n Th&#xe0;nh"/>
+                                    <Property name="verticalAlignment" type="int" value="1"/>
+                                    <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+                                      <Color id="Default Cursor"/>
+                                    </Property>
+                                    <Property name="horizontalTextPosition" type="int" value="0"/>
                                   </Properties>
                                 </Component>
                               </SubComponents>
                             </Container>
                             <Container class="javax.swing.JPanel" name="jPanel10">
 
-                              <Layout>
-                                <DimensionLayout dim="0">
-                                  <Group type="103" groupAlignment="0" attributes="0">
-                                      <Group type="102" alignment="0" attributes="0">
-                                          <EmptySpace min="-2" pref="129" max="-2" attributes="0"/>
-                                          <Component id="jLabel15" min="-2" max="-2" attributes="0"/>
-                                          <EmptySpace pref="129" max="32767" attributes="0"/>
-                                      </Group>
-                                  </Group>
-                                </DimensionLayout>
-                                <DimensionLayout dim="1">
-                                  <Group type="103" groupAlignment="0" attributes="0">
-                                      <Group type="102" alignment="1" attributes="0">
-                                          <EmptySpace pref="123" max="32767" attributes="0"/>
-                                          <Component id="jLabel15" min="-2" max="-2" attributes="0"/>
-                                          <EmptySpace min="-2" pref="46" max="-2" attributes="0"/>
-                                      </Group>
-                                  </Group>
-                                </DimensionLayout>
+                              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                                <Property name="columns" type="int" value="1"/>
+                                <Property name="rows" type="int" value="0"/>
+                                <Property name="verticalGap" type="int" value="25"/>
                               </Layout>
                               <SubComponents>
-                                <Component class="javax.swing.JLabel" name="jLabel15">
+                                <Component class="javax.swing.JLabel" name="jLabel17">
                                   <Properties>
-                                    <Property name="text" type="java.lang.String" value="H&#x1ee7;y"/>
+                                    <Property name="horizontalAlignment" type="int" value="0"/>
+                                    <Property name="text" type="java.lang.String" value="pp"/>
+                                    <Property name="verticalAlignment" type="int" value="3"/>
+                                    <Property name="horizontalTextPosition" type="int" value="0"/>
+                                  </Properties>
+                                </Component>
+                                <Component class="javax.swing.JLabel" name="jLabel18">
+                                  <Properties>
+                                    <Property name="horizontalAlignment" type="int" value="0"/>
+                                    <Property name="text" type="java.lang.String" value="&#x110;&#xe3; H&#x1ee7;y"/>
+                                    <Property name="verticalAlignment" type="int" value="1"/>
+                                    <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+                                      <Color id="Default Cursor"/>
+                                    </Property>
+                                    <Property name="horizontalTextPosition" type="int" value="0"/>
                                   </Properties>
                                 </Component>
                               </SubComponents>
                             </Container>
                             <Container class="javax.swing.JPanel" name="jPanel11">
 
-                              <Layout>
-                                <DimensionLayout dim="0">
-                                  <Group type="103" groupAlignment="0" attributes="0">
-                                      <Group type="102" alignment="0" attributes="0">
-                                          <EmptySpace min="-2" pref="80" max="-2" attributes="0"/>
-                                          <Component id="jLabel16" min="-2" max="-2" attributes="0"/>
-                                          <EmptySpace pref="103" max="32767" attributes="0"/>
-                                      </Group>
-                                  </Group>
-                                </DimensionLayout>
-                                <DimensionLayout dim="1">
-                                  <Group type="103" groupAlignment="0" attributes="0">
-                                      <Group type="102" alignment="1" attributes="0">
-                                          <EmptySpace pref="119" max="32767" attributes="0"/>
-                                          <Component id="jLabel16" min="-2" max="-2" attributes="0"/>
-                                          <EmptySpace min="-2" pref="50" max="-2" attributes="0"/>
-                                      </Group>
-                                  </Group>
-                                </DimensionLayout>
+                              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                                <Property name="columns" type="int" value="1"/>
+                                <Property name="rows" type="int" value="0"/>
+                                <Property name="verticalGap" type="int" value="25"/>
                               </Layout>
                               <SubComponents>
-                                <Component class="javax.swing.JLabel" name="jLabel16">
+                                <Component class="javax.swing.JLabel" name="jLabel19">
                                   <Properties>
-                                    <Property name="text" type="java.lang.String" value="S&#x1ea3;n Ph&#x1ea9;m C&#xf2;n &#xcd;t"/>
+                                    <Property name="horizontalAlignment" type="int" value="0"/>
+                                    <Property name="text" type="java.lang.String" value="pp"/>
+                                    <Property name="verticalAlignment" type="int" value="3"/>
+                                    <Property name="horizontalTextPosition" type="int" value="0"/>
+                                  </Properties>
+                                </Component>
+                                <Component class="javax.swing.JLabel" name="jLabel20">
+                                  <Properties>
+                                    <Property name="horizontalAlignment" type="int" value="0"/>
+                                    <Property name="text" type="java.lang.String" value="SP C&#xf2;n &#xcd;t"/>
+                                    <Property name="verticalAlignment" type="int" value="1"/>
+                                    <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+                                      <Color id="Default Cursor"/>
+                                    </Property>
+                                    <Property name="horizontalTextPosition" type="int" value="0"/>
                                   </Properties>
                                 </Component>
                               </SubComponents>
                             </Container>
                             <Container class="javax.swing.JPanel" name="jPanel12">
 
-                              <Layout>
-                                <DimensionLayout dim="0">
-                                  <Group type="103" groupAlignment="0" attributes="0">
-                                      <Group type="102" alignment="1" attributes="0">
-                                          <EmptySpace pref="92" max="32767" attributes="0"/>
-                                          <Component id="jLabel18" min="-2" max="-2" attributes="0"/>
-                                          <EmptySpace min="-2" pref="73" max="-2" attributes="0"/>
-                                      </Group>
-                                  </Group>
-                                </DimensionLayout>
-                                <DimensionLayout dim="1">
-                                  <Group type="103" groupAlignment="0" attributes="0">
-                                      <Group type="102" alignment="1" attributes="0">
-                                          <EmptySpace pref="114" max="32767" attributes="0"/>
-                                          <Component id="jLabel18" min="-2" max="-2" attributes="0"/>
-                                          <EmptySpace min="-2" pref="55" max="-2" attributes="0"/>
-                                      </Group>
-                                  </Group>
-                                </DimensionLayout>
+                              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                                <Property name="columns" type="int" value="1"/>
+                                <Property name="rows" type="int" value="0"/>
+                                <Property name="verticalGap" type="int" value="25"/>
                               </Layout>
                               <SubComponents>
-                                <Component class="javax.swing.JLabel" name="jLabel18">
+                                <Component class="javax.swing.JLabel" name="jLabel21">
                                   <Properties>
-                                    <Property name="text" type="java.lang.String" value="S&#x1ea3;n Ph&#x1ea9;m H&#x1ebf;t H&#xe0;ng"/>
+                                    <Property name="horizontalAlignment" type="int" value="0"/>
+                                    <Property name="text" type="java.lang.String" value="pp"/>
+                                    <Property name="verticalAlignment" type="int" value="3"/>
+                                    <Property name="horizontalTextPosition" type="int" value="0"/>
+                                  </Properties>
+                                </Component>
+                                <Component class="javax.swing.JLabel" name="jLabel22">
+                                  <Properties>
+                                    <Property name="horizontalAlignment" type="int" value="0"/>
+                                    <Property name="text" type="java.lang.String" value="SP Kh&#xf4;ng B&#xe1;n &#x110;&#x1b0;&#x1ee3;c"/>
+                                    <Property name="verticalAlignment" type="int" value="1"/>
+                                    <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+                                      <Color id="Default Cursor"/>
+                                    </Property>
+                                    <Property name="horizontalTextPosition" type="int" value="0"/>
                                   </Properties>
                                 </Component>
                               </SubComponents>
                             </Container>
                             <Container class="javax.swing.JPanel" name="jPanel13">
 
-                              <Layout>
-                                <DimensionLayout dim="0">
-                                  <Group type="103" groupAlignment="0" attributes="0">
-                                      <Group type="102" alignment="1" attributes="0">
-                                          <EmptySpace pref="62" max="32767" attributes="0"/>
-                                          <Component id="jLabel17" min="-2" max="-2" attributes="0"/>
-                                          <EmptySpace min="-2" pref="61" max="-2" attributes="0"/>
-                                      </Group>
-                                  </Group>
-                                </DimensionLayout>
-                                <DimensionLayout dim="1">
-                                  <Group type="103" groupAlignment="0" attributes="0">
-                                      <Group type="102" alignment="1" attributes="0">
-                                          <EmptySpace pref="114" max="32767" attributes="0"/>
-                                          <Component id="jLabel17" min="-2" max="-2" attributes="0"/>
-                                          <EmptySpace min="-2" pref="55" max="-2" attributes="0"/>
-                                      </Group>
-                                  </Group>
-                                </DimensionLayout>
+                              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                                <Property name="columns" type="int" value="1"/>
+                                <Property name="rows" type="int" value="0"/>
+                                <Property name="verticalGap" type="int" value="25"/>
                               </Layout>
                               <SubComponents>
-                                <Component class="javax.swing.JLabel" name="jLabel17">
+                                <Component class="javax.swing.JLabel" name="jLabel23">
                                   <Properties>
-                                    <Property name="text" type="java.lang.String" value="S&#x1ea3;n Ph&#x1ea9;m Kh&#xf4;ng &#x110;&#x1b0;&#x1ee3;c B&#xe1;n"/>
+                                    <Property name="horizontalAlignment" type="int" value="0"/>
+                                    <Property name="text" type="java.lang.String" value="pp"/>
+                                    <Property name="verticalAlignment" type="int" value="3"/>
+                                    <Property name="horizontalTextPosition" type="int" value="0"/>
+                                  </Properties>
+                                </Component>
+                                <Component class="javax.swing.JLabel" name="jLabel24">
+                                  <Properties>
+                                    <Property name="horizontalAlignment" type="int" value="0"/>
+                                    <Property name="text" type="java.lang.String" value="SP T&#x1ed3;n Nhi&#x1ec1;u"/>
+                                    <Property name="verticalAlignment" type="int" value="1"/>
+                                    <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+                                      <Color id="Default Cursor"/>
+                                    </Property>
+                                    <Property name="horizontalTextPosition" type="int" value="0"/>
                                   </Properties>
                                 </Component>
                               </SubComponents>
                             </Container>
                             <Container class="javax.swing.JPanel" name="jPanel14">
 
-                              <Layout>
-                                <DimensionLayout dim="0">
-                                  <Group type="103" groupAlignment="0" attributes="0">
-                                      <Group type="102" alignment="1" attributes="0">
-                                          <EmptySpace pref="91" max="32767" attributes="0"/>
-                                          <Component id="jLabel19" min="-2" max="-2" attributes="0"/>
-                                          <EmptySpace min="-2" pref="73" max="-2" attributes="0"/>
-                                      </Group>
-                                  </Group>
-                                </DimensionLayout>
-                                <DimensionLayout dim="1">
-                                  <Group type="103" groupAlignment="0" attributes="0">
-                                      <Group type="102" alignment="1" attributes="0">
-                                          <EmptySpace pref="114" max="32767" attributes="0"/>
-                                          <Component id="jLabel19" min="-2" max="-2" attributes="0"/>
-                                          <EmptySpace min="-2" pref="55" max="-2" attributes="0"/>
-                                      </Group>
-                                  </Group>
-                                </DimensionLayout>
+                              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                                <Property name="columns" type="int" value="1"/>
+                                <Property name="rows" type="int" value="0"/>
+                                <Property name="verticalGap" type="int" value="25"/>
                               </Layout>
                               <SubComponents>
-                                <Component class="javax.swing.JLabel" name="jLabel19">
+                                <Component class="javax.swing.JLabel" name="jLabel25">
                                   <Properties>
-                                    <Property name="text" type="java.lang.String" value="S&#x1ea3;n Ph&#x1ea9;m B&#xe1;n Ch&#x1ea1;y"/>
+                                    <Property name="horizontalAlignment" type="int" value="0"/>
+                                    <Property name="text" type="java.lang.String" value="pp"/>
+                                    <Property name="verticalAlignment" type="int" value="3"/>
+                                    <Property name="horizontalTextPosition" type="int" value="0"/>
+                                  </Properties>
+                                </Component>
+                                <Component class="javax.swing.JLabel" name="jLabel26">
+                                  <Properties>
+                                    <Property name="horizontalAlignment" type="int" value="0"/>
+                                    <Property name="text" type="java.lang.String" value="SP B&#xe1;n Ch&#x1ea1;y"/>
+                                    <Property name="verticalAlignment" type="int" value="1"/>
+                                    <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+                                      <Color id="Default Cursor"/>
+                                    </Property>
+                                    <Property name="horizontalTextPosition" type="int" value="0"/>
                                   </Properties>
                                 </Component>
                               </SubComponents>
@@ -1086,10 +1069,20 @@
                       <Layout>
                         <DimensionLayout dim="0">
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="102" alignment="0" attributes="0">
-                                  <EmptySpace min="-2" pref="32" max="-2" attributes="0"/>
-                                  <Component id="jLabel8" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace max="32767" attributes="0"/>
+                              <Group type="102" attributes="0">
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Group type="102" attributes="0">
+                                          <EmptySpace min="-2" pref="32" max="-2" attributes="0"/>
+                                          <Component id="jLabel8" min="-2" max="-2" attributes="0"/>
+                                      </Group>
+                                      <Group type="102" alignment="0" attributes="0">
+                                          <EmptySpace min="-2" pref="60" max="-2" attributes="0"/>
+                                          <Component id="jPanel15" min="-2" pref="356" max="-2" attributes="0"/>
+                                          <EmptySpace min="-2" pref="47" max="-2" attributes="0"/>
+                                          <Component id="jButton1" min="-2" max="-2" attributes="0"/>
+                                      </Group>
+                                  </Group>
+                                  <EmptySpace pref="2695" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                         </DimensionLayout>
@@ -1098,7 +1091,18 @@
                               <Group type="102" alignment="0" attributes="0">
                                   <EmptySpace min="-2" pref="25" max="-2" attributes="0"/>
                                   <Component id="jLabel8" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace pref="426" max="32767" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Group type="102" attributes="0">
+                                          <EmptySpace max="32767" attributes="0"/>
+                                          <Component id="jButton1" min="-2" max="-2" attributes="0"/>
+                                          <EmptySpace min="-2" pref="185" max="-2" attributes="0"/>
+                                      </Group>
+                                      <Group type="102" alignment="0" attributes="0">
+                                          <EmptySpace min="-2" pref="50" max="-2" attributes="0"/>
+                                          <Component id="jPanel15" min="-2" pref="269" max="-2" attributes="0"/>
+                                          <EmptySpace pref="107" max="32767" attributes="0"/>
+                                      </Group>
+                                  </Group>
                               </Group>
                           </Group>
                         </DimensionLayout>
@@ -1114,6 +1118,18 @@
                             </Property>
                             <Property name="text" type="java.lang.String" value="Th&#x1ed1;ng K&#xea; Doanh Thu Theo T&#x1eeb;ng S&#x1ea3;n Ph&#x1ea9;m"/>
                           </Properties>
+                        </Component>
+                        <Container class="javax.swing.JPanel" name="jPanel15">
+
+                          <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBoxLayout"/>
+                        </Container>
+                        <Component class="javax.swing.JButton" name="jButton1">
+                          <Properties>
+                            <Property name="text" type="java.lang.String" value="jButton1"/>
+                          </Properties>
+                          <Events>
+                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton1ActionPerformed"/>
+                          </Events>
                         </Component>
                       </SubComponents>
                     </Container>

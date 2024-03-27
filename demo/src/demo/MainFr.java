@@ -11,7 +11,11 @@ import static demo.Handler.createPieChart;
 import static demo.Handler.dateError;
 import static demo.Handler.intErrorTable;
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.FlowLayout;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -25,8 +29,10 @@ import java.util.logging.Logger;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
@@ -36,6 +42,7 @@ import javax.swing.table.TableColumn;
 import org.jfree.chart.ChartPanel;
 import org.jfree.data.general.DefaultPieDataset;
 import models.Order;
+import models.OrderInfo;
 import models.Product;
 import models.ProductEx;
 import models.orderDetailTable;
@@ -344,26 +351,35 @@ public class MainFr extends javax.swing.JFrame {
         jLabel9 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
-        jLabel11 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
         jPanel7 = new javax.swing.JPanel();
         jLabel13 = new javax.swing.JLabel();
-        jPanel8 = new javax.swing.JPanel();
         jLabel14 = new javax.swing.JLabel();
-        jPanel10 = new javax.swing.JPanel();
+        jPanel8 = new javax.swing.JPanel();
         jLabel15 = new javax.swing.JLabel();
-        jPanel11 = new javax.swing.JPanel();
         jLabel16 = new javax.swing.JLabel();
-        jPanel12 = new javax.swing.JPanel();
-        jLabel18 = new javax.swing.JLabel();
-        jPanel13 = new javax.swing.JPanel();
+        jPanel10 = new javax.swing.JPanel();
         jLabel17 = new javax.swing.JLabel();
-        jPanel14 = new javax.swing.JPanel();
+        jLabel18 = new javax.swing.JLabel();
+        jPanel11 = new javax.swing.JPanel();
         jLabel19 = new javax.swing.JLabel();
+        jLabel20 = new javax.swing.JLabel();
+        jPanel12 = new javax.swing.JPanel();
+        jLabel21 = new javax.swing.JLabel();
+        jLabel22 = new javax.swing.JLabel();
+        jPanel13 = new javax.swing.JPanel();
+        jLabel23 = new javax.swing.JLabel();
+        jLabel24 = new javax.swing.JLabel();
+        jPanel14 = new javax.swing.JPanel();
+        jLabel25 = new javax.swing.JLabel();
+        jLabel26 = new javax.swing.JLabel();
         cb_month = new javax.swing.JComboBox<>();
         cb_year = new javax.swing.JComboBox<>(getYear().toArray(new String[0]));
         p_analysis_product = new javax.swing.JPanel();
         jLabel8 = new javax.swing.JLabel();
+        jPanel15 = new javax.swing.JPanel();
+        jButton1 = new javax.swing.JButton();
         p_analysis_profit = new javax.swing.JPanel();
         jLabel10 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
@@ -414,7 +430,7 @@ public class MainFr extends javax.swing.JFrame {
                 .addComponent(b_search_product)
                 .addGap(18, 18, 18)
                 .addComponent(txt_search_product, javax.swing.GroupLayout.PREFERRED_SIZE, 478, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(64, Short.MAX_VALUE))
+                .addContainerGap(2330, Short.MAX_VALUE))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -439,7 +455,7 @@ public class MainFr extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, sanphamLayout.createSequentialGroup()
                 .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 523, Short.MAX_VALUE))
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 560, Short.MAX_VALUE))
         );
 
         MENU.addTab("SẢN PHÂM", sanpham);
@@ -502,7 +518,7 @@ public class MainFr extends javax.swing.JFrame {
             new Object [][] {
             },
             new String [] {
-                "Mã sản phẩm","Sản phẩm", "Số lượng", "Đơn giá","Giá"
+                "Mã sản phẩm","Sản phẩm", "Số lượng", "Đơn giá","Giá", "Giảm giá"
             }
         ));
         TableColumn productColumn = orderdetail.getColumnModel().getColumn(1);
@@ -592,7 +608,7 @@ public class MainFr extends javax.swing.JFrame {
                             .addComponent(completed, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(cancel, javax.swing.GroupLayout.DEFAULT_SIZE, 85, Short.MAX_VALUE))
                         .addContainerGap())
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 667, Short.MAX_VALUE)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 2740, Short.MAX_VALUE)
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -608,7 +624,7 @@ public class MainFr extends javax.swing.JFrame {
                             .addComponent(name_c_f)
                             .addComponent(date_o_f)
                             .addComponent(addr_f)
-                            .addComponent(pay_type, 0, 507, Short.MAX_VALUE)
+                            .addComponent(pay_type, 0, 2580, Short.MAX_VALUE)
                             .addGroup(jPanel5Layout.createSequentialGroup()
                                 .addComponent(addOD)
                                 .addGap(0, 0, Short.MAX_VALUE))
@@ -657,7 +673,7 @@ public class MainFr extends javax.swing.JFrame {
                     .addComponent(jLabel2)
                     .addComponent(addOD))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 86, Short.MAX_VALUE))
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 123, Short.MAX_VALUE))
         );
 
         errMess.getAccessibleContext().setAccessibleName("errMess");
@@ -824,178 +840,153 @@ public class MainFr extends javax.swing.JFrame {
 
         jPanel1.setLayout(new java.awt.GridLayout(2, 4));
 
-        jLabel11.setText("Chờ Lấy Hàng");
+        jPanel4.setLayout(new java.awt.GridLayout(0, 1, 0, 25));
+        // Thêm MouseListener vào jPanel4
+        jPanel4.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                // Thay đổi màu nền khi di chuột vào
+                jPanel4.setBackground(Color.WHITE);
+            }
 
-        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
-        jPanel4.setLayout(jPanel4Layout);
-        jPanel4Layout.setHorizontalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGap(91, 91, 91)
-                        .addComponent(jLabel11))
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGap(108, 108, 108)
-                        .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(110, Short.MAX_VALUE))
-        );
-        jPanel4Layout.setVerticalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                .addContainerGap(85, Short.MAX_VALUE)
-                .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(26, 26, 26)
-                .addComponent(jLabel11)
-                .addGap(38, 38, 38))
-        );
+            @Override
+            public void mouseExited(MouseEvent e) {
+                // Thay đổi màu nền khi di chuột ra khỏi
+                jPanel4.setBackground(Color.GRAY); // Thay đổi màu nền khi di chuột ra khỏi
+            }
+        });
+
+        jLabel12.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel12.setText("pp");
+        jLabel12.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        jLabel12.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jPanel4.add(jLabel12);
+
+        jLabel11.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel11.setText("Chờ Lấy Hàng");
+        jLabel11.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+        jLabel11.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jLabel11.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jPanel4.add(jLabel11);
 
         jPanel1.add(jPanel4);
 
-        jLabel13.setText("Đang Giao");
+        jPanel7.setLayout(new java.awt.GridLayout(0, 1, 0, 25));
 
-        javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
-        jPanel7.setLayout(jPanel7Layout);
-        jPanel7Layout.setHorizontalGroup(
-            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
-                .addContainerGap(117, Short.MAX_VALUE)
-                .addComponent(jLabel13)
-                .addGap(103, 103, 103))
-        );
-        jPanel7Layout.setVerticalGroup(
-            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
-                .addContainerGap(127, Short.MAX_VALUE)
-                .addComponent(jLabel13)
-                .addGap(42, 42, 42))
-        );
+        jLabel13.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel13.setText("pp");
+        jLabel13.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        jLabel13.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jPanel7.add(jLabel13);
+
+        jLabel14.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel14.setText("Đang Giao");
+        jLabel14.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+        jLabel14.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jLabel14.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jPanel7.add(jLabel14);
 
         jPanel1.add(jPanel7);
 
-        jLabel14.setText("Hoàn Thành");
+        jPanel8.setLayout(new java.awt.GridLayout(0, 1, 0, 25));
 
-        javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
-        jPanel8.setLayout(jPanel8Layout);
-        jPanel8Layout.setHorizontalGroup(
-            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel8Layout.createSequentialGroup()
-                .addGap(105, 105, 105)
-                .addComponent(jLabel14)
-                .addContainerGap(105, Short.MAX_VALUE))
-        );
-        jPanel8Layout.setVerticalGroup(
-            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
-                .addContainerGap(127, Short.MAX_VALUE)
-                .addComponent(jLabel14)
-                .addGap(42, 42, 42))
-        );
+        jLabel15.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel15.setText("pp");
+        jLabel15.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        jLabel15.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jPanel8.add(jLabel15);
+
+        jLabel16.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel16.setText("Hoàn Thành");
+        jLabel16.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+        jLabel16.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jLabel16.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jPanel8.add(jLabel16);
 
         jPanel1.add(jPanel8);
 
-        jLabel15.setText("Hủy");
+        jPanel10.setLayout(new java.awt.GridLayout(0, 1, 0, 25));
 
-        javax.swing.GroupLayout jPanel10Layout = new javax.swing.GroupLayout(jPanel10);
-        jPanel10.setLayout(jPanel10Layout);
-        jPanel10Layout.setHorizontalGroup(
-            jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel10Layout.createSequentialGroup()
-                .addGap(129, 129, 129)
-                .addComponent(jLabel15)
-                .addContainerGap(129, Short.MAX_VALUE))
-        );
-        jPanel10Layout.setVerticalGroup(
-            jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel10Layout.createSequentialGroup()
-                .addContainerGap(123, Short.MAX_VALUE)
-                .addComponent(jLabel15)
-                .addGap(46, 46, 46))
-        );
+        jLabel17.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel17.setText("pp");
+        jLabel17.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        jLabel17.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jPanel10.add(jLabel17);
+
+        jLabel18.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel18.setText("Đã Hủy");
+        jLabel18.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+        jLabel18.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jLabel18.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jPanel10.add(jLabel18);
 
         jPanel1.add(jPanel10);
 
-        jLabel16.setText("Sản Phẩm Còn Ít");
+        jPanel11.setLayout(new java.awt.GridLayout(0, 1, 0, 25));
 
-        javax.swing.GroupLayout jPanel11Layout = new javax.swing.GroupLayout(jPanel11);
-        jPanel11.setLayout(jPanel11Layout);
-        jPanel11Layout.setHorizontalGroup(
-            jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel11Layout.createSequentialGroup()
-                .addGap(80, 80, 80)
-                .addComponent(jLabel16)
-                .addContainerGap(103, Short.MAX_VALUE))
-        );
-        jPanel11Layout.setVerticalGroup(
-            jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel11Layout.createSequentialGroup()
-                .addContainerGap(119, Short.MAX_VALUE)
-                .addComponent(jLabel16)
-                .addGap(50, 50, 50))
-        );
+        jLabel19.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel19.setText("pp");
+        jLabel19.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        jLabel19.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jPanel11.add(jLabel19);
+
+        jLabel20.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel20.setText("SP Còn Ít");
+        jLabel20.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+        jLabel20.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jLabel20.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jPanel11.add(jLabel20);
 
         jPanel1.add(jPanel11);
 
-        jLabel18.setText("Sản Phẩm Hết Hàng");
+        jPanel12.setLayout(new java.awt.GridLayout(0, 1, 0, 25));
 
-        javax.swing.GroupLayout jPanel12Layout = new javax.swing.GroupLayout(jPanel12);
-        jPanel12.setLayout(jPanel12Layout);
-        jPanel12Layout.setHorizontalGroup(
-            jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel12Layout.createSequentialGroup()
-                .addContainerGap(92, Short.MAX_VALUE)
-                .addComponent(jLabel18)
-                .addGap(73, 73, 73))
-        );
-        jPanel12Layout.setVerticalGroup(
-            jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel12Layout.createSequentialGroup()
-                .addContainerGap(114, Short.MAX_VALUE)
-                .addComponent(jLabel18)
-                .addGap(55, 55, 55))
-        );
+        jLabel21.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel21.setText("pp");
+        jLabel21.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        jLabel21.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jPanel12.add(jLabel21);
+
+        jLabel22.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel22.setText("SP Không Bán Được");
+        jLabel22.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+        jLabel22.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jLabel22.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jPanel12.add(jLabel22);
 
         jPanel1.add(jPanel12);
 
-        jLabel17.setText("Sản Phẩm Không Được Bán");
+        jPanel13.setLayout(new java.awt.GridLayout(0, 1, 0, 25));
 
-        javax.swing.GroupLayout jPanel13Layout = new javax.swing.GroupLayout(jPanel13);
-        jPanel13.setLayout(jPanel13Layout);
-        jPanel13Layout.setHorizontalGroup(
-            jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel13Layout.createSequentialGroup()
-                .addContainerGap(62, Short.MAX_VALUE)
-                .addComponent(jLabel17)
-                .addGap(61, 61, 61))
-        );
-        jPanel13Layout.setVerticalGroup(
-            jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel13Layout.createSequentialGroup()
-                .addContainerGap(114, Short.MAX_VALUE)
-                .addComponent(jLabel17)
-                .addGap(55, 55, 55))
-        );
+        jLabel23.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel23.setText("pp");
+        jLabel23.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        jLabel23.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jPanel13.add(jLabel23);
+
+        jLabel24.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel24.setText("SP Tồn Nhiều");
+        jLabel24.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+        jLabel24.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jLabel24.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jPanel13.add(jLabel24);
 
         jPanel1.add(jPanel13);
 
-        jLabel19.setText("Sản Phẩm Bán Chạy");
+        jPanel14.setLayout(new java.awt.GridLayout(0, 1, 0, 25));
 
-        javax.swing.GroupLayout jPanel14Layout = new javax.swing.GroupLayout(jPanel14);
-        jPanel14.setLayout(jPanel14Layout);
-        jPanel14Layout.setHorizontalGroup(
-            jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel14Layout.createSequentialGroup()
-                .addContainerGap(91, Short.MAX_VALUE)
-                .addComponent(jLabel19)
-                .addGap(73, 73, 73))
-        );
-        jPanel14Layout.setVerticalGroup(
-            jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel14Layout.createSequentialGroup()
-                .addContainerGap(114, Short.MAX_VALUE)
-                .addComponent(jLabel19)
-                .addGap(55, 55, 55))
-        );
+        jLabel25.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel25.setText("pp");
+        jLabel25.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        jLabel25.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jPanel14.add(jLabel25);
+
+        jLabel26.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel26.setText("SP Bán Chạy");
+        jLabel26.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+        jLabel26.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jLabel26.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jPanel14.add(jLabel26);
 
         jPanel1.add(jPanel14);
 
@@ -1008,14 +999,14 @@ public class MainFr extends javax.swing.JFrame {
             .addGroup(p_overviewLayout.createSequentialGroup()
                 .addGap(32, 32, 32)
                 .addGroup(p_overviewLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 1119, Short.MAX_VALUE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(p_overviewLayout.createSequentialGroup()
                         .addComponent(jLabel9)
                         .addGap(18, 18, 18)
                         .addComponent(cb_month, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(cb_year, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(0, 2824, Short.MAX_VALUE)))
                 .addGap(39, 39, 39))
         );
         p_overviewLayout.setVerticalGroup(
@@ -1043,21 +1034,45 @@ public class MainFr extends javax.swing.JFrame {
         jLabel8.setForeground(new java.awt.Color(102, 51, 0));
         jLabel8.setText("Thống Kê Doanh Thu Theo Từng Sản Phẩm");
 
+        jPanel15.setLayout(new javax.swing.BoxLayout(jPanel15, javax.swing.BoxLayout.LINE_AXIS));
+
+        jButton1.setText("jButton1");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout p_analysis_productLayout = new javax.swing.GroupLayout(p_analysis_product);
         p_analysis_product.setLayout(p_analysis_productLayout);
         p_analysis_productLayout.setHorizontalGroup(
             p_analysis_productLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(p_analysis_productLayout.createSequentialGroup()
-                .addGap(32, 32, 32)
-                .addComponent(jLabel8)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(p_analysis_productLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(p_analysis_productLayout.createSequentialGroup()
+                        .addGap(32, 32, 32)
+                        .addComponent(jLabel8))
+                    .addGroup(p_analysis_productLayout.createSequentialGroup()
+                        .addGap(60, 60, 60)
+                        .addComponent(jPanel15, javax.swing.GroupLayout.PREFERRED_SIZE, 356, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(47, 47, 47)
+                        .addComponent(jButton1)))
+                .addContainerGap(2695, Short.MAX_VALUE))
         );
         p_analysis_productLayout.setVerticalGroup(
             p_analysis_productLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(p_analysis_productLayout.createSequentialGroup()
                 .addGap(25, 25, 25)
                 .addComponent(jLabel8)
-                .addContainerGap(426, Short.MAX_VALUE))
+                .addGroup(p_analysis_productLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(p_analysis_productLayout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton1)
+                        .addGap(185, 185, 185))
+                    .addGroup(p_analysis_productLayout.createSequentialGroup()
+                        .addGap(50, 50, 50)
+                        .addComponent(jPanel15, javax.swing.GroupLayout.PREFERRED_SIZE, 269, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(107, Short.MAX_VALUE))))
         );
 
         p_analysis.add(p_analysis_product);
@@ -1098,7 +1113,7 @@ public class MainFr extends javax.swing.JFrame {
         );
         thongkeLayout.setVerticalGroup(
             thongkeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 573, Short.MAX_VALUE)
+            .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 610, Short.MAX_VALUE)
         );
 
         MENU.addTab("THỐNG KÊ", thongke);
@@ -1159,6 +1174,7 @@ public class MainFr extends javax.swing.JFrame {
         addr_f.setText(allOrders.get(index).getAddr());
         pay_type.setSelectedItem(allOrders.get(index).getPay_type());
         
+        
 
         int del_stt = allOrders.get(index).getDel_stt();
         defaultStt();
@@ -1180,11 +1196,12 @@ public class MainFr extends javax.swing.JFrame {
         //orderdetail
         DefaultTableModel model = (DefaultTableModel) orderdetail.getModel();
         model.setRowCount(0);
-        Map<String, Integer> orderDetail= allOrders.get(index).getOrder_detail();
-        for(Map.Entry<String,  Integer> entry: orderDetail.entrySet()){
-            String id = entry.getKey();
+        List<OrderInfo> orderDetail= allOrders.get(index).getOrder_detail();
+        for(OrderInfo od : orderDetail){
+            String id = od.getId_p();
             //System.out.print(" " + id);
-            int qual = entry.getValue();
+            int qual = od.getQuantity();
+            int discount = od.getDiscount();
             int price = 0;
             String id_p=null;
             String name = null;
@@ -1197,7 +1214,7 @@ public class MainFr extends javax.swing.JFrame {
                 }
             }
 
-            Object[] row = {id_p, name, qual, price, price*qual};
+            Object[] row = {id_p, name, qual, price, price*qual, discount};
             model.addRow(row);
             isEditMode = true;
         }
@@ -1300,14 +1317,16 @@ public class MainFr extends javax.swing.JFrame {
         String pay = (String) pay_type.getSelectedItem();
         
 
-        Map<String, Integer> order_detail = new HashMap<>();
+        List<OrderInfo> order_detail = new ArrayList<>();
         for (int row = 0; row < orderdetail.getRowCount(); row++) {
             String id_p = orderdetail.getValueAt(row, 0) +"";
             String qualS = orderdetail.getValueAt(row, 2) +"";
+            String discountS = orderdetail.getValueAt(row, 5) +"";
             if(id_p == null || qualS == null ){
                 JOptionPane.showMessageDialog(rootPane, "Không Được Để Trống Cột Sản Phẩm Và Số Lưọng");
             } else{                
-                int qual = Integer.parseInt(qualS);              
+                int qual = Integer.parseInt(qualS);     
+                int discount = Integer.parseInt(discountS);   
                 //Nếu trạng thái giao hàng là 1 2 3 thì giảm tồn kho, từ 1 2 3 thành 0 thì tăng tồn kho
                 if(deStockCheck(id_o_f) ==1 ){
                     cndb db = cndb.getInstance();
@@ -1321,9 +1340,22 @@ public class MainFr extends javax.swing.JFrame {
                     db.close();         
                 }
                 //System.out.println("thunghiem "+keyO +"/"+value);
-                if(qual != 0){
-                    order_detail.put(id_p, order_detail.getOrDefault(id_p, 0) + qual);
+                if (qual != 0) {
+                    boolean found = false;
+                    for (OrderInfo od : order_detail) {
+                        if (od.getId_p().equals(id_p) && od.getDiscount() == discount) {
+                            // Nếu đã tồn tại OrderInfo với cùng id_p và discount, cập nhật qual
+                            od.setQuantity(od.getQuantity() + qual);
+                            found = true;
+                            break;
+                        }
+                    }
+                    // Nếu không tìm thấy OrderInfo với cùng id_p và discount, thêm mới vào danh sách
+                    if (!found) {
+                        order_detail.add(new OrderInfo(id_p, qual, discount));
+                    }
                 }
+
             }
         }
         deStock =0;
@@ -1423,15 +1455,19 @@ public class MainFr extends javax.swing.JFrame {
         b_save_order.setEnabled(true);
         del_stt=3;
     }//GEN-LAST:event_date_d_fKeyTyped
-//        cndb db = cndb.getInstance();
-//        db.open();
-//        DefaultPieDataset a= db.salesReportsdts("03", "2024",true, false);
-//        System.out.println(a.getValue(0));
-//
-//        ChartPanel chartP = new ChartPanel(createPieChart(a, "Thử nghiệm"));
-//        chartPanel.add(chartP);
-//        chartPanel.revalidate();
-//        db.close();
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        cndb db = cndb.getInstance();
+        db.open();
+        DefaultPieDataset a= db.salesReportsdts("03", "2024",false, true);
+        System.out.println(a.getValue(0));
+
+        ChartPanel chartP = new ChartPanel(createPieChart(a, "Thử nghiệm"));
+        jPanel15.add(chartP);
+        jPanel15.revalidate();
+        db.close();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
 
     /**
      * @param args the command line arguments
@@ -1474,6 +1510,7 @@ public class MainFr extends javax.swing.JFrame {
     private javax.swing.JPanel donhang;
     private javax.swing.JLabel errMess;
     private javax.swing.JTextField id_o_f;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -1486,6 +1523,13 @@ public class MainFr extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel20;
+    private javax.swing.JLabel jLabel21;
+    private javax.swing.JLabel jLabel22;
+    private javax.swing.JLabel jLabel23;
+    private javax.swing.JLabel jLabel24;
+    private javax.swing.JLabel jLabel25;
+    private javax.swing.JLabel jLabel26;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -1502,6 +1546,7 @@ public class MainFr extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel12;
     private javax.swing.JPanel jPanel13;
     private javax.swing.JPanel jPanel14;
+    private javax.swing.JPanel jPanel15;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;

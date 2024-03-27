@@ -6,12 +6,10 @@
 package demo;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Types;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -21,9 +19,9 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-import javax.swing.table.DefaultTableModel;
 import org.jfree.data.general.DefaultPieDataset;
 import models.Order;
+import models.OrderInfo;
 import models.Product;
 import models.ProductEx;
 
@@ -100,7 +98,7 @@ public class cndb {
         List<Order> allOrders = new ArrayList<>();
         
          try{
-            String sql = "SELECT o.ID_O, o.NAME_C, o.DATE_O, o.DATE_D, o.ADDR, o.PAY_TYPE, o.DEL_STT, od.ID_P, od.ID_P, od.QUAL, p.PRICE_S "
+            String sql = "SELECT o.ID_O, o.NAME_C, o.DATE_O, o.DATE_D, o.ADDR, o.PAY_TYPE, o.DEL_STT, od.ID_P, od.ID_P, od.QUAL, p.PRICE_S, od.DISCOUNT "
                     + "FROM ORDERS o "
                     + "JOIN ORDERS_DETAIL od ON o.ID_O = od.ID_O "
                     + "JOIN PRODUCTS p ON od.ID_P = p.ID_P";//truy vấn sql 
@@ -116,13 +114,15 @@ public class cndb {
                 if (!orderMap.containsKey(orderId)) {
                     orderMap.put(orderId, new Order(orderId, rlt.getString("NAME_C"), rlt.getString("DATE_O"),  rlt.getString("DATE_D"),
                             rlt.getString("ADDR"), rlt.getString("PAY_TYPE"), rlt.getInt("DEL_STT"),
-                            new HashMap<>(), 0));
+                            new ArrayList<>(), 0));
                 }
                 Order order = orderMap.get(orderId);
                 String productId = rlt.getString("ID_P");
                 int quantity = rlt.getInt("QUAL");
-                order.getOrder_detail().put(productId, quantity);
+                int discount= rlt.getInt("DISCOUNT"); 
                 order.setTotal_amount(order.getTotal_amount() + quantity * rlt.getInt("PRICE_S"));
+                List<OrderInfo> orderDetail = order.getOrder_detail();
+                orderDetail.add(new OrderInfo(productId,quantity, discount));
             }
             allOrders.addAll(orderMap.values());
         } catch (SQLException e) {
@@ -159,7 +159,7 @@ public class cndb {
     }
 
 
-        public int orderInsert(String id_o, String name_c, String date_o, String date_d, String addr, String pay_type, int del_stt, Map<String, Integer> order_detail){
+        public int orderInsert(String id_o, String name_c, String date_o, String date_d, String addr, String pay_type, int del_stt, List<OrderInfo> order_detail){
             
         int status = 0;
         try {
@@ -188,7 +188,7 @@ public class cndb {
         return status;
         }
      //Phương thức chỉnh sửa đơn hàng
-        public int orderEdit(String id_o, String name_c, String date_o, String date_d, String addr, String pay_type, int del_stt, Map<String, Integer> order_detail){
+        public int orderEdit(String id_o, String name_c, String date_o, String date_d, String addr, String pay_type, int del_stt, List<OrderInfo> order_detail){
             
         int status = 0;
         try {
@@ -221,16 +221,18 @@ public class cndb {
         return status;
         }
         
-        public int insertOD(String id_o, Map<String, Integer> order_detail) {
+        public int insertOD(String id_o, List< OrderInfo> order_detail) {
             int status = 0;       
             try {
-            String orderDetailSql = "INSERT INTO orders_detail (ID_O, ID_O_D, ID_P, QUAL) VALUES (?, ?, ?, ?)";
+            String orderDetailSql = "INSERT INTO orders_detail (ID_O, ID_O_D, ID_P, QUAL, DISCOUNT) VALUES (?, ?, ?, ?, ?)";
             PreparedStatement orderDetailStmt = conn.prepareStatement(orderDetailSql);
-            for (Map.Entry<String, Integer> entry : order_detail.entrySet()) {
-                orderDetailStmt.setString(1, id_o);
-                orderDetailStmt.setString(2, generateOrderDetailId(id_o)); //tạo id_o_p
-                orderDetailStmt.setString(3, entry.getKey()); // key là String = id_p, 
-                orderDetailStmt.setInt(4, entry.getValue());// value là Integer = qual
+            for (OrderInfo od : order_detail) {
+                orderDetailStmt.setString(1, id_o); // ID của đơn hàng
+                orderDetailStmt.setString(2, generateOrderDetailId(id_o)); // ID chi tiết đơn hàng
+                orderDetailStmt.setString(3, od.getId_p()); // ID của sản phẩm
+                orderDetailStmt.setInt(4, od.getQuantity()); // Số lượng của sản phẩm
+                orderDetailStmt.setInt(5, od.getDiscount()); // Giảm giá của sản
+
                 orderDetailStmt.addBatch();
             }
             orderDetailStmt.executeBatch();
@@ -283,16 +285,17 @@ public class cndb {
                         List<ProductEx> proExs = new ArrayList<>();
             try {
                 String sql = "SELECT od.ID_P, \n" +
-                        "       p.NAME_P, \n" +
-                        "       SUM(od.QUAL) AS total_QUAL, \n" +
-                        "       p.PRICE_S, \n" +
-                        "       p.PRICE_I, \n" +
-                        "       o.DATE_D\n" +
-                        "FROM ORDERS o \n" +
-                        "JOIN ORDERS_DETAIL od ON o.ID_O = od.ID_O \n" +
-                        "JOIN PRODUCTS p ON od.ID_P = p.ID_P \n" +
-                        "WHERE strftime('%m', o.DATE_O) = ? AND strftime('%Y', o.DATE_O) = ?\n" +
-                        "GROUP BY od.ID_P;";
+                "       p.NAME_P, \n" +
+                "       SUM(od.QUAL) AS total_QUAL, \n" +
+                "       p.PRICE_S, \n" +
+                "       p.PRICE_I, \n" +
+                "       o.DATE_D,\n" +
+                "       od.DISCOUNT\n" +
+                "FROM ORDERS o \n" +
+                "JOIN ORDERS_DETAIL od ON o.ID_O = od.ID_O \n" +
+                "JOIN PRODUCTS p ON od.ID_P = p.ID_P \n" +
+                "WHERE strftime('%m', o.DATE_O) = ? AND strftime('%Y', o.DATE_O) = ?\n" +
+                "GROUP BY od.ID_P, od.DISCOUNT;";
 
                 pre = conn.prepareStatement(sql); //pre một lệnh truy vấn sql select chuẩn bị thực thi trên database
                 pre.setString(1, month);
@@ -305,7 +308,8 @@ public class cndb {
                     int price_s = rlt.getInt("PRICE_S");
                     int price_i = rlt.getInt("PRICE_I");
                     int qual = rlt.getInt("total_QUAL");
-                    ProductEx proEx = new ProductEx(pro, qual, price_i, price_s);
+                    int discount = rlt.getInt("DISCOUNT");
+                    ProductEx proEx = new ProductEx(pro, qual, price_i, price_s, discount);
                     proExs.add(proEx);
                 }            
             } catch (SQLException ex) {
@@ -360,7 +364,7 @@ public class cndb {
                 }
                 
                 if(pro.checkProfit()){
-                    int productProfit = pro.getProfit();
+                    double productProfit = pro.getProfit();
                     double profitPercentage = ((double) productProfit / totalProfit) * 100;                
                     if (profitPercentage < 1) {
                         otherProfit += productProfit;
@@ -369,7 +373,7 @@ public class cndb {
 //                        System.out.println(productName+"/"+profitPercentage);
                     }
                 } else {
-                    int productLoss = - pro.getProfit();
+                    double productLoss = - pro.getProfit();
                     double lossPercentage = ((double) productLoss / totalLoss)*100;
                     if(lossPercentage <1){
                         otherLoss += productLoss;
@@ -404,7 +408,7 @@ public class cndb {
         List<Order> allOrders = new ArrayList<>();
 
          try{
-            String sql = "SELECT o.ID_O, o.NAME_C, o.DATE_O, o.DATE_D, o.ADDR, o.PAY_TYPE, o.DEL_STT, od.ID_P, od.ID_P, od.QUAL, p.PRICE_S "
+            String sql = "SELECT o.ID_O, o.NAME_C, o.DATE_O, o.DATE_D, o.ADDR, o.PAY_TYPE, o.DEL_STT, od.ID_P, od.ID_P, od.QUAL, p.PRICE_S, od.DISCOUNT "
                     + "FROM ORDERS o "
                     + "JOIN ORDERS_DETAIL od ON o.ID_O = od.ID_O "
                     + "JOIN PRODUCTS p ON od.ID_P = p.ID_P"
@@ -427,13 +431,14 @@ public class cndb {
                 if (!orderMap.containsKey(orderId)) {
                     orderMap.put(orderId, new Order(orderId, rlt.getString("NAME_C"), rlt.getString("DATE_O"), rlt.getString("DATE_D"),
                             rlt.getString("ADDR"), rlt.getString("PAY_TYPE"), rlt.getInt("DEL_STT"),
-                            new HashMap<>(), 0));
+                            new ArrayList<>(), 0));
                 }
                 Order order = orderMap.get(orderId);
                 String productId = rlt.getString("ID_P");
                 int quantity = rlt.getInt("QUAL");
-                order.getOrder_detail().put(productId, quantity);
-                order.setTotal_amount(order.getTotal_amount() + quantity * rlt.getInt("PRICE_S"));
+                int discount = rlt.getInt("DISCOUNT");
+                order.getOrder_detail().add(new OrderInfo(productId, quantity, discount));
+                order.setTotal_amount(order.getTotal_amount() + quantity * rlt.getInt("PRICE_S")*discount);
             }
             allOrders.addAll(orderMap.values());
         } catch (SQLException e) {
