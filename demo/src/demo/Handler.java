@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package demo;
 
 import java.awt.Graphics2D;
@@ -20,6 +15,9 @@ import java.io.IOException;
 import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -29,22 +27,18 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
-import javax.swing.JTable;
 import javax.swing.JTextField;
-import javax.swing.event.TableModelEvent;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.data.general.DefaultPieDataset;
-import models.Order;
-import models.Product;
-import models.proPanel;
+import structure.Order;
+import structure.Product;
+import structure.proPanel;
 
-/**
- *
- * @author DELL
- */
 public class Handler {
 //phương thức hiển thị tất cả sản phẩm hiện có trong list vào bảng đơn hàng trong ứng dụng
     public static DefaultTableModel allOrdersT(List<Order> allOrders){
@@ -57,7 +51,7 @@ public class Handler {
         for(Order order: allOrders){
             String id = order.getId_o();
             String name = order.getName_c();
-            double cost = order.getTotal_amount();
+            int cost = order.getTotal_amount();
             int deliveryStt = order.getDel_stt();
             Object[] row = {id, name, cost, deliveryStt};
             dTM.addRow(row);
@@ -83,22 +77,6 @@ public class Handler {
         return proPanels;
     }
     
-    //xác định lỗi khi người dùng nhập vào bảng không phải số
-    public static String intErrorTable(JTable table, TableModelEvent e) {
-        String errorMessage = " ";
-        int row = e.getFirstRow();
-        int column = e.getColumn();
-        String value = (String) table.getValueAt(row, column);
-
-        if ( value != null && !value.matches("\\d+")) { // Kiểm tra nếu giá trị không phải là số nguyên dương
-            errorMessage = "HÃY NHẬP VÀO SỐ";
-            table.setValueAt(null, row, column);
-        } else {
-            errorMessage = "";
-        }
-        return errorMessage;
-    }
-    
     //xác định lỗi khi người dùng nhập vào không phải là số
     public static String intError(KeyEvent evt){
         String errorMessage=" ";
@@ -118,21 +96,68 @@ public class Handler {
     
     //xác định lỗi khi người dùng nhập vào không phải là date
     static boolean check = false;   
-    public static String dateError(KeyEvent evt, JTextField date){
+//    public static String dateError(KeyEvent evt, JTextField date){
+//
+//        char ch = evt.getKeyChar();
+//        String errorMessage="";
+//        errorMessage = intError(evt);
+//        if(!errorMessage.equals("")){
+//            errorMessage += ". Nhập đúng định dạng dd/mm/yyyy";
+//        }        
+//        if((date.getText().length() == 1 || date.getText().length() == 4) && ch != '\b'){
+//            date.setText(date.getText() + ch +"/");
+//            evt.consume(); 
+//        }
+//        if((date.getText().length() == 2 || date.getText().length() == 5) && ch == '\b'){
+//            check = true;
+//        }else if(check && ch != '\b' && (date.getText().length() == 2 || date.getText().length() == 5) ){
+//            date.setText(date.getText() + "/" + ch);
+//            evt.consume();
+//            check = false;
+//        }
+//        
+//        if (date.getText().length() == 10) {
+//            errorMessage = "Nhập quá nhiều ký tự. Nhập đúng định dạng dd/mm/yyyy";
+//            evt.consume(); 
+//        } 
+////        date.requestFocusInWindow(); // Di chuyển con trỏ văn bản đến JTextField
+//        return errorMessage; 
+//    }
 
+
+   
+//    // Lớp xử lý sự kiện để paste hình ảnh từ Clipboard
+//    public static ImageIcon pasteImageFromClipboard() {
+//        ImageIcon currentImage = null;
+//        try {
+//            Transferable transferable = Toolkit.getDefaultToolkit().getSystemClipboard().getContents(null);
+//            if (transferable != null && transferable.isDataFlavorSupported(DataFlavor.imageFlavor)) {
+//                Image image = (Image) transferable.getTransferData(DataFlavor.imageFlavor);
+//                ImageIcon icon = new ImageIcon(image);
+//                //imageLb.setIcon(icon);
+//                currentImage = icon; // Lưu ImageIcon hiện tại
+//            }
+//        } catch (UnsupportedFlavorException | IOException ex) {
+//            ex.printStackTrace();
+//        }
+//        return currentImage;
+//    }
+    
+    public static String dateError(KeyEvent evt, JTextField date) {
         char ch = evt.getKeyChar();
-        String errorMessage="";
-        errorMessage = intError(evt);
-        if(!errorMessage.equals("")){
+        String errorMessage = intError(evt);
+        if (!errorMessage.equals("")) {
             errorMessage += ". Nhập đúng định dạng dd/mm/yyyy";
-        }        
-        if((date.getText().length() == 1 || date.getText().length() == 4) && ch != '\b'){
-            date.setText(date.getText() + ch +"/");
-            evt.consume(); 
         }
-        if((date.getText().length() == 2 || date.getText().length() == 5) && ch == '\b'){
+        
+        if ((date.getText().length() == 1 || date.getText().length() == 4) && ch != '\b') {
+            date.setText(date.getText() + ch + "/");
+            evt.consume();
+        }
+        
+        if ((date.getText().length() == 2 || date.getText().length() == 5) && ch == '\b') {
             check = true;
-        }else if(check && ch != '\b' && (date.getText().length() == 2 || date.getText().length() == 5) ){
+        } else if (check && ch != '\b' && (date.getText().length() == 2 || date.getText().length() == 5)) {
             date.setText(date.getText() + "/" + ch);
             evt.consume();
             check = false;
@@ -140,13 +165,23 @@ public class Handler {
         
         if (date.getText().length() == 10) {
             errorMessage = "Nhập quá nhiều ký tự. Nhập đúng định dạng dd/mm/yyyy";
-            evt.consume(); 
-        } 
-//        date.requestFocusInWindow(); // Di chuyển con trỏ văn bản đến JTextField
-        return errorMessage; 
+            evt.consume();
+        }
+        
+        
+        return errorMessage;
     }
-
-
+    //PT lấy ngày hiện tại 
+    public static String getCurrentDate() {
+        // Định dạng ngày tháng
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        // Lấy ngày hiện tại
+        LocalDate currentDate = LocalDate.now();
+        // Chuyển định dạng ngày thành chuỗi
+        String formattedDate = currentDate.format(formatter);
+        return formattedDate;
+    }    
+    
     // Lớp xử lý sự kiện để paste hình ảnh từ Clipboard
     public static ImageIcon pasteImageFromClipboard() {
         ImageIcon currentImage = null;
@@ -155,7 +190,21 @@ public class Handler {
             if (transferable != null && transferable.isDataFlavorSupported(DataFlavor.imageFlavor)) {
                 Image image = (Image) transferable.getTransferData(DataFlavor.imageFlavor);
                 ImageIcon icon = new ImageIcon(image);
-                //imageLb.setIcon(icon);
+
+                // Kiểm tra kích thước của hình ảnh
+                int width = icon.getIconWidth();
+                int height = icon.getIconHeight();
+
+                // Nếu kích thước vượt quá 200x200, thì thay đổi kích thước
+                if (width > 200 || height > 200) {
+                    int newWidth = width > 200 ? 200 : width; // Giảm chiều rộng nếu lớn hơn 200
+                    int newHeight = height > 200 ? height * 200 / width : height; // Tính toán chiều cao mới
+
+                    // Thay đổi kích thước hình ảnh
+                    image = image.getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH);
+                    icon = new ImageIcon(image);
+                }
+
                 currentImage = icon; // Lưu ImageIcon hiện tại
             }
         } catch (UnsupportedFlavorException | IOException ex) {
@@ -163,6 +212,8 @@ public class Handler {
         }
         return currentImage;
     }
+
+
     
         //chuyển đổi từ ToolkitImage sang BufferedImage
     public static BufferedImage convertToBufferedImage(ImageIcon icon) {
@@ -188,7 +239,8 @@ public class Handler {
         ImageIO.write((BufferedImage) image, "jpg", baos);
         return baos.toByteArray();
     }
-
+    
+    // Phương thức đổi date từ dd/MM/yyyy sang yyyy-MM-dd 
     public static String getDate(JTextField label) {
         String inputFormat = "dd/MM/yyyy";
         String outputFormat = "yyyy-MM-dd";
@@ -209,6 +261,7 @@ public class Handler {
         }
     }
     
+    //Chuyển đổi từ yyyy-MM-dd sang dd/MM/yyyy
     public static String formatDate(String dateString) {
         String formattedDate = null;
         if(dateString != null){
@@ -231,8 +284,7 @@ public class Handler {
     }
 
 
-    //Phương thức tạo biểu đồ tròn, đối số tên bảng và map<sp,%>
-    
+    //Phương thức tạo biểu đồ tròn, đối số tên bảng và map<sp,%>    
     public static JFreeChart createPieChart(DefaultPieDataset dataset, String nameChart){
         
         JFreeChart chart = ChartFactory.createPieChart(
@@ -244,7 +296,14 @@ public class Handler {
         );        
         return chart;
     }
-    
+     //Phương thức khi nhấn enter thì chuyẻn từ jtextField này sang jtextField khác
+    public static void enter(KeyEvent evt, JTextField b) {
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            // Chuyển focus sang textField_out khi nhấn Enter
+            b.requestFocusInWindow();
+        }
+    }
+
 
     //phương thức tìm kiếm sản phẩm theo tên
     

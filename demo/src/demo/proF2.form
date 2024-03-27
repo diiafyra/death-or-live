@@ -26,7 +26,7 @@
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace min="-2" pref="64" max="-2" attributes="0"/>
               <Component id="jLayeredPane1" min="-2" max="-2" attributes="0"/>
-              <EmptySpace pref="37" max="32767" attributes="0"/>
+              <EmptySpace pref="70" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -49,77 +49,79 @@
               <Group type="102" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" alignment="0" attributes="0">
+                      <Component id="khonhapL" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Component id="gianhapL" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Component id="motaL" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Component id="maspL" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Component id="ngaynhapL" alignment="0" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace max="32767" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="102" attributes="0">
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="khonhapL" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="gianhapL" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="motaL" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="maspL" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="ngaynhapL" alignment="0" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <EmptySpace max="32767" attributes="0"/>
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="102" alignment="0" attributes="0">
-                                  <Component id="txt_hinh_anh" min="-2" pref="90" max="-2" attributes="0"/>
-                                  <EmptySpace min="-2" pref="87" max="-2" attributes="0"/>
-                                  <Component id="chua_hinh_anh" min="-2" pref="315" max="-2" attributes="0"/>
-                                  <EmptySpace pref="166" max="-2" attributes="0"/>
+                              <Group type="102" attributes="0">
+                                  <EmptySpace min="-2" pref="122" max="-2" attributes="0"/>
+                                  <Component id="errorMess" min="-2" pref="320" max="-2" attributes="0"/>
                               </Group>
                               <Group type="102" alignment="0" attributes="0">
                                   <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="khonhapF" alignment="0" min="-2" pref="206" max="-2" attributes="0"/>
-                                      <Component id="ngaynhapF" alignment="0" min="-2" pref="206" max="-2" attributes="0"/>
-                                      <Component id="maspF" alignment="0" min="-2" pref="206" max="-2" attributes="0"/>
-                                      <Component id="jScrollPane5" alignment="0" min="-2" pref="206" max="-2" attributes="0"/>
-                                      <Component id="gianhapF" alignment="0" min="-2" pref="206" max="-2" attributes="0"/>
+                                      <Component id="txt_hinh_anh" min="-2" pref="90" max="-2" attributes="0"/>
+                                      <Component id="brower" min="-2" max="-2" attributes="0"/>
                                   </Group>
-                                  <EmptySpace max="32767" attributes="0"/>
-                                  <Group type="103" groupAlignment="1" attributes="0">
-                                      <Group type="102" alignment="1" attributes="0">
-                                          <EmptySpace pref="212" max="-2" attributes="0"/>
-                                          <Component id="nut_luu_chinh_sua" min="-2" max="-2" attributes="0"/>
-                                      </Group>
-                                      <Group type="103" alignment="1" groupAlignment="0" attributes="0">
+                                  <EmptySpace min="-2" pref="87" max="-2" attributes="0"/>
+                                  <Component id="chua_hinh_anh" min="-2" pref="315" max="-2" attributes="0"/>
+                              </Group>
+                          </Group>
+                          <EmptySpace min="-2" pref="223" max="-2" attributes="0"/>
+                      </Group>
+                      <Group type="102" alignment="0" attributes="0">
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="khonhapF" alignment="0" min="-2" pref="206" max="-2" attributes="0"/>
+                              <Component id="ngaynhapF" alignment="0" min="-2" pref="206" max="-2" attributes="0"/>
+                              <Component id="maspF" alignment="0" min="-2" pref="206" max="-2" attributes="0"/>
+                              <Component id="jScrollPane5" alignment="0" min="-2" pref="206" max="-2" attributes="0"/>
+                              <Component id="gianhapF" alignment="0" min="-2" pref="206" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace max="32767" attributes="0"/>
+                          <Group type="103" groupAlignment="1" attributes="0">
+                              <Group type="102" alignment="1" attributes="0">
+                                  <EmptySpace pref="212" max="-2" attributes="0"/>
+                                  <Component id="nut_luu_chinh_sua" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <Group type="103" alignment="1" groupAlignment="0" attributes="0">
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <EmptySpace min="1" pref="1" max="-2" attributes="0"/>
+                                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
                                           <Group type="102" alignment="0" attributes="0">
-                                              <EmptySpace min="1" pref="1" max="-2" attributes="0"/>
-                                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                                  <Group type="102" alignment="0" attributes="0">
-                                                      <Component id="giaL" min="-2" max="-2" attributes="0"/>
-                                                      <EmptySpace max="32767" attributes="0"/>
-                                                      <Component id="giabanF" min="-2" pref="206" max="-2" attributes="0"/>
-                                                  </Group>
-                                                  <Group type="102" alignment="0" attributes="0">
-                                                      <Component id="tenspL" min="-2" max="-2" attributes="0"/>
-                                                      <EmptySpace min="-2" pref="75" max="-2" attributes="0"/>
-                                                      <Component id="tenspF" min="-2" pref="206" max="-2" attributes="0"/>
-                                                  </Group>
-                                              </Group>
+                                              <Component id="giaL" min="-2" max="-2" attributes="0"/>
+                                              <EmptySpace max="32767" attributes="0"/>
+                                              <Component id="giabanF" min="-2" pref="206" max="-2" attributes="0"/>
                                           </Group>
                                           <Group type="102" alignment="0" attributes="0">
-                                              <Component id="tonkhoL" min="-2" max="-2" attributes="0"/>
-                                              <Group type="103" groupAlignment="0" attributes="0">
-                                                  <Group type="102" alignment="0" attributes="0">
-                                                      <EmptySpace min="-2" pref="218" max="-2" attributes="0"/>
-                                                      <Component id="nut_edit" min="-2" max="-2" attributes="0"/>
-                                                  </Group>
-                                                  <Group type="102" alignment="0" attributes="0">
-                                                      <EmptySpace min="-2" pref="72" max="-2" attributes="0"/>
-                                                      <Component id="tonkhoF" min="-2" pref="206" max="-2" attributes="0"/>
-                                                  </Group>
-                                              </Group>
+                                              <Component id="tenspL" min="-2" max="-2" attributes="0"/>
+                                              <EmptySpace min="-2" pref="75" max="-2" attributes="0"/>
+                                              <Component id="tenspF" min="-2" pref="206" max="-2" attributes="0"/>
+                                          </Group>
+                                      </Group>
+                                  </Group>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Component id="tonkhoL" min="-2" max="-2" attributes="0"/>
+                                      <Group type="103" groupAlignment="0" attributes="0">
+                                          <Group type="102" alignment="0" attributes="0">
+                                              <EmptySpace min="-2" pref="218" max="-2" attributes="0"/>
+                                              <Component id="nut_edit" min="-2" max="-2" attributes="0"/>
+                                          </Group>
+                                          <Group type="102" alignment="0" attributes="0">
+                                              <EmptySpace min="-2" pref="72" max="-2" attributes="0"/>
+                                              <Component id="tonkhoF" min="-2" pref="206" max="-2" attributes="0"/>
                                           </Group>
                                       </Group>
                                   </Group>
                               </Group>
                           </Group>
-                      </Group>
-                      <Group type="102" alignment="0" attributes="0">
-                          <EmptySpace min="-2" pref="231" max="-2" attributes="0"/>
-                          <Component id="errorMess" min="-2" pref="320" max="-2" attributes="0"/>
-                          <EmptySpace pref="261" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
                       </Group>
                   </Group>
-                  <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -127,11 +129,15 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="1" attributes="0">
+                  <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="chua_hinh_anh" min="-2" pref="161" max="-2" attributes="0"/>
-                      <Component id="txt_hinh_anh" min="-2" max="-2" attributes="0"/>
+                      <Group type="102" alignment="1" attributes="0">
+                          <Component id="txt_hinh_anh" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                          <Component id="brower" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="31" max="-2" attributes="0"/>
+                      </Group>
                   </Group>
-                  <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Component id="errorMess" min="-2" pref="20" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="27" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
@@ -356,6 +362,14 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="T&#xea;n SP"/>
           </Properties>
+        </Component>
+        <Component class="javax.swing.JButton" name="brower">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Brower"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="browerActionPerformed"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>

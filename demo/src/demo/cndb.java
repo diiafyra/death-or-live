@@ -5,11 +5,20 @@
  */
 package demo;
 
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -18,12 +27,25 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DefaultHighlighter;
+import javax.swing.text.Highlighter;
+import javax.swing.text.JTextComponent;
 import org.jfree.data.general.DefaultPieDataset;
-import models.Order;
-import models.OrderInfo;
-import models.Product;
-import models.ProductEx;
+import structure.Order;
+import structure.Product;
+import structure.ProductEx;
+import structure.proPanel;
+import static structure.proPanel.index;
 
 /**
  *
@@ -59,8 +81,6 @@ public class cndb {
     
 //singleton pattern nhằm chỉ tạo ra 1 đối tượng cndb duy nhất trong quá trình chạy
     private static cndb instance;    
-    //1
-    //singleton pattern nhằm chỉ tạo ra 1 đối tượng cndb duy nhất trong quá trình chạy
     public static cndb getInstance(){
         if(instance == null){
             instance = new cndb();
@@ -98,7 +118,7 @@ public class cndb {
         List<Order> allOrders = new ArrayList<>();
         
          try{
-            String sql = "SELECT o.ID_O, o.NAME_C, o.DATE_O, o.DATE_D, o.ADDR, o.PAY_TYPE, o.DEL_STT, od.ID_P, od.ID_P, od.QUAL, p.PRICE_S, od.DISCOUNT "
+            String sql = "SELECT o.ID_O, o.NAME_C, o.DATE_O, o.DATE_D, o.ADDR, o.PAY_TYPE, o.DEL_STT, od.ID_P, od.ID_P, od.QUAL, p.PRICE_S "
                     + "FROM ORDERS o "
                     + "JOIN ORDERS_DETAIL od ON o.ID_O = od.ID_O "
                     + "JOIN PRODUCTS p ON od.ID_P = p.ID_P";//truy vấn sql 
@@ -114,15 +134,13 @@ public class cndb {
                 if (!orderMap.containsKey(orderId)) {
                     orderMap.put(orderId, new Order(orderId, rlt.getString("NAME_C"), rlt.getString("DATE_O"),  rlt.getString("DATE_D"),
                             rlt.getString("ADDR"), rlt.getString("PAY_TYPE"), rlt.getInt("DEL_STT"),
-                            new ArrayList<>(), 0));
+                            new HashMap<>(), 0));
                 }
                 Order order = orderMap.get(orderId);
                 String productId = rlt.getString("ID_P");
                 int quantity = rlt.getInt("QUAL");
-                int discount= rlt.getInt("DISCOUNT"); 
+                order.getOrder_detail().put(productId, quantity);
                 order.setTotal_amount(order.getTotal_amount() + quantity * rlt.getInt("PRICE_S"));
-                List<OrderInfo> orderDetail = order.getOrder_detail();
-                orderDetail.add(new OrderInfo(productId,quantity, discount));
             }
             allOrders.addAll(orderMap.values());
         } catch (SQLException e) {
@@ -159,7 +177,7 @@ public class cndb {
     }
 
 
-        public int orderInsert(String id_o, String name_c, String date_o, String date_d, String addr, String pay_type, int del_stt, List<OrderInfo> order_detail){
+        public int orderInsert(String id_o, String name_c, String date_o, String date_d, String addr, String pay_type, int del_stt, Map<String, Integer> order_detail){
             
         int status = 0;
         try {
@@ -188,7 +206,7 @@ public class cndb {
         return status;
         }
      //Phương thức chỉnh sửa đơn hàng
-        public int orderEdit(String id_o, String name_c, String date_o, String date_d, String addr, String pay_type, int del_stt, List<OrderInfo> order_detail){
+        public int orderEdit(String id_o, String name_c, String date_o, String date_d, String addr, String pay_type, int del_stt, Map<String, Integer> order_detail){
             
         int status = 0;
         try {
@@ -221,18 +239,16 @@ public class cndb {
         return status;
         }
         
-        public int insertOD(String id_o, List< OrderInfo> order_detail) {
+        public int insertOD(String id_o, Map<String, Integer> order_detail) {
             int status = 0;       
             try {
-            String orderDetailSql = "INSERT INTO orders_detail (ID_O, ID_O_D, ID_P, QUAL, DISCOUNT) VALUES (?, ?, ?, ?, ?)";
+            String orderDetailSql = "INSERT INTO orders_detail (ID_O, ID_O_D, ID_P, QUAL) VALUES (?, ?, ?, ?)";
             PreparedStatement orderDetailStmt = conn.prepareStatement(orderDetailSql);
-            for (OrderInfo od : order_detail) {
-                orderDetailStmt.setString(1, id_o); // ID của đơn hàng
-                orderDetailStmt.setString(2, generateOrderDetailId(id_o)); // ID chi tiết đơn hàng
-                orderDetailStmt.setString(3, od.getId_p()); // ID của sản phẩm
-                orderDetailStmt.setInt(4, od.getQuantity()); // Số lượng của sản phẩm
-                orderDetailStmt.setInt(5, od.getDiscount()); // Giảm giá của sản
-
+            for (Map.Entry<String, Integer> entry : order_detail.entrySet()) {
+                orderDetailStmt.setString(1, id_o);
+                orderDetailStmt.setString(2, generateOrderDetailId(id_o)); //tạo id_o_p
+                orderDetailStmt.setString(3, entry.getKey()); // key là String = id_p, 
+                orderDetailStmt.setInt(4, entry.getValue());// value là Integer = qual
                 orderDetailStmt.addBatch();
             }
             orderDetailStmt.executeBatch();
@@ -268,34 +284,20 @@ public class cndb {
             return status;
     }
         
-        public int getEarliestYear(){
-            int eYear = 0;
-            try {
-                String sql = "SELECT MIN(strftime('%Y', DATE_O)) AS EARLIEST_YEAR FROM ORDERS";
-
-                pre = conn.prepareStatement(sql);
-                ResultSet rlt = pre.executeQuery();
-                eYear = rlt.getInt("EARLIEST_YEAR");
-            } catch (SQLException ex) {
-                Logger.getLogger(cndb.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            return eYear;
-        }
         public List<ProductEx> salesReports(String month, String year){
                         List<ProductEx> proExs = new ArrayList<>();
             try {
                 String sql = "SELECT od.ID_P, \n" +
-                "       p.NAME_P, \n" +
-                "       SUM(od.QUAL) AS total_QUAL, \n" +
-                "       p.PRICE_S, \n" +
-                "       p.PRICE_I, \n" +
-                "       o.DATE_D,\n" +
-                "       od.DISCOUNT\n" +
-                "FROM ORDERS o \n" +
-                "JOIN ORDERS_DETAIL od ON o.ID_O = od.ID_O \n" +
-                "JOIN PRODUCTS p ON od.ID_P = p.ID_P \n" +
-                "WHERE strftime('%m', o.DATE_O) = ? AND strftime('%Y', o.DATE_O) = ?\n" +
-                "GROUP BY od.ID_P, od.DISCOUNT;";
+                        "       p.NAME_P, \n" +
+                        "       SUM(od.QUAL) AS total_QUAL, \n" +
+                        "       p.PRICE_S, \n" +
+                        "       p.PRICE_I, \n" +
+                        "       o.DATE_D\n" +
+                        "FROM ORDERS o \n" +
+                        "JOIN ORDERS_DETAIL od ON o.ID_O = od.ID_O \n" +
+                        "JOIN PRODUCTS p ON od.ID_P = p.ID_P \n" +
+                        "WHERE strftime('%m', o.DATE_O) = ? AND strftime('%Y', o.DATE_O) = ?\n" +
+                        "GROUP BY od.ID_P;";
 
                 pre = conn.prepareStatement(sql); //pre một lệnh truy vấn sql select chuẩn bị thực thi trên database
                 pre.setString(1, month);
@@ -308,8 +310,7 @@ public class cndb {
                     int price_s = rlt.getInt("PRICE_S");
                     int price_i = rlt.getInt("PRICE_I");
                     int qual = rlt.getInt("total_QUAL");
-                    int discount = rlt.getInt("DISCOUNT");
-                    ProductEx proEx = new ProductEx(pro, qual, price_i, price_s, discount);
+                    ProductEx proEx = new ProductEx(pro, qual, price_i, price_s);
                     proExs.add(proEx);
                 }            
             } catch (SQLException ex) {
@@ -364,7 +365,7 @@ public class cndb {
                 }
                 
                 if(pro.checkProfit()){
-                    double productProfit = pro.getProfit();
+                    int productProfit = pro.getProfit();
                     double profitPercentage = ((double) productProfit / totalProfit) * 100;                
                     if (profitPercentage < 1) {
                         otherProfit += productProfit;
@@ -373,7 +374,7 @@ public class cndb {
 //                        System.out.println(productName+"/"+profitPercentage);
                     }
                 } else {
-                    double productLoss = - pro.getProfit();
+                    int productLoss = - pro.getProfit();
                     double lossPercentage = ((double) productLoss / totalLoss)*100;
                     if(lossPercentage <1){
                         otherLoss += productLoss;
@@ -408,7 +409,7 @@ public class cndb {
         List<Order> allOrders = new ArrayList<>();
 
          try{
-            String sql = "SELECT o.ID_O, o.NAME_C, o.DATE_O, o.DATE_D, o.ADDR, o.PAY_TYPE, o.DEL_STT, od.ID_P, od.ID_P, od.QUAL, p.PRICE_S, od.DISCOUNT "
+            String sql = "SELECT o.ID_O, o.NAME_C, o.DATE_O, o.DATE_D, o.ADDR, o.PAY_TYPE, o.DEL_STT, od.ID_P, od.ID_P, od.QUAL, p.PRICE_S "
                     + "FROM ORDERS o "
                     + "JOIN ORDERS_DETAIL od ON o.ID_O = od.ID_O "
                     + "JOIN PRODUCTS p ON od.ID_P = p.ID_P"
@@ -429,16 +430,15 @@ public class cndb {
                 //System.out.print(""+date);
                 //Nếu dòng tiếp theo có orderId không có trong map chưa nếu chưa thì thêm ..
                 if (!orderMap.containsKey(orderId)) {
-                    orderMap.put(orderId, new Order(orderId, rlt.getString("NAME_C"), rlt.getString("DATE_O"), rlt.getString("DATE_D"),
+                    orderMap.put(orderId, new Order(orderId, rlt.getString("NAME_C"), rlt.getString("DATE_O"), rlt.getString("DATE_P"),
                             rlt.getString("ADDR"), rlt.getString("PAY_TYPE"), rlt.getInt("DEL_STT"),
-                            new ArrayList<>(), 0));
+                            new HashMap<>(), 0));
                 }
                 Order order = orderMap.get(orderId);
                 String productId = rlt.getString("ID_P");
                 int quantity = rlt.getInt("QUAL");
-                int discount = rlt.getInt("DISCOUNT");
-                order.getOrder_detail().add(new OrderInfo(productId, quantity, discount));
-                order.setTotal_amount(order.getTotal_amount() + quantity * rlt.getInt("PRICE_S")*discount);
+                order.getOrder_detail().put(productId, quantity);
+                order.setTotal_amount(order.getTotal_amount() + quantity * rlt.getInt("PRICE_S"));
             }
             allOrders.addAll(orderMap.values());
         } catch (SQLException e) {
@@ -449,7 +449,7 @@ public class cndb {
     }
     public String creaSqlEx(boolean btn, int option) {
         ///btn là khi người dùng nhấn nút tìm kiếm = key phải y hệt thông tin trong đơn hàng = tìm kiếm chặt
-//// option là tìm kiếm theo tên 0 tên người mua, 1 id đơn hàng, 2 id sản phẩm hoặc tên sản phẩm, 3 trạng thái giao hàng, 4. Thanh toán
+        // option là tìm kiếm theo tên 0 tên người mua, 1 id đơn hàng, 2 id sản phẩm hoặc tên sản phẩm, 3 trạng thái giao hàng, 4. Thanh toán
         String sqlA = "";
         String sqlB = "";
         String sqlEx = " WHERE ";
@@ -466,7 +466,7 @@ public class cndb {
                 sqlA = btn ? "o.ID_O = ?" + sqlB : "o.ID_O LIKE ? ";
                 break;
             case 2:
-                sqlA = btn ? "p.ID_P = ? OR p.NAME_P = ? " + sqlB : "p.ID_P LIKE ? OR p.NAME_P LIKE ? ";
+                sqlA = btn ? "p.ID_P = ? OR p_NAME_P = ? " + sqlB : "p.ID_P LIKE ? OR p_NAME_P LIKE ? ";
                 break;
             case 3:
                 sqlA = btn ? "o.DEL_STT = ? " : "o.DEL_STT = ? ";
@@ -482,21 +482,7 @@ public class cndb {
         return sqlEx;
     }
 
-    public int getStock(String id_p){
-        int stock = 0;
-        try {
-            String sql = "SELECT STOCK FROM PRODUCTS WHERE ID_P =?";
-            pre = conn.prepareStatement(sql);
-            pre.setString(1, id_p);
-            ResultSet rlt = pre.executeQuery();
-            if (rlt.next()) { // Di chuyển con trỏ đến dòng đầu tiên
-                stock = rlt.getInt("STOCK"); // Lấy giá trị từ cột STOCK
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(cndb.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return stock;
-    }
+
 
     //phương thức thêm sản phẩm vào database
         public int productInsert(String id_p, String name_p, int stock , String desc, byte[] image,int price_i, int price_s, String depot, String date){
@@ -555,7 +541,6 @@ public class cndb {
         return proList;
     }
 
-    
     //Phương thức xóa sản phẩm theo hình ảnh 
     public void xoa_san_pham(java.awt.event.ActionEvent e, byte[] image){
         // Kết nối cơ sở dữ liệu
@@ -580,8 +565,6 @@ public class cndb {
         }    
     }
     
-
-    
     //Phương thức bổ trợ hiện chi tiết sản phẩm 
     public String id_p;
     public String name_p;
@@ -591,8 +574,8 @@ public class cndb {
     public int price_i;
     public int price_s;
     public String date_p;
-    public String depot;   
-
+    public String depot;    
+    
     public void chi_tiet_san_pham(int index, List<Product> allPro) {         
         try {
             // Lấy ID của sản phẩm cần xóa từ danh sách sản phẩm
@@ -688,25 +671,77 @@ public class cndb {
         }    
     }
     
-    //PT update tồn kho sản phẩm theo ID 
-    public int stockUpdate(String id_p, int qual){
-        int status = 0;
+    // Hàm hiển thị hình ảnh từ tệp lên JLabel
+    public static ImageIcon displayImageOnLabel(File file, JLabel label) {
         try {
-            String sql = "UPDATE PRODUCTS SET STOCK = STOCK - ? WHERE ID_P =?";
-            pre = conn.prepareStatement(sql);
-            pre.setInt(1, qual);
-            pre.setString(2, id_p);
-            status = pre.executeUpdate();
-        } catch (SQLException ex) {
-            Logger.getLogger(cndb.class.getName()).log(Level.SEVERE, null, ex);
-            status = -1;
+            // Tạo một ImageIcon từ tệp đã chọn
+            ImageIcon icon = new ImageIcon(file.getPath());
+            // Lấy kích thước hiện tại của JLabel
+            int width = label.getWidth();
+            int height = label.getHeight();
+            // Chỉnh kích thước của hình ảnh để phù hợp với JLabel
+            Image scaledImage = icon.getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH);
+            // Tạo một ImageIcon mới từ hình ảnh đã chỉnh kích thước
+            ImageIcon scaledIcon = new ImageIcon(scaledImage);
+            // Đặt hình ảnh mới lên JLabel
+            label.setIcon(scaledIcon);
+            return icon;
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
-        return status;
+        return null;
+    }  
+    
+    // Phương thức hình ảnh khi dùng giữa clipboad , CSDL , Netbean 
+    public static byte[] getImageBytes(Image image) throws IOException {
+        BufferedImage bufferedImage = convertToBufferedImage(image);
+        return getByteArray(bufferedImage);
+    }
+    public static BufferedImage convertToBufferedImage(Image image) {
+        if (image instanceof BufferedImage) {
+            return (BufferedImage) image;
+        }
+        BufferedImage bufferedImage = new BufferedImage(image.getWidth(null), image.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+        bufferedImage.getGraphics().drawImage(image, 0, 0, null);
+        return bufferedImage;
+    }
+    public static byte[] getByteArray(BufferedImage image) throws IOException {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        javax.imageio.ImageIO.write(image, "png", baos);
+        return baos.toByteArray();
+    }
+    public static byte[] getByteArray(Image image) throws IOException {
+        BufferedImage bufferedImage = convertToBufferedImage(image);
+        return getByteArray(bufferedImage);
+    }
+    public static BufferedImage convertToolkitImageToBufferedImage(Image image) {
+        BufferedImage bufferedImage = new BufferedImage(image.getWidth(null), image.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+        bufferedImage.getGraphics().drawImage(image, 0, 0, null);
+        return bufferedImage;
     }
     
-
+    //Kiểm tra một JPanel a có chứa chuõi a không , có thì trả về số 1 , không thì trả về số 0 
+    public static JLabel label;
+    public static String labelText;
+    public static int tim_kiem_san_pham(JPanel panel, String abc) {
+        List<String> text = new ArrayList<>();
+        Component[] components = panel.getComponents();
+        for (Component comp : components) {
+            if (comp instanceof JLabel) {
+                label = (JLabel) comp;
+                labelText = label.getText();
+                text.add(labelText);
+            }        
+            for(String a: text){
+                if(a==null){
+                    a="!!!";
+                }
+                if(a.contains(abc)){          
+                    return 1;
+                }                    
+            }
+        }       
+        return 0;
+    }
     
-}
-
-
-
+}   

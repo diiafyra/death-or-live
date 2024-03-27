@@ -77,7 +77,7 @@ public class passwordFr extends javax.swing.JFrame {
         mfr.setVisible(true);
         mfr.RefreshTables();
         mfr.RefreshProList();
-        dispose();
+        dispose();       
     }//GEN-LAST:event_LoginBtnActionPerformed
 
     /**

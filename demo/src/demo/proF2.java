@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package demo;
 
 import static demo.Handler.convertToBufferedImage;
@@ -15,21 +10,19 @@ import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageProducer;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.sql.Date;
 import javax.swing.ImageIcon;
 import javax.swing.JTextField;
-import models.proPanel;
+import structure.proPanel;
 import java.sql.Date;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.Icon;
+import javax.swing.JFileChooser;
 
-/**
- *
- * @author dhhuo
- */
 public class proF2 extends javax.swing.JFrame {
 
     public proF2() {
@@ -48,9 +41,12 @@ public class proF2 extends javax.swing.JFrame {
         motaArea.setEditable(false);
         ngaynhapF.setEditable(false);
         
+        
         //Ẩn nút cho đến khi nhấn nut_chinh_sua
         nut_luu_chinh_sua.setVisible(false);
         txt_hinh_anh.setVisible(false);
+        brower.setVisible(false);
+        
     }   
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -79,6 +75,7 @@ public class proF2 extends javax.swing.JFrame {
         ngaynhapF = new javax.swing.JTextField();
         gianhapL = new javax.swing.JLabel();
         tenspL = new javax.swing.JLabel();
+        brower = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -223,6 +220,13 @@ public class proF2 extends javax.swing.JFrame {
 
         tenspL.setText("Tên SP");
 
+        brower.setText("Brower");
+        brower.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                browerActionPerformed(evt);
+            }
+        });
+
         jLayeredPane1.setLayer(giaL, javax.swing.JLayeredPane.DEFAULT_LAYER);
         jLayeredPane1.setLayer(nut_luu_chinh_sua, javax.swing.JLayeredPane.DEFAULT_LAYER);
         jLayeredPane1.setLayer(tenspF, javax.swing.JLayeredPane.DEFAULT_LAYER);
@@ -244,6 +248,7 @@ public class proF2 extends javax.swing.JFrame {
         jLayeredPane1.setLayer(ngaynhapF, javax.swing.JLayeredPane.DEFAULT_LAYER);
         jLayeredPane1.setLayer(gianhapL, javax.swing.JLayeredPane.DEFAULT_LAYER);
         jLayeredPane1.setLayer(tenspL, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jLayeredPane1.setLayer(brower, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         javax.swing.GroupLayout jLayeredPane1Layout = new javax.swing.GroupLayout(jLayeredPane1);
         jLayeredPane1.setLayout(jLayeredPane1Layout);
@@ -252,66 +257,71 @@ public class proF2 extends javax.swing.JFrame {
             .addGroup(jLayeredPane1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(khonhapL)
+                    .addComponent(gianhapL)
+                    .addComponent(motaL)
+                    .addComponent(maspL)
+                    .addComponent(ngaynhapL))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jLayeredPane1Layout.createSequentialGroup()
                         .addGroup(jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(khonhapL)
-                            .addComponent(gianhapL)
-                            .addComponent(motaL)
-                            .addComponent(maspL)
-                            .addComponent(ngaynhapL))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jLayeredPane1Layout.createSequentialGroup()
-                                .addComponent(txt_hinh_anh, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(87, 87, 87)
-                                .addComponent(chua_hinh_anh, javax.swing.GroupLayout.PREFERRED_SIZE, 315, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 166, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(122, 122, 122)
+                                .addComponent(errorMess, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jLayeredPane1Layout.createSequentialGroup()
                                 .addGroup(jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(khonhapF, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(ngaynhapF, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(maspF, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(gianhapF, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGroup(jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addGroup(jLayeredPane1Layout.createSequentialGroup()
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 212, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(nut_luu_chinh_sua))
+                                    .addComponent(txt_hinh_anh, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(brower))
+                                .addGap(87, 87, 87)
+                                .addComponent(chua_hinh_anh, javax.swing.GroupLayout.PREFERRED_SIZE, 315, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(223, 223, 223))
+                    .addGroup(jLayeredPane1Layout.createSequentialGroup()
+                        .addGroup(jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(khonhapF, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(ngaynhapF, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(maspF, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(gianhapF, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(jLayeredPane1Layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 212, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(nut_luu_chinh_sua))
+                            .addGroup(jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(jLayeredPane1Layout.createSequentialGroup()
+                                    .addGap(1, 1, 1)
+                                    .addGroup(jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addGroup(jLayeredPane1Layout.createSequentialGroup()
+                                            .addComponent(giaL)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addComponent(giabanF, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGroup(jLayeredPane1Layout.createSequentialGroup()
+                                            .addComponent(tenspL)
+                                            .addGap(75, 75, 75)
+                                            .addComponent(tenspF, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addGroup(jLayeredPane1Layout.createSequentialGroup()
+                                    .addComponent(tonkhoL)
                                     .addGroup(jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addGroup(jLayeredPane1Layout.createSequentialGroup()
-                                            .addGap(1, 1, 1)
-                                            .addGroup(jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                                .addGroup(jLayeredPane1Layout.createSequentialGroup()
-                                                    .addComponent(giaL)
-                                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                    .addComponent(giabanF, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                .addGroup(jLayeredPane1Layout.createSequentialGroup()
-                                                    .addComponent(tenspL)
-                                                    .addGap(75, 75, 75)
-                                                    .addComponent(tenspF, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                            .addGap(218, 218, 218)
+                                            .addComponent(nut_edit))
                                         .addGroup(jLayeredPane1Layout.createSequentialGroup()
-                                            .addComponent(tonkhoL)
-                                            .addGroup(jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                .addGroup(jLayeredPane1Layout.createSequentialGroup()
-                                                    .addGap(218, 218, 218)
-                                                    .addComponent(nut_edit))
-                                                .addGroup(jLayeredPane1Layout.createSequentialGroup()
-                                                    .addGap(72, 72, 72)
-                                                    .addComponent(tonkhoF, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE)))))))))
-                    .addGroup(jLayeredPane1Layout.createSequentialGroup()
-                        .addGap(231, 231, 231)
-                        .addComponent(errorMess, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 261, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
+                                            .addGap(72, 72, 72)
+                                            .addComponent(tonkhoF, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                        .addContainerGap())))
         );
         jLayeredPane1Layout.setVerticalGroup(
             jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jLayeredPane1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(chua_hinh_anh, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txt_hinh_anh, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jLayeredPane1Layout.createSequentialGroup()
+                        .addComponent(txt_hinh_anh, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(brower)
+                        .addGap(31, 31, 31)))
                 .addGap(18, 18, 18)
                 .addComponent(errorMess, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(27, 27, 27)
@@ -365,7 +375,7 @@ public class proF2 extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(64, 64, 64)
                 .addComponent(jLayeredPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(37, Short.MAX_VALUE))
+                .addContainerGap(70, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -400,6 +410,7 @@ public class proF2 extends javax.swing.JFrame {
 
     private void nut_editActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nut_editActionPerformed
         nut_edit.setVisible(false);
+        brower.setVisible(true);
         nut_luu_chinh_sua.setVisible(true);
         txt_hinh_anh.setVisible(true);
         chua_hinh_anh.setVisible(true); 
@@ -422,8 +433,7 @@ public class proF2 extends javax.swing.JFrame {
         byte[] image = null;
         if (currentImage != null) {
             try {
-//                image = getByteArray(currentImage.getImage());
-                  image = getImageBytes(currentImage.getImage());  
+                  image = cndb.getImageBytes(currentImage.getImage());  
             } catch (IOException ex) {
                 Logger.getLogger(productF.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -443,37 +453,7 @@ public class proF2 extends javax.swing.JFrame {
         
         setVisible(false);
     }//GEN-LAST:event_nut_luu_chinh_suaActionPerformed
-    public byte[] getImageBytes(Image image) throws IOException {
-        BufferedImage bufferedImage = convertToBufferedImage(image);
-        return getByteArray(bufferedImage);
-    }
 
-    private BufferedImage convertToBufferedImage(Image image) {
-        if (image instanceof BufferedImage) {
-            return (BufferedImage) image;
-        }
-        BufferedImage bufferedImage = new BufferedImage(image.getWidth(null), image.getHeight(null), BufferedImage.TYPE_INT_ARGB);
-        bufferedImage.getGraphics().drawImage(image, 0, 0, null);
-        return bufferedImage;
-    }
-
-    private byte[] getByteArray(BufferedImage image) throws IOException {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        javax.imageio.ImageIO.write(image, "png", baos);
-        return baos.toByteArray();
-    }
-
-    private byte[] getByteArray(Image image) throws IOException {
-        BufferedImage bufferedImage = convertToBufferedImage(image);
-        return getByteArray(bufferedImage);
-    }
-
-    // Sử dụng phương thức này để chuyển đổi từ ToolkitImage sang BufferedImage
-    private BufferedImage convertToolkitImageToBufferedImage(Image image) {
-        BufferedImage bufferedImage = new BufferedImage(image.getWidth(null), image.getHeight(null), BufferedImage.TYPE_INT_ARGB);
-        bufferedImage.getGraphics().drawImage(image, 0, 0, null);
-        return bufferedImage;
-    }
     
     private void maspFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_maspFActionPerformed
         // TODO add your handling code here:
@@ -536,6 +516,16 @@ public class proF2 extends javax.swing.JFrame {
           
     }//GEN-LAST:event_txt_hinh_anhKeyTyped
 
+    private void browerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_browerActionPerformed
+        JFileChooser chooser = new JFileChooser(); // Tạo một đối tượng JFileChooser
+        chooser.setFileSelectionMode(JFileChooser.FILES_ONLY); // Chỉ cho phép chọn tệp
+        int result = chooser.showOpenDialog(this); // Hiển thị hộp thoại chọn tệp
+        if (result == JFileChooser.APPROVE_OPTION) { // Nếu người dùng chọn một tệp
+            File file = chooser.getSelectedFile(); // Lấy đối tượng File từ tệp đã chọn
+            currentImage=cndb.displayImageOnLabel(file, chua_hinh_anh); // Hiển thị hình ảnh trên JLabel và Gán hình ảnh cho currentImage
+        }
+    }//GEN-LAST:event_browerActionPerformed
+
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -561,8 +551,6 @@ public class proF2 extends javax.swing.JFrame {
         }
         //</editor-fold>
         //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -575,6 +563,7 @@ public class proF2 extends javax.swing.JFrame {
     public static ImageIcon currentImage;
 //    int a1=0;
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton brower;
     public javax.swing.JLabel chua_hinh_anh;
     private javax.swing.JLabel errorMess;
     private javax.swing.JLabel giaL;

@@ -6,16 +6,32 @@ import static demo.Handler.*;
 import static demo.Handler.pasteImageFromClipboard;
 import java.sql.Date;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.io.File;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 public class productF extends javax.swing.JFrame {
     public productF() {
         initComponents();
+        // Đặt JFrame ở giữa màn hình
+        setLocationRelativeTo(null);
+        
+        //Gán cho ngaynhapF gí trị ngyaf hôm nay
+        ngaynhapF.setText(Handler.getCurrentDate());
+        
+        // Yêu cầu con trỏ chuột chuyển đến JTextField khi JFrame được hiển thị
+        maspF.requestFocusInWindow();
+        
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
     }   
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -123,18 +139,55 @@ public class productF extends javax.swing.JFrame {
         errorMess.setForeground(new java.awt.Color(255, 51, 51));
         errorMess.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jPanel4.add(errorMess, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 20, 320, 20));
+
+        maspF.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                maspFActionPerformed(evt);
+            }
+        });
+        maspF.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                maspFKeyPressed(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                maspFKeyTyped(evt);
+            }
+        });
         jPanel4.add(maspF, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 80, 210, 20));
 
+        ngaynhapF.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ngaynhapFActionPerformed(evt);
+            }
+        });
         ngaynhapF.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                ngaynhapFKeyPressed(evt);
+            }
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 ngaynhapFKeyTyped(evt);
             }
         });
         jPanel4.add(ngaynhapF, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 140, 210, 20));
+
+        tenspF.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                tenspFKeyPressed(evt);
+            }
+        });
         jPanel4.add(tenspF, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 80, 210, 20));
+
+        khonhapF.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                khonhapFKeyPressed(evt);
+            }
+        });
         jPanel4.add(khonhapF, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 200, 210, 20));
 
         gianhapF.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                gianhapFKeyPressed(evt);
+            }
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 gianhapFKeyTyped(evt);
             }
@@ -142,6 +195,9 @@ public class productF extends javax.swing.JFrame {
         jPanel4.add(gianhapF, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 260, 210, 20));
 
         tonkhoF.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                tonkhoFKeyPressed(evt);
+            }
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 tonkhoFKeyTyped(evt);
             }
@@ -149,6 +205,9 @@ public class productF extends javax.swing.JFrame {
         jPanel4.add(tonkhoF, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 200, 210, 20));
 
         giaF.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                giaFKeyPressed(evt);
+            }
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 giaFKeyTyped(evt);
             }
@@ -176,7 +235,14 @@ public class productF extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void browerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_browerActionPerformed
-        // TODO add your handling code here:
+        JFileChooser chooser = new JFileChooser(); // Tạo một đối tượng JFileChooser
+        chooser.setFileSelectionMode(JFileChooser.FILES_ONLY); // Chỉ cho phép chọn tệp
+        int result = chooser.showOpenDialog(this); // Hiển thị hộp thoại chọn tệp
+        if (result == JFileChooser.APPROVE_OPTION) { // Nếu người dùng chọn một tệp
+            File file = chooser.getSelectedFile(); // Lấy đối tượng File từ tệp đã chọn
+            currentImage=cndb.displayImageOnLabel(file, imageLb); // Hiển thị hình ảnh trên JLabel và Gán hình ảnh cho currentImage
+
+        }        
     }//GEN-LAST:event_browerActionPerformed
 
     private void imageLbKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_imageLbKeyTyped
@@ -191,7 +257,8 @@ public class productF extends javax.swing.JFrame {
         byte[] imageData = null;
         if (currentImage != null) {
             try {
-                imageData = getByteArray(currentImage.getImage());
+                // Dùng cndb.getImageBytes 
+                imageData = cndb.getImageBytes(currentImage.getImage());
             } catch (IOException ex) {
                 Logger.getLogger(productF.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -242,8 +309,50 @@ public class productF extends javax.swing.JFrame {
 
     private void ngaynhapFKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_ngaynhapFKeyTyped
         errorMess.setText(dateError(evt, ngaynhapF));
-//        a1++; 
     }//GEN-LAST:event_ngaynhapFKeyTyped
+
+    private void ngaynhapFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ngaynhapFActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ngaynhapFActionPerformed
+
+    private void maspFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_maspFActionPerformed
+
+    }//GEN-LAST:event_maspFActionPerformed
+
+    private void maspFKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_maspFKeyTyped
+
+    }//GEN-LAST:event_maspFKeyTyped
+
+    private void maspFKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_maspFKeyPressed
+        Handler.enter(evt,tenspF);
+    }//GEN-LAST:event_maspFKeyPressed
+
+    private void tenspFKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tenspFKeyPressed
+        Handler.enter(evt,giaF);
+    }//GEN-LAST:event_tenspFKeyPressed
+
+    private void ngaynhapFKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_ngaynhapFKeyPressed
+        Handler.enter(evt,tonkhoF);
+    }//GEN-LAST:event_ngaynhapFKeyPressed
+
+    private void tonkhoFKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tonkhoFKeyPressed
+        Handler.enter(evt,khonhapF);
+    }//GEN-LAST:event_tonkhoFKeyPressed
+
+    private void khonhapFKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_khonhapFKeyPressed
+        Handler.enter(evt,gianhapF);
+    }//GEN-LAST:event_khonhapFKeyPressed
+
+    private void gianhapFKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_gianhapFKeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            // Chuyển focus sang textField_out khi nhấn Enter
+            motaArea.requestFocusInWindow();
+        }        
+    }//GEN-LAST:event_gianhapFKeyPressed
+
+    private void giaFKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_giaFKeyPressed
+        Handler.enter(evt,ngaynhapF);
+    }//GEN-LAST:event_giaFKeyPressed
 
        
     ImageIcon currentImage;
@@ -270,10 +379,6 @@ public class productF extends javax.swing.JFrame {
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(productF.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>

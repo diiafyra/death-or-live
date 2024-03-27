@@ -1,4 +1,4 @@
-package models;
+package structure;
 
 import demo.Handler;
 import demo.MainFr;
