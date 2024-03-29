@@ -11,7 +11,13 @@ import static demo.Handler.createPieChart;
 import static demo.Handler.dateError;
 import static demo.Handler.pasteImageFromClipboard;
 import java.awt.Color;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -22,7 +28,10 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultCellEditor;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
@@ -246,9 +255,7 @@ public class MainFr extends javax.swing.JFrame {
         thongke = new javax.swing.JPanel();
         chartPanel = new javax.swing.JPanel();
         pie_chart = new javax.swing.JButton();
-        jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
-        jMenu2 = new javax.swing.JMenu();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -322,7 +329,7 @@ public class MainFr extends javax.swing.JFrame {
                 .addComponent(nut_tim_kiem_sp)
                 .addGap(18, 18, 18)
                 .addComponent(txt_tim_kiem_sp, javax.swing.GroupLayout.PREFERRED_SIZE, 478, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(68, Short.MAX_VALUE))
+                .addContainerGap(64, Short.MAX_VALUE))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -350,7 +357,7 @@ public class MainFr extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, sanphamLayout.createSequentialGroup()
                 .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 523, Short.MAX_VALUE))
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 564, Short.MAX_VALUE))
         );
 
         MENU.addTab("SẢN PHÂM", sanpham);
@@ -585,7 +592,7 @@ public class MainFr extends javax.swing.JFrame {
                     .addComponent(jLabel2)
                     .addComponent(addOD))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 86, Short.MAX_VALUE))
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 148, Short.MAX_VALUE))
         );
 
         errMess.getAccessibleContext().setAccessibleName("errMess");
@@ -772,28 +779,22 @@ public class MainFr extends javax.swing.JFrame {
                     .addGroup(thongkeLayout.createSequentialGroup()
                         .addGap(138, 138, 138)
                         .addComponent(chartPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 272, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(163, Short.MAX_VALUE))
+                .addContainerGap(204, Short.MAX_VALUE))
         );
 
         MENU.addTab("THỐNG KÊ", thongke);
 
-        jMenu1.setText("File");
-        jMenuBar1.add(jMenu1);
-
-        jMenu2.setText("Edit");
-        jMenuBar1.add(jMenu2);
-
-        setJMenuBar(jMenuBar1);
+        jButton1.setText("jButton1");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(MENU)
+            .addComponent(MENU, javax.swing.GroupLayout.DEFAULT_SIZE, 1057, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(MENU, javax.swing.GroupLayout.Alignment.TRAILING)
+            .addComponent(MENU, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 619, Short.MAX_VALUE)
         );
 
         pack();
@@ -1110,7 +1111,27 @@ public class MainFr extends javax.swing.JFrame {
     }//GEN-LAST:event_panel_spAncestorAdded
 
     private void txt_tim_kiem_spKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_tim_kiem_spKeyTyped
-    
+        if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
+            tro_lai.setVisible(true);
+            panel_sp.removeAll();
+            cndb db =  cndb.getInstance();
+            db.open();
+            List<Product> allPro = db.allProducts();      
+            List<proPanel> proPanels = allProP(allPro);        
+            String abc=txt_tim_kiem_sp.getText();
+            System.out.println(abc);
+
+            for( JPanel a : proPanels){
+                if(db.tim_kiem_san_pham(a, abc)== 1){
+                    System.out.println("abafdsa");
+                    System.out.println(db.tim_kiem_san_pham(a, abc));
+                    panel_sp.add(a);
+                }
+            }
+            panel_sp.revalidate();
+            panel_sp.repaint();
+            db.close();
+        }    
     }//GEN-LAST:event_txt_tim_kiem_spKeyTyped
 
     private void tro_laiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tro_laiActionPerformed
@@ -1118,7 +1139,15 @@ public class MainFr extends javax.swing.JFrame {
             mfr.RefreshProList();
             tro_lai.setVisible(false);
     }//GEN-LAST:event_tro_laiActionPerformed
-
+    private JFrame mainFrame;
+    private JTextField passwordField;
+    private JButton changeButton;
+    protected void getpass(JTextField a){
+        this.passwordField=a;
+    }
+    protected JTextField setpass(){
+        return passwordField;
+    }
 
     /**
      * @param args the command line arguments
@@ -1138,7 +1167,8 @@ public class MainFr extends javax.swing.JFrame {
             }
         });
     }
-
+    
+     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTabbedPane MENU;
     private javax.swing.JButton addB;
@@ -1155,6 +1185,7 @@ public class MainFr extends javax.swing.JFrame {
     private javax.swing.JLabel errMess;
     private javax.swing.JButton filterB;
     private javax.swing.JTextField id_o_f;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -1162,9 +1193,6 @@ public class MainFr extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
-    private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel5;

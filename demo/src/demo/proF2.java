@@ -22,6 +22,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.Icon;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 
 public class proF2 extends javax.swing.JFrame {
 
@@ -46,6 +47,8 @@ public class proF2 extends javax.swing.JFrame {
         nut_luu_chinh_sua.setVisible(false);
         txt_hinh_anh.setVisible(false);
         brower.setVisible(false);
+        
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         
     }   
     @SuppressWarnings("unchecked")

@@ -1,15 +1,17 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package demo;
 
+//import static demo.MainFr.pass_change;
+import java.awt.event.KeyEvent;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 
-/**
- *
- * @author DELL
- */
+
 public class passwordFr extends javax.swing.JFrame {
 
     /**
@@ -19,6 +21,8 @@ public class passwordFr extends javax.swing.JFrame {
         initComponents();
         // Đặt JFrame ở giữa màn hình
         setLocationRelativeTo(null);
+        
+        
     }
 
     /**
@@ -33,10 +37,24 @@ public class passwordFr extends javax.swing.JFrame {
         password = new javax.swing.JPasswordField();
         jLabel1 = new javax.swing.JLabel();
         LoginBtn = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jLabel1.setText("Nhập mật khẩu");
+        password.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
+        password.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                passwordActionPerformed(evt);
+            }
+        });
+        password.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                passwordKeyTyped(evt);
+            }
+        });
+
+        jLabel1.setFont(new java.awt.Font("MingLiU-ExtB", 3, 36)); // NOI18N
+        jLabel1.setText("Login");
 
         LoginBtn.setText("OK");
         LoginBtn.addActionListener(new java.awt.event.ActionListener() {
@@ -45,50 +63,95 @@ public class passwordFr extends javax.swing.JFrame {
             }
         });
 
+        jLabel2.setFont(new java.awt.Font("Dialog", 0, 24)); // NOI18N
+        jLabel2.setText("Password");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(97, 97, 97)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(LoginBtn)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(password))
-                .addContainerGap(361, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(53, 53, 53)
+                        .addComponent(jLabel1))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(136, 136, 136)
+                        .addComponent(jLabel2)
+                        .addGap(35, 35, 35)
+                        .addComponent(password, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(226, 226, 226)
+                        .addComponent(LoginBtn)))
+                .addContainerGap(182, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(150, 150, 150)
+                .addGap(46, 46, 46)
                 .addComponent(jLabel1)
-                .addGap(18, 18, 18)
-                .addComponent(password, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addGap(89, 89, 89)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(password, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2))
+                .addGap(70, 70, 70)
                 .addComponent(LoginBtn)
-                .addContainerGap(177, Short.MAX_VALUE))
+                .addContainerGap(116, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void LoginBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LoginBtnActionPerformed
-        MainFr mfr = MainFr.getInstance();
-        mfr.setVisible(true);
-        mfr.RefreshTables();
-        mfr.RefreshProList();
-        dispose();       
+            String enteredText = password.getText();
+            if (enteredText.equals(originalPassword)) {
+                MainFr mfr = MainFr.getInstance();
+                mfr.setVisible(true);
+                mfr.RefreshTables();
+                mfr.RefreshProList();
+                dispose();  
+            } else {
+                // Mật khẩu không đúng, có thể hiển thị thông báo lỗi hoặc thực hiện hành động khác
+                JOptionPane.showMessageDialog(this, "Mật khẩu không đúng", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            }     
     }//GEN-LAST:event_LoginBtnActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
+    private void passwordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_passwordActionPerformed
+      
+    }//GEN-LAST:event_passwordActionPerformed
+    
+    //Mật khẩu nhé , không tạo database nữa 
+    private void passwordKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_passwordKeyTyped
+        if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
+            String enteredText = password.getText();
+            
+//            MainFr abc=new MainFr();
+//            JTextField a = abc.setpass();
+//            originalPassword=a.getText();
+//
+////            // Đọc giá trị từ tệp
+////            try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+////                String line = reader.readLine();
+////                int savedValue = Integer.parseInt(line);
+////                System.out.println("Saved value: " + savedValue);
+////            } catch (IOException e) {
+////                e.printStackTrace();
+////            }
+                   
+            if (enteredText.equals(originalPassword)) {
+                MainFr mfr = MainFr.getInstance();
+                mfr.setVisible(true);
+                mfr.RefreshTables();
+                mfr.RefreshProList();
+                dispose();  
+            } else {
+                // Mật khẩu không đúng, có thể hiển thị thông báo lỗi hoặc thực hiện hành động khác
+                JOptionPane.showMessageDialog(this, "Mật khẩu không đúng", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }//GEN-LAST:event_passwordKeyTyped
+
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -106,19 +169,18 @@ public class passwordFr extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(passwordFr.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-        //</editor-fold>
 
-        /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new passwordFr().setVisible(true);
             }
         });
     }
-
+    protected String originalPassword ="abc" ; // Thay đổi chuỗi này thành mật khẩu 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton LoginBtn;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JPasswordField password;
     // End of variables declaration//GEN-END:variables
 }
