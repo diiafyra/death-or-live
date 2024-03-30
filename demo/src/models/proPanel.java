@@ -1,6 +1,7 @@
-package structure;
+package models;
 
 import demo.Handler;
+import demo.Handler.CustomBgPanel;
 import demo.MainFr;
 import demo.cndb;
 import demo.proF2;
@@ -27,10 +28,9 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import sun.applet.Main;
 
-public class proPanel extends JPanel {
-    private boolean isHighlighted = false;
+public class proPanel extends CustomBgPanel {
+//    private boolean isHighlighted = false;
     public static ImageIcon icon;
     public static int index;
     
@@ -40,15 +40,7 @@ public class proPanel extends JPanel {
 
         // Sự kiện khi di chuột vào panel
         addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                setHighlighted(true); // Đánh dấu panel được sáng lên
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-                setHighlighted(false); // Đánh dấu panel không được sáng lên
-            }
+            
              //Sự kiện khi nhấp 2 lần liên tiếp vào sp 
             List<Product> allPro ;
             @Override
@@ -150,19 +142,4 @@ public class proPanel extends JPanel {
         add(instockLb);
     }
 
-    @Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        if (isHighlighted) {
-            // Vẽ một màu nền mờ lên panel khi được sáng lên
-            g.setColor(new Color(255, 255, 255, 100)); // Màu trắng với độ trong suốt 100
-            g.fillRect(0, 0, getWidth(), getHeight()); // Vẽ một hình chữ nhật đậm nguyên màu trên toàn bộ panel
-        }
-    }
-
-    // Phương thức để đặt trạng thái sáng lên của panel
-    public void setHighlighted(boolean highlighted) {
-        isHighlighted = highlighted;
-        repaint(); // Vẽ lại panel để hiển thị trạng thái mới
-    }
 }

@@ -3,17 +3,20 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package structure;
+package models;
 
 
 import static demo.Handler.formatDate;
 import java.sql.Date;
+import java.util.List;
 import java.util.Map;
+import javafx.util.Pair;
 
 /**
  *
  * @author DELL
  */
+
 public class Order {
     private String id_o;
     private String name_c;
@@ -22,10 +25,10 @@ public class Order {
     private String addr;
     private String pay_type;
     private int del_stt;
-    private Map<String, Integer> order_detail;//String là key là id_p , Interger là value = qual
-    private int total_amount;
+    private List<OrderInfo> order_detail;//String là key là id_p , Interger là value = qual
+    private double total_amount;
 
-    public Order(String id_o, String name_c, String date_o, String date_d, String addr, String pay_type, int del_stt, Map<String, Integer> order_detail, int total_amount) {
+    public Order(String id_o, String name_c, String date_o, String date_d, String addr, String pay_type, int del_stt, List<OrderInfo> order_detail, double total_amount) {
         this.id_o = id_o;
         this.name_c = name_c;
         this.date_o = formatDate(date_o);
@@ -36,6 +39,7 @@ public class Order {
         this.order_detail = order_detail;
         this.total_amount = total_amount;
     }
+
 
     public void setId_o(String id_o) {
         this.id_o = id_o;
@@ -65,11 +69,11 @@ public class Order {
         this.del_stt = del_stt;
     }
 
-    public void setOrder_detail(Map<String, Integer> order_detail) {
+    public void setOD(List<OrderInfo> order_detail) {
         this.order_detail = order_detail;
     }
 
-    public void setTotal_amount(int total_amount) {
+    public void setTotal_amount(double total_amount) {
         this.total_amount = total_amount;
     }
 
@@ -101,11 +105,11 @@ public class Order {
         return del_stt;
     }
 
-    public Map<String, Integer> getOrder_detail() {
+    public List<OrderInfo> getOrder_detail() {
         return order_detail;
     }
 
-    public int getTotal_amount() {
+    public double getTotal_amount() {
         return total_amount;
     }
 

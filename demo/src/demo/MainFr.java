@@ -7,46 +7,46 @@ package demo;
 import com.formdev.flatlaf.FlatLightLaf;
 import static demo.Handler.allOrdersT;
 import static demo.Handler.allProP;
+import static demo.Handler.bestSalePro;
 import static demo.Handler.createPieChart;
+import static demo.Handler.createLineChart;
 import static demo.Handler.dateError;
-import static demo.Handler.pasteImageFromClipboard;
+import static demo.Handler.getCurrentDate;
+import static demo.Handler.intErrorTable;
+import static demo.Handler.noSalePro;
+import static demo.Handler.stockProAna;
 import java.awt.Color;
-import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.EventObject;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultCellEditor;
-import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableColumn;
 import org.jfree.chart.ChartPanel;
 import org.jfree.data.general.DefaultPieDataset;
-import structure.Order;
-import structure.Product;
-import structure.ProductEx;
-import structure.proPanel;
+import models.Order;
+import models.OrderInfo;
+import models.Product;
+import models.ProductEx;
+import models.proPanel;
+import demo.Handler.HighlightPanel;
+import demo.Handler.HighlightLabel;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import org.jfree.data.category.DefaultCategoryDataset;
 /**
  *
  * @author DELL
@@ -56,29 +56,69 @@ public class MainFr extends javax.swing.JFrame {
         initComponents();
         //Giao diện lớn bằng cả màn hình 
         setExtendedState(MainFr.MAXIMIZED_BOTH);
-        tro_lai.setVisible(false);
     }
     //triển khai một pattern Singleton để đảm bảo rằng một lớp chỉ có một thể hiện duy nhất
     private static MainFr instance;
     String errorMess = "";
-    public int del_stt;
-    public int index;
-    int indexP;
+    public int del_stt =1;//mỗi lần nhấn nút lưu thì del_stt reset = 1
     int option = 0;
     String key = "";
 //    String search = "";
-    boolean isEditMode = false;
-    boolean searchMode = false;
-    boolean closeSearch = false;
-    boolean canEditDS = true;
-    
-    private void dateNow(JTextField date){
-        LocalDate today = LocalDate.now();
-        String formattedDate = today.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-        date.setText(formattedDate);
+    boolean isEditMode = false; //thông báo cho nút thêm là đang ở trạng thái edit order hay insert order
+    boolean searchMode = false; //thông báo cho bảng table_order hiện thị order ở trạng thái nào
+ 
+    boolean canEditDelStt = true;
+    int deStock = 0;
+    int bestSellerCutoff;
+    int lowQuantityCutoff;
+    int highQuantityCutoff;
+    String month = null;
+    String year = null;
+    private int deStockCheck(JTextField a){
+        int db_del_stt = 1;
+        if(!isEditMode){
+            if(del_stt != 0){
+                return 1;
+            } else{
+                return 0;
+            }
+        }else{
+            cndb db = cndb.getInstance();
+            db.open();
+            List<Order> orders = db.allOrders();
+            db.close();
+            String id_o = (String) a.getText();
+            for(Order ord: orders){
+                if(ord.getId_o().equals(id_o)){
+                    db_del_stt = ord.getDel_stt();
+                    break;
+                }
+            }
+        }
+        if(db_del_stt != 0 && del_stt ==0){
+            return 2;
+        } else if(db_del_stt ==0 && del_stt !=0){
+            return 1;
+        }else{
+            return 0;
+        }
     }
     
-    private void defaultStt() {        
+    private ArrayList<String> getYear(){
+        ArrayList<String> years = new ArrayList<>();
+        cndb db = cndb.getInstance();
+        db.open();
+        int eYear = db.getEarliestYear();
+        LocalDate currentDate = LocalDate.now();
+        int lYear = currentDate.getYear();
+        for(int i=eYear; i<=lYear; i++){
+            years.add(String.valueOf(i));
+        }
+        return years;
+    }
+    
+    private void defaultStt() {
+        
         //Border border = BorderFactory.createLineBorder(Color.pink, 3);
         //Border emptyBorder = BorderFactory.createEmptyBorder(2, 2, 2, 2);
         cancel.setBackground(Color.white);
@@ -95,7 +135,7 @@ public class MainFr extends javax.swing.JFrame {
         addr_f.setEditable(true);
         pay_type.setEnabled(true);
         orderdetail.setEnabled(true);
-        saveB.setEnabled(true);
+        b_save_order.setEnabled(true);
         addOD.setEnabled(true);
         date_d_f.setEditable(true);
         
@@ -108,7 +148,7 @@ public class MainFr extends javax.swing.JFrame {
         addr_f.setEditable(false);
         pay_type.setEnabled(false);
         orderdetail.setEnabled(false);
-        saveB.setEnabled(false);
+        b_save_order.setEnabled(false);
         addOD.setEnabled(false);
         date_d_f.setEditable(false);
     }
@@ -126,27 +166,79 @@ public class MainFr extends javax.swing.JFrame {
         model.addRow(new Object[]{null, null, null, null});      
     }
     
-    private  JComboBox<String> createProComboBox() {
+    private  JComboBox<String> createProComboBox(JTable table) {
         JComboBox<String> comboBox = new JComboBox<>();
         cndb db = cndb.getInstance();
         db.open();
         List<Product> allPro = db.allProducts();
+        db.close();        
         for(Product pro : allPro){
             comboBox.addItem(pro.getName_p());
         }
-        db.close();
-        
         comboBox.addActionListener(e -> {
-            int selectedRow = orderdetail.getSelectedRow();
+            int selectedRow = table.getSelectedRow();
             if (selectedRow != -1 ) {
-               indexP =  comboBox.getSelectedIndex();
+               int indexP =  comboBox.getSelectedIndex();
                 if (indexP != -1 ) {                
                     Product selectedProduct = allPro.get(indexP);
-                    orderdetail.setValueAt(selectedProduct.getPrice_s(), selectedRow, 3);
-                    orderdetail.setValueAt(selectedProduct.getId_p(), selectedRow, 0);
+                    table.setValueAt(selectedProduct.getPrice_s(), selectedRow, 3);
+                    table.setValueAt(selectedProduct.getId_p(), selectedRow, 0);
                 }
             }
         });
+        
+        table.getModel().addTableModelListener(new TableModelListener() {
+            @Override
+            public void tableChanged(TableModelEvent e) {
+                if (e.getType() == TableModelEvent.UPDATE) {
+                    int column = e.getColumn();
+                    if (column == 0 || column == 2) { // Check if changed column is quantity or price
+                        if(column == 2){
+                            errMess.setText(intErrorTable(table, e));
+
+                        }
+                        int row = e.getFirstRow();
+                        if( table.getValueAt(row, 0) !=null && table.getValueAt(row, 2)!=null){
+                            int quantity = Integer.parseInt(table.getValueAt(row, 2).toString());
+                            String id_p = (String) table.getValueAt(row, 0);
+                            cndb db = cndb.getInstance();
+                            db.open();
+                            int stock = db.getStock(id_p);
+                            db.close();
+                            int preQual =0;
+                            
+                            for(int i =0; i<table.getRowCount(); i++){
+                                String id = (String) table.getValueAt(i, 0);
+                                String qual = (String) table.getValueAt(i, 2);
+                                if(id!= null && qual != null && id.equals(id_p)){
+                                    preQual += Integer.valueOf(qual);
+                                }
+                            }
+                            System.out.println(preQual);
+                            if(quantity>(stock - preQual+quantity)){
+                                JOptionPane.showMessageDialog(rootPane, "Vượt Quá Số Lượng Tồn Kho. Tồn Kho: " + stock);
+                                table.setValueAt(null, row, 2);
+                            } else{
+                                float price = Float.valueOf(table.getValueAt(row, 3).toString());
+                                float totalPrice = quantity * price;
+                                table.setValueAt(totalPrice, row, 4); // Update total price column
+                            }
+                        }
+                    }
+                }
+            }
+        });
+        
+        TableCellEditor nonEditableEditor = new DefaultCellEditor(new JTextField()) {
+            @Override
+            public boolean isCellEditable(EventObject e) {
+                return false;
+            }
+        };
+
+        // Thiết lập trình biên tập tùy chỉnh cho cột cụ thể
+        table.getColumnModel().getColumn(3).setCellEditor(nonEditableEditor);
+        table.getColumnModel().getColumn(0).setCellEditor(nonEditableEditor);
         return comboBox;
     }
     
@@ -184,42 +276,105 @@ public class MainFr extends javax.swing.JFrame {
         db.open();
         List<Order> allOrders = db.allOrders();
         //System.out.print(allOrders.get(22).getDate_o());
-        orderTable.setModel(allOrdersT(allOrders));
+        table_order.setModel(allOrdersT(allOrders));
         db.close();
+        
     }
      
     public void RefreshProList() {
         //cần phải sửa jPanel1 sang layout grid hoặc flow hoặc box thì mới add được, poe muôn năm :)))
+        int totalC=0;
         cndb db =  cndb.getInstance();
         db.open();
         List<Product> allPro = db.allProducts();
-       
+        for(Product pro: allPro){
+            totalC += pro.getCapital();
+        }
         List<proPanel> proPanels = allProP(allPro);
         panel_sp.removeAll();
         for(proPanel proP: proPanels){
             panel_sp.add(proP);
         }
         db.close();
+        l_totalCapital.setText(totalC + " VND");
     }
 
+    public void setOverview(){
+        month = (String) cb_month.getSelectedItem();
+        year = (String) cb_year.getSelectedItem();
+        cndb db = cndb.getInstance();
+        try {
+            db.open();
+            int shipOrder = db.OrdersFilterByDS(month, year, 1).size();
+            int receiveOrder = db.OrdersFilterByDS(month, year, 2).size();
+            int completedOrder = db.OrdersFilterByDS(month, year, 3).size();
+            int cancelOrder = db.OrdersFilterByDS(month, year, 4).size();
+            l_toShip.setText(shipOrder+"");
+            l_toReceive.setText(receiveOrder+"");
+            l_completed.setText(completedOrder+"");
+            l_cancel.setText(cancelOrder+"");
+
+            List<Product> allPro = db.allProducts();
+            List<ProductEx> proExs = db.salesReports(month, year);
+            int cNoSalePro = noSalePro(allPro, proExs).size();
+            int cBestSalePro = bestSalePro(allPro, proExs, bestSellerCutoff).size();
+            int cLowStock = stockProAna(allPro, lowQuantityCutoff, 1).size();
+            int cHighStock = stockProAna(allPro, highQuantityCutoff, 2).size();
+            int cNoStock = stockProAna(allPro, lowQuantityCutoff, 0).size();
+            l_noQualPro.setText(cNoStock+"");
+            l_lowQualPro.setText(cLowStock+"");
+            l_highQualPro.setText(cHighStock+"");
+            l_bestSalePro.setText(cBestSalePro+"");
+            l_noSalePro.setText(cNoSalePro+"");
+        } catch (Exception e) {
+            // Xử lý ngoại lệ
+            e.printStackTrace();
+        } finally {
+            // Luôn đảm bảo rằng cơ sở dữ liệu được đóng
+            try {
+                db.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
+    public void setTotalProfitChart(){
+        String year = (String) cb_year1.getSelectedItem();
+        String qarter = (String) cb_qarter.getSelectedItem();
+        boolean yearMode;
+        if(cb_yearMode.getSelectedItem().toString().equals("Theo Quý")){
+            yearMode = false;
+        } else{
+            yearMode = true;
+        }
+        cndb db = cndb.getInstance();
+        db.open();
+        DefaultCategoryDataset totalProfitDS = db.salesTotalProfitdts(year, yearMode, qarter);
+        ChartPanel chartP;
+        chartP = new ChartPanel(createLineChart("Báo Cáo Lợi Nhuận",totalProfitDS));
+        p_categoryChart.add(chartP);
+        p_categoryChart.revalidate();
+        db.close(); 
+    }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        java.awt.GridBagConstraints gridBagConstraints;
 
         MENU = new javax.swing.JTabbedPane();
         sanpham = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         panel_sp = new javax.swing.JPanel();
         jPanel6 = new javax.swing.JPanel();
-        nut_them_sp = new javax.swing.JButton();
-        nut_tim_kiem_sp = new javax.swing.JButton();
-        txt_tim_kiem_sp = new javax.swing.JTextField();
-        tro_lai = new javax.swing.JButton();
+        b_add_product = new javax.swing.JButton();
+        b_search_product = new javax.swing.JButton();
+        txt_search_product = new javax.swing.JTextField();
         donhang = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         jSplitPane1 = new javax.swing.JSplitPane();
         jScrollPane1 = new javax.swing.JScrollPane();
-        orderTable = new javax.swing.JTable();
+        table_order = new javax.swing.JTable();
         jPanel2 = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -243,21 +398,70 @@ public class MainFr extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
         date_d_f = new javax.swing.JTextField();
         errMess = new javax.swing.JLabel();
-        saveB = new javax.swing.JButton();
+        b_save_order = new javax.swing.JButton();
         jPanel9 = new javax.swing.JPanel();
-        addB = new javax.swing.JButton();
-        deleteB = new javax.swing.JButton();
-        editB = new javax.swing.JButton();
-        searchB = new javax.swing.JButton();
-        searchF = new javax.swing.JTextField();
-        searchOption = new javax.swing.JComboBox<>();
-        filterB = new javax.swing.JButton();
+        b_addOrder = new javax.swing.JButton();
+        b_delete_order = new javax.swing.JButton();
+        b_edit_order = new javax.swing.JButton();
+        b_search_order = new javax.swing.JButton();
+        txt_search_order = new javax.swing.JTextField();
+        cb_search_option = new javax.swing.JComboBox<>();
+        b_filter_order = new javax.swing.JButton();
         thongke = new javax.swing.JPanel();
-        chartPanel = new javax.swing.JPanel();
-        pie_chart = new javax.swing.JButton();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        p_analysis = new javax.swing.JPanel();
+        p_overview = new javax.swing.JPanel();
+        jLabel9 = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
+        jPanel4 = new HighlightPanel();
+        l_toShip = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
+        jPanel7 = new HighlightPanel();
+        l_toReceive = new javax.swing.JLabel();
+        jLabel14 = new javax.swing.JLabel();
+        jPanel8 = new HighlightPanel();
+        l_completed = new javax.swing.JLabel();
+        jLabel16 = new javax.swing.JLabel();
+        jPanel10 = new HighlightPanel();
+        l_cancel = new javax.swing.JLabel();
+        jLabel18 = new javax.swing.JLabel();
+        cb_month = new javax.swing.JComboBox<>();
+        cb_year = new javax.swing.JComboBox<>(getYear().toArray(new String[0]));
+        jPanel16 = new javax.swing.JPanel();
+        jPanel11 = new HighlightPanel();
+        l_noQualPro = new HighlightLabel();
+        l_lowQualPro = new HighlightLabel();
+        jLabel20 = new javax.swing.JLabel();
+        jPanel12 = new HighlightPanel();
+        l_highQualPro = new javax.swing.JLabel();
+        jLabel22 = new javax.swing.JLabel();
+        jPanel13 = new HighlightPanel();
+        l_noSalePro = new javax.swing.JLabel();
+        jLabel24 = new javax.swing.JLabel();
+        jPanel14 = new HighlightPanel();
+        l_bestSalePro = new javax.swing.JLabel();
+        jLabel26 = new javax.swing.JLabel();
+        jPanel18 = new javax.swing.JPanel();
+        l_totalCapital = new javax.swing.JLabel();
+        jLabel12 = new javax.swing.JLabel();
+        jLabel27 = new javax.swing.JLabel();
+        jLabel28 = new javax.swing.JLabel();
+        p_analysis_product = new javax.swing.JPanel();
+        jLabel8 = new javax.swing.JLabel();
+        jPanel15 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
+        p_analysis_profit = new javax.swing.JPanel();
+        jLabel10 = new javax.swing.JLabel();
+        cb_year1 = new javax.swing.JComboBox<>(getYear().toArray(new String[0]));
+        cb_yearMode = new javax.swing.JComboBox<>();
+        cb_qarter = new javax.swing.JComboBox<>();
+        p_categoryChart = new javax.swing.JPanel();
+        jMenuBar1 = new javax.swing.JMenuBar();
+        jMenu1 = new javax.swing.JMenu();
+        jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setPreferredSize(new java.awt.Dimension(800, 641));
 
         MENU.setTabLayoutPolicy(javax.swing.JTabbedPane.SCROLL_TAB_LAYOUT);
         MENU.setTabPlacement(javax.swing.JTabbedPane.LEFT);
@@ -266,53 +470,27 @@ public class MainFr extends javax.swing.JFrame {
 
         jScrollPane2.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
-        panel_sp.addAncestorListener(new javax.swing.event.AncestorListener() {
-            public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
-            }
-            public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
-                panel_spAncestorAdded(evt);
-            }
-            public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
-            }
-        });
         panel_sp.setLayout(new java.awt.GridLayout(0, 6));
         jScrollPane2.setViewportView(panel_sp);
 
-        nut_them_sp.setText("Thêm");
-        nut_them_sp.setFocusable(false);
-        nut_them_sp.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        nut_them_sp.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        nut_them_sp.addActionListener(new java.awt.event.ActionListener() {
+        b_add_product.setText("Thêm");
+        b_add_product.setFocusable(false);
+        b_add_product.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        b_add_product.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        b_add_product.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                nut_them_spActionPerformed(evt);
+                b_add_productActionPerformed(evt);
             }
         });
 
-        nut_tim_kiem_sp.setText("Tìm kiếm");
-        nut_tim_kiem_sp.setFocusable(false);
-        nut_tim_kiem_sp.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        nut_tim_kiem_sp.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        nut_tim_kiem_sp.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                nut_tim_kiem_spActionPerformed(evt);
-            }
-        });
+        b_search_product.setText("Tìm kiếm");
+        b_search_product.setFocusable(false);
+        b_search_product.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        b_search_product.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
 
-        txt_tim_kiem_sp.addActionListener(new java.awt.event.ActionListener() {
+        txt_search_product.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txt_tim_kiem_spActionPerformed(evt);
-            }
-        });
-        txt_tim_kiem_sp.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                txt_tim_kiem_spKeyTyped(evt);
-            }
-        });
-
-        tro_lai.setText("Home");
-        tro_lai.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                tro_laiActionPerformed(evt);
+                txt_search_productActionPerformed(evt);
             }
         });
 
@@ -322,27 +500,22 @@ public class MainFr extends javax.swing.JFrame {
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(nut_them_sp)
-                .addGap(192, 192, 192)
-                .addComponent(tro_lai)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(nut_tim_kiem_sp)
+                .addComponent(b_add_product)
+                .addGap(276, 276, 276)
+                .addComponent(b_search_product)
                 .addGap(18, 18, 18)
-                .addComponent(txt_tim_kiem_sp, javax.swing.GroupLayout.PREFERRED_SIZE, 478, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(64, Short.MAX_VALUE))
+                .addComponent(txt_search_product, javax.swing.GroupLayout.PREFERRED_SIZE, 478, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addGap(3, 3, 3)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(nut_tim_kiem_sp, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(nut_them_sp)
-                    .addComponent(txt_tim_kiem_sp, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(b_search_product, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(b_add_product)
+                    .addComponent(txt_search_product, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(jPanel6Layout.createSequentialGroup()
-                .addComponent(tro_lai)
-                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout sanphamLayout = new javax.swing.GroupLayout(sanpham);
@@ -357,12 +530,12 @@ public class MainFr extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, sanphamLayout.createSequentialGroup()
                 .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 564, Short.MAX_VALUE))
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 560, Short.MAX_VALUE))
         );
 
         MENU.addTab("SẢN PHÂM", sanpham);
 
-        orderTable.setModel(new javax.swing.table.DefaultTableModel(
+        table_order.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -373,12 +546,12 @@ public class MainFr extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        orderTable.addMouseListener(new java.awt.event.MouseAdapter() {
+        table_order.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
-                orderTableMouseReleased(evt);
+                table_orderMouseReleased(evt);
             }
         });
-        jScrollPane1.setViewportView(orderTable);
+        jScrollPane1.setViewportView(table_order);
 
         jSplitPane1.setLeftComponent(jScrollPane1);
 
@@ -420,29 +593,12 @@ public class MainFr extends javax.swing.JFrame {
             new Object [][] {
             },
             new String [] {
-                "Mã sản phẩm","Sản phẩm", "Số lượng", "Đơn giá","Giá"
+                "Mã sản phẩm","Sản phẩm", "Số lượng", "Đơn giá","Giá", "Giảm giá"
             }
         ));
         TableColumn productColumn = orderdetail.getColumnModel().getColumn(1);
-        JComboBox comboBox = createProComboBox();
+        JComboBox comboBox = createProComboBox(orderdetail);
         productColumn.setCellEditor(new DefaultCellEditor(comboBox));
-        orderdetail.getModel().addTableModelListener(new TableModelListener() {
-            @Override
-            public void tableChanged(TableModelEvent e) {
-                if (e.getType() == TableModelEvent.UPDATE) {
-                    int column = e.getColumn();
-                    if (column == 0 || column == 2) { // Check if changed column is quantity or price
-                        int row = e.getFirstRow();
-                        if( orderdetail.getValueAt(row, 0) !=null && orderdetail.getValueAt(row, 2)!=null){
-                            int quantity = Integer.parseInt(orderdetail.getValueAt(row, 2).toString());
-                            float price = Float.valueOf(orderdetail.getValueAt(row, 3).toString());
-                            float totalPrice = quantity * price;
-                            orderdetail.setValueAt(totalPrice, row, 4); // Update total price column
-                        }
-                    }
-                }
-            }
-        });
         orderdetail.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 orderdetailMouseReleased(evt);
@@ -527,7 +683,7 @@ public class MainFr extends javax.swing.JFrame {
                             .addComponent(completed, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(cancel, javax.swing.GroupLayout.DEFAULT_SIZE, 85, Short.MAX_VALUE))
                         .addContainerGap())
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 894, Short.MAX_VALUE)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 842, Short.MAX_VALUE)
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -543,7 +699,7 @@ public class MainFr extends javax.swing.JFrame {
                             .addComponent(name_c_f)
                             .addComponent(date_o_f)
                             .addComponent(addr_f)
-                            .addComponent(pay_type, 0, 734, Short.MAX_VALUE)
+                            .addComponent(pay_type, 0, 682, Short.MAX_VALUE)
                             .addGroup(jPanel5Layout.createSequentialGroup()
                                 .addComponent(addOD)
                                 .addGap(0, 0, Short.MAX_VALUE))
@@ -592,15 +748,15 @@ public class MainFr extends javax.swing.JFrame {
                     .addComponent(jLabel2)
                     .addComponent(addOD))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 148, Short.MAX_VALUE))
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 123, Short.MAX_VALUE))
         );
 
         errMess.getAccessibleContext().setAccessibleName("errMess");
 
-        saveB.setText("Lưu");
-        saveB.addActionListener(new java.awt.event.ActionListener() {
+        b_save_order.setText("Lưu");
+        b_save_order.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                saveBActionPerformed(evt);
+                b_save_orderActionPerformed(evt);
             }
         });
 
@@ -613,7 +769,7 @@ public class MainFr extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(saveB))
+                        .addComponent(b_save_order))
                     .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(30, 30, 30))
         );
@@ -623,64 +779,64 @@ public class MainFr extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
-                .addComponent(saveB)
+                .addComponent(b_save_order)
                 .addGap(35, 35, 35))
         );
 
         jSplitPane1.setRightComponent(jPanel2);
 
-        addB.setText("Thêm");
-        addB.setFocusable(false);
-        addB.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        addB.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        addB.addActionListener(new java.awt.event.ActionListener() {
+        b_addOrder.setText("Thêm");
+        b_addOrder.setFocusable(false);
+        b_addOrder.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        b_addOrder.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        b_addOrder.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                addBActionPerformed(evt);
+                b_addOrderActionPerformed(evt);
             }
         });
 
-        deleteB.setText("Xóa");
-        deleteB.setFocusable(false);
-        deleteB.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        deleteB.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        deleteB.addActionListener(new java.awt.event.ActionListener() {
+        b_delete_order.setText("Xóa");
+        b_delete_order.setFocusable(false);
+        b_delete_order.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        b_delete_order.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        b_delete_order.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                deleteBActionPerformed(evt);
+                b_delete_orderActionPerformed(evt);
             }
         });
 
-        editB.setText("Chỉnh sửa");
-        editB.setFocusable(false);
-        editB.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        editB.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        editB.addActionListener(new java.awt.event.ActionListener() {
+        b_edit_order.setText("Chỉnh sửa");
+        b_edit_order.setFocusable(false);
+        b_edit_order.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        b_edit_order.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        b_edit_order.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                editBActionPerformed(evt);
+                b_edit_orderActionPerformed(evt);
             }
         });
 
-        searchB.setText("Tìm kiếm");
-        searchB.setFocusable(false);
-        searchB.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        searchB.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        searchB.addActionListener(new java.awt.event.ActionListener() {
+        b_search_order.setText("Tìm kiếm");
+        b_search_order.setFocusable(false);
+        b_search_order.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        b_search_order.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        b_search_order.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                searchBActionPerformed(evt);
+                b_search_orderActionPerformed(evt);
             }
         });
 
-        searchF.addActionListener(new java.awt.event.ActionListener() {
+        txt_search_order.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                searchFActionPerformed(evt);
+                txt_search_orderActionPerformed(evt);
             }
         });
-        searchF.addKeyListener(new java.awt.event.KeyAdapter() {
+        txt_search_order.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
-                searchFKeyReleased(evt);
+                txt_search_orderKeyReleased(evt);
             }
         });
 
-        searchOption.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Tên khách hàng", "ID đơn hàng", "Sản phẩm" }));
+        cb_search_option.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Tên khách hàng", "ID đơn hàng", "Sản phẩm" }));
 
         javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
         jPanel9.setLayout(jPanel9Layout);
@@ -688,19 +844,19 @@ public class MainFr extends javax.swing.JFrame {
             jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel9Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(searchF, javax.swing.GroupLayout.PREFERRED_SIZE, 285, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txt_search_order, javax.swing.GroupLayout.PREFERRED_SIZE, 285, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(searchB)
+                .addComponent(b_search_order)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(searchOption, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(cb_search_option, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(filterB, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 158, Short.MAX_VALUE)
-                .addComponent(addB)
+                .addComponent(b_filter_order, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(b_addOrder)
                 .addGap(18, 18, 18)
-                .addComponent(deleteB)
+                .addComponent(b_delete_order)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(editB)
+                .addComponent(b_edit_order)
                 .addGap(30, 30, 30))
         );
         jPanel9Layout.setVerticalGroup(
@@ -708,13 +864,13 @@ public class MainFr extends javax.swing.JFrame {
             .addGroup(jPanel9Layout.createSequentialGroup()
                 .addGap(3, 3, 3)
                 .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(searchB, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(addB, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(deleteB, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(editB, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(searchF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(searchOption, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(filterB, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                    .addComponent(b_search_order, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(b_addOrder, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(b_delete_order, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(b_edit_order, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(txt_search_order, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cb_search_option, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(b_filter_order, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -748,53 +904,544 @@ public class MainFr extends javax.swing.JFrame {
 
         MENU.addTab("ĐƠN HÀNG", donhang);
 
-        chartPanel.setBackground(new java.awt.Color(255, 255, 204));
-        chartPanel.setLayout(new javax.swing.BoxLayout(chartPanel, javax.swing.BoxLayout.LINE_AXIS));
+        jScrollPane4.getVerticalScrollBar().setUnitIncrement(50);
+        jScrollPane4.getVerticalScrollBar().setBlockIncrement(100);
 
-        pie_chart.setText("Cơ cấu doanh thu theo sản phẩm");
-        pie_chart.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                pie_chartActionPerformed(evt);
+        p_analysis.setPreferredSize(new java.awt.Dimension(1500, 2160));
+        p_analysis.setLayout(new java.awt.GridLayout(0, 1));
+
+        p_overview.setBackground(new java.awt.Color(255, 230, 191));
+        p_overview.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        p_overview.setPreferredSize(new java.awt.Dimension(848, 646));
+
+        jLabel9.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabel9.setForeground(new java.awt.Color(102, 51, 0));
+        jLabel9.setText("Tổng Quan");
+
+        jPanel1.setPreferredSize(new java.awt.Dimension(1500, 201));
+        jPanel1.setLayout(new java.awt.GridLayout());
+
+        jPanel4.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                cndb db =  cndb.getInstance();
+                db.open();
+                List<Order> allOrders = db.OrdersFilterByDS(month, year, 1);
+                //System.out.print(allOrders.get(22).getDate_o());
+                table_order.setModel(allOrdersT(allOrders));
+                db.close();;
+                MENU.setSelectedIndex(1);
+
             }
         });
+        jPanel4.setLayout(new java.awt.GridLayout(0, 1, 0, 25));
+
+        l_toShip.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        l_toShip.setText("pp");
+        l_toShip.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        l_toShip.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jPanel4.add(l_toShip);
+
+        jLabel11.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel11.setText("Chờ Lấy Hàng");
+        jLabel11.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+        jLabel11.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jLabel11.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jPanel4.add(jLabel11);
+
+        jPanel1.add(jPanel4);
+
+        jPanel7.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                cndb db =  cndb.getInstance();
+                db.open();
+                List<Order> allOrders = db.OrdersFilterByDS(month, year, 2);
+                //System.out.print(allOrders.get(22).getDate_o());
+                table_order.setModel(allOrdersT(allOrders));
+                db.close();;
+                MENU.setSelectedIndex(1);
+
+            }
+        });
+        jPanel7.setLayout(new java.awt.GridLayout(0, 1, 0, 25));
+
+        l_toReceive.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        l_toReceive.setText("pp");
+        l_toReceive.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        l_toReceive.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jPanel7.add(l_toReceive);
+
+        jLabel14.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel14.setText("Đang Giao");
+        jLabel14.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+        jLabel14.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jLabel14.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jPanel7.add(jLabel14);
+
+        jPanel1.add(jPanel7);
+
+        jPanel8.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                cndb db =  cndb.getInstance();
+                db.open();
+                List<Order> allOrders = db.OrdersFilterByDS(month, year, 3);
+                //System.out.print(allOrders.get(22).getDate_o());
+                table_order.setModel(allOrdersT(allOrders));
+                db.close();;
+                MENU.setSelectedIndex(1);
+
+            }
+        });
+        jPanel8.setLayout(new java.awt.GridLayout(0, 1, 0, 25));
+
+        l_completed.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        l_completed.setText("pp");
+        l_completed.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        l_completed.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jPanel8.add(l_completed);
+
+        jLabel16.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel16.setText("Hoàn Thành");
+        jLabel16.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+        jLabel16.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jLabel16.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jPanel8.add(jLabel16);
+
+        jPanel1.add(jPanel8);
+
+        jPanel10.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                cndb db =  cndb.getInstance();
+                db.open();
+                List<Order> allOrders = db.OrdersFilterByDS(month, year, 0);
+                //System.out.print(allOrders.get(22).getDate_o());
+                table_order.setModel(allOrdersT(allOrders));
+                db.close();;
+                MENU.setSelectedIndex(1);
+
+            }
+        });
+        jPanel10.setLayout(new java.awt.GridLayout(0, 1, 0, 25));
+
+        l_cancel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        l_cancel.setText("pp");
+        l_cancel.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        l_cancel.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jPanel10.add(l_cancel);
+
+        jLabel18.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel18.setText("Đã Hủy");
+        jLabel18.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+        jLabel18.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jLabel18.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jPanel10.add(jLabel18);
+
+        jPanel1.add(jPanel10);
+
+        cb_month.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12" }));
+        cb_month.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cb_monthActionPerformed(evt);
+            }
+        });
+
+        cb_year.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cb_yearActionPerformed(evt);
+            }
+        });
+
+        jPanel16.setLayout(new java.awt.GridLayout());
+
+        jPanel11.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                cndb db =  cndb.getInstance();
+                db.open();
+                List<Product> allPro = db.allProducts();
+                List<Product> lowQualPro = stockProAna(allPro, lowQuantityCutoff, 1);
+                List<Product> noQualPro = stockProAna(allPro, lowQuantityCutoff, 0);
+                lowQualPro.addAll(noQualPro);
+                List<proPanel> proPanels = allProP(lowQualPro);
+                panel_sp.removeAll();
+                for(proPanel proP: proPanels){
+                    panel_sp.add(proP);
+                }
+                db.close();
+                MENU.setSelectedIndex(0);
+
+            }
+        });
+
+        l_noQualPro.setForeground(new java.awt.Color(255, 0, 0));
+        l_noQualPro.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        l_noQualPro.setText("pp");
+        l_noQualPro.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+
+        l_lowQualPro.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        l_lowQualPro.setText("pp");
+
+        jLabel20.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel20.setText("SP Còn Ít");
+        jLabel20.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+        jLabel20.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jLabel20.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+
+        javax.swing.GroupLayout jPanel11Layout = new javax.swing.GroupLayout(jPanel11);
+        jPanel11.setLayout(jPanel11Layout);
+        jPanel11Layout.setHorizontalGroup(
+            jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel11Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(l_noQualPro, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(l_lowQualPro, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+            .addGroup(jPanel11Layout.createSequentialGroup()
+                .addGap(147, 147, 147)
+                .addComponent(jLabel20)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel11Layout.setVerticalGroup(
+            jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel11Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(l_noQualPro, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)
+                    .addComponent(l_lowQualPro, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel20))
+        );
+
+        jPanel16.add(jPanel11);
+
+        jPanel12.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                cndb db =  cndb.getInstance();
+                db.open();
+                List<Product> allPro = db.allProducts();
+                List<Product> highQualPro = stockProAna(allPro, lowQuantityCutoff, 2);
+                List<proPanel> proPanels = allProP(highQualPro);
+                panel_sp.removeAll();
+                for(proPanel proP: proPanels){
+                    panel_sp.add(proP);
+                }
+                db.close();
+                MENU.setSelectedIndex(0);
+
+            }
+        });
+        jPanel12.setLayout(new java.awt.GridLayout(0, 1, 0, 25));
+
+        l_highQualPro.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        l_highQualPro.setText("pp");
+        l_highQualPro.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        l_highQualPro.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jPanel12.add(l_highQualPro);
+
+        jLabel22.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel22.setText("SP Tồn Nhiều");
+        jLabel22.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+        jLabel22.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jLabel22.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jPanel12.add(jLabel22);
+
+        jPanel16.add(jPanel12);
+
+        jPanel13.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                cndb db =  cndb.getInstance();
+                db.open();
+                List<Product> allPro = db.allProducts();
+                List<ProductEx> proExs = db.salesReports(month, year);
+                List<Product> noSalePro = noSalePro(allPro, proExs);
+                List<proPanel> proPanels = allProP(noSalePro);
+                panel_sp.removeAll();
+                for(proPanel proP: proPanels){
+                    panel_sp.add(proP);
+                }
+                db.close();
+                MENU.setSelectedIndex(0);
+
+            }
+        });
+        jPanel13.setLayout(new java.awt.GridLayout(0, 1, 0, 25));
+
+        l_noSalePro.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        l_noSalePro.setText("pp");
+        l_noSalePro.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        l_noSalePro.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jPanel13.add(l_noSalePro);
+
+        jLabel24.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel24.setText("SP Không Bán Được");
+        jLabel24.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+        jLabel24.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jLabel24.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jPanel13.add(jLabel24);
+
+        jPanel16.add(jPanel13);
+
+        jPanel14.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                cndb db =  cndb.getInstance();
+                db.open();
+                List<Product> allPro = db.allProducts();
+                List<ProductEx> proExs = db.salesReports(month, year);
+                List<Product> bestSalePro = bestSalePro(allPro, proExs, bestSellerCutoff);
+                List<proPanel> proPanels = allProP(bestSalePro);
+                panel_sp.removeAll();
+                for(proPanel proP: proPanels){
+                    panel_sp.add(proP);
+                }
+                db.close();
+                MENU.setSelectedIndex(0);
+
+            }
+        });
+        jPanel14.setLayout(new java.awt.GridLayout(0, 1, 0, 25));
+
+        l_bestSalePro.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        l_bestSalePro.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        l_bestSalePro.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jPanel14.add(l_bestSalePro);
+
+        jLabel26.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel26.setText("SP Bán Chạy");
+        jLabel26.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+        jLabel26.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jLabel26.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jPanel14.add(jLabel26);
+
+        jPanel16.add(jPanel14);
+
+        jPanel18.setBackground(new Color(140, 204, 185));
+        jPanel18.setLayout(new java.awt.GridLayout(0, 1, 0, 30));
+
+        l_totalCapital.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        l_totalCapital.setText("xxx");
+        l_totalCapital.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        jPanel18.add(l_totalCapital);
+
+        jLabel12.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel12.setText("Tổng Vốn Hiện Tại");
+        jLabel12.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+        jPanel18.add(jLabel12);
+
+        jLabel27.setText("ĐƠN HÀNG");
+
+        jLabel28.setText("SẢN PHẨM");
+
+        javax.swing.GroupLayout p_overviewLayout = new javax.swing.GroupLayout(p_overview);
+        p_overview.setLayout(p_overviewLayout);
+        p_overviewLayout.setHorizontalGroup(
+            p_overviewLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(p_overviewLayout.createSequentialGroup()
+                .addGap(148, 148, 148)
+                .addComponent(jPanel18, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(165, 165, 165))
+            .addGroup(p_overviewLayout.createSequentialGroup()
+                .addGap(32, 32, 32)
+                .addGroup(p_overviewLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(p_overviewLayout.createSequentialGroup()
+                        .addComponent(jLabel9)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(p_overviewLayout.createSequentialGroup()
+                        .addGroup(p_overviewLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel27)
+                            .addComponent(jLabel28)
+                            .addGroup(p_overviewLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                                .addGroup(p_overviewLayout.createSequentialGroup()
+                                    .addComponent(cb_month, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGap(39, 39, 39)
+                                    .addComponent(cb_year, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGap(0, 0, Short.MAX_VALUE))
+                                .addComponent(jPanel16, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addGap(35, 35, 35))))
+        );
+        p_overviewLayout.setVerticalGroup(
+            p_overviewLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(p_overviewLayout.createSequentialGroup()
+                .addGap(25, 25, 25)
+                .addComponent(jLabel9)
+                .addGap(18, 18, 18)
+                .addComponent(jPanel18, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(26, 26, 26)
+                .addGroup(p_overviewLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cb_month, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cb_year, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(22, 22, 22)
+                .addComponent(jLabel27)
+                .addGap(18, 18, 18)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(37, 37, 37)
+                .addComponent(jLabel28)
+                .addGap(32, 32, 32)
+                .addComponent(jPanel16, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(33, Short.MAX_VALUE))
+        );
+
+        cb_month.getAccessibleContext().setAccessibleName("");
+        cb_month.getAccessibleContext().setAccessibleDescription("");
+
+        p_analysis.add(p_overview);
+
+        p_analysis_product.setBackground(new java.awt.Color(255, 230, 191));
+        p_analysis_product.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
+        jLabel8.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabel8.setForeground(new java.awt.Color(102, 51, 0));
+        jLabel8.setText("Thống Kê Doanh Thu Theo Từng Sản Phẩm");
+
+        jPanel15.setLayout(new javax.swing.BoxLayout(jPanel15, javax.swing.BoxLayout.LINE_AXIS));
+
+        jButton1.setText("jButton1");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout p_analysis_productLayout = new javax.swing.GroupLayout(p_analysis_product);
+        p_analysis_product.setLayout(p_analysis_productLayout);
+        p_analysis_productLayout.setHorizontalGroup(
+            p_analysis_productLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(p_analysis_productLayout.createSequentialGroup()
+                .addGroup(p_analysis_productLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(p_analysis_productLayout.createSequentialGroup()
+                        .addGap(32, 32, 32)
+                        .addComponent(jLabel8))
+                    .addGroup(p_analysis_productLayout.createSequentialGroup()
+                        .addGap(60, 60, 60)
+                        .addComponent(jPanel15, javax.swing.GroupLayout.PREFERRED_SIZE, 356, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(47, 47, 47)
+                        .addComponent(jButton1)))
+                .addContainerGap(958, Short.MAX_VALUE))
+        );
+        p_analysis_productLayout.setVerticalGroup(
+            p_analysis_productLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(p_analysis_productLayout.createSequentialGroup()
+                .addGap(25, 25, 25)
+                .addComponent(jLabel8)
+                .addGroup(p_analysis_productLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(p_analysis_productLayout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton1)
+                        .addGap(185, 185, 185))
+                    .addGroup(p_analysis_productLayout.createSequentialGroup()
+                        .addGap(50, 50, 50)
+                        .addComponent(jPanel15, javax.swing.GroupLayout.PREFERRED_SIZE, 269, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(354, Short.MAX_VALUE))))
+        );
+
+        p_analysis.add(p_analysis_product);
+
+        p_analysis_profit.setBackground(new java.awt.Color(255, 230, 191));
+        p_analysis_profit.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
+        jLabel10.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabel10.setForeground(new java.awt.Color(102, 51, 0));
+        jLabel10.setText("Thống Kê Doanh Thu Theo Tháng");
+
+        cb_year1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cb_year1ActionPerformed(evt);
+            }
+        });
+
+        cb_yearMode.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Theo Quý", "Theo Năm" }));
+        cb_yearMode.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cb_yearModeActionPerformed(evt);
+            }
+        });
+
+        cb_qarter.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Quý 1", "Quý 2", "Quý 3", "Quý 4" }));
+        cb_qarter.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cb_qarterActionPerformed(evt);
+            }
+        });
+
+        p_categoryChart.setLayout(new java.awt.BorderLayout());
+        p_categoryChart.setBackground(new Color(140, 204, 185));
+
+        javax.swing.GroupLayout p_analysis_profitLayout = new javax.swing.GroupLayout(p_analysis_profit);
+        p_analysis_profit.setLayout(p_analysis_profitLayout);
+        p_analysis_profitLayout.setHorizontalGroup(
+            p_analysis_profitLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(p_analysis_profitLayout.createSequentialGroup()
+                .addGap(32, 32, 32)
+                .addGroup(p_analysis_profitLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(p_categoryChart, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(p_analysis_profitLayout.createSequentialGroup()
+                        .addGroup(p_analysis_profitLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel10)
+                            .addGroup(p_analysis_profitLayout.createSequentialGroup()
+                                .addComponent(cb_yearMode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(cb_qarter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(cb_year1, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 1122, Short.MAX_VALUE)))
+                .addGap(49, 49, 49))
+        );
+        p_analysis_profitLayout.setVerticalGroup(
+            p_analysis_profitLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(p_analysis_profitLayout.createSequentialGroup()
+                .addGap(25, 25, 25)
+                .addComponent(jLabel10)
+                .addGap(38, 38, 38)
+                .addGroup(p_analysis_profitLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cb_year1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cb_yearMode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cb_qarter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(48, 48, 48)
+                .addComponent(p_categoryChart, javax.swing.GroupLayout.PREFERRED_SIZE, 374, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(187, Short.MAX_VALUE))
+        );
+
+        p_analysis.add(p_analysis_profit);
+
+        jScrollPane4.setViewportView(p_analysis);
 
         javax.swing.GroupLayout thongkeLayout = new javax.swing.GroupLayout(thongke);
         thongke.setLayout(thongkeLayout);
         thongkeLayout.setHorizontalGroup(
             thongkeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, thongkeLayout.createSequentialGroup()
-                .addContainerGap(306, Short.MAX_VALUE)
-                .addComponent(pie_chart)
-                .addGap(63, 63, 63)
-                .addComponent(chartPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 274, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(129, 129, 129))
+            .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 941, Short.MAX_VALUE)
         );
         thongkeLayout.setVerticalGroup(
             thongkeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(thongkeLayout.createSequentialGroup()
-                .addGroup(thongkeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(thongkeLayout.createSequentialGroup()
-                        .addGap(243, 243, 243)
-                        .addComponent(pie_chart))
-                    .addGroup(thongkeLayout.createSequentialGroup()
-                        .addGap(138, 138, 138)
-                        .addComponent(chartPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 272, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(204, Short.MAX_VALUE))
+            .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 610, Short.MAX_VALUE)
         );
 
         MENU.addTab("THỐNG KÊ", thongke);
 
-        jButton1.setText("jButton1");
+        jMenu1.setText("File");
+        jMenuBar1.add(jMenu1);
+
+        jMenu2.setText("Edit");
+        jMenuBar1.add(jMenu2);
+
+        setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(MENU, javax.swing.GroupLayout.DEFAULT_SIZE, 1057, Short.MAX_VALUE)
+            .addComponent(MENU)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(MENU, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 619, Short.MAX_VALUE)
+            .addComponent(MENU, javax.swing.GroupLayout.Alignment.TRAILING)
         );
 
         pack();
@@ -809,27 +1456,31 @@ public class MainFr extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_date_o_fActionPerformed
 
-    private void orderTableMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_orderTableMouseReleased
+    private void table_orderMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_table_orderMouseReleased
         displayDefault();
-        index = orderTable.getSelectedRow();
+        int selectedR = table_order.getSelectedRow();
+        int index = -1;
         cndb db =  cndb.getInstance();
         db.open();
         List<Order> allOrders = new ArrayList<>();
-        if(!searchMode){
-            allOrders = db.allOrders();
-        }else{
-            String sqlEx = db.creaSqlEx(closeSearch, option);
-            allOrders = db.allOrdersFilter(sqlEx, key, closeSearch);
-        }
+        allOrders = db.allOrders();
         List<Product> allPro = db.allProducts();
         db.close();
         //System.out.print(""+ allOrders.get(index).getName_c());
-        id_o_f.setText(allOrders.get(index).getId_o());
+        String id_o = (String) table_order.getValueAt(selectedR, 0);
+        for (Order ord : allOrders) {
+            if (ord.getId_o().equals(id_o)) {
+                index = allOrders.indexOf(ord);
+                break;
+            }
+        }
+        id_o_f.setText(id_o);
         name_c_f.setText(allOrders.get(index).getName_c());
         date_o_f.setText(allOrders.get(index).getDate_o());
         date_d_f.setText(allOrders.get(index).getDate_d());
         addr_f.setText(allOrders.get(index).getAddr());
         pay_type.setSelectedItem(allOrders.get(index).getPay_type());
+        
         
 
         int del_stt = allOrders.get(index).getDel_stt();
@@ -852,11 +1503,12 @@ public class MainFr extends javax.swing.JFrame {
         //orderdetail
         DefaultTableModel model = (DefaultTableModel) orderdetail.getModel();
         model.setRowCount(0);
-        Map<String, Integer> orderDetail= allOrders.get(index).getOrder_detail();
-        for(Map.Entry<String,  Integer> entry: orderDetail.entrySet()){
-            String id = entry.getKey();
+        List<OrderInfo> orderDetail= allOrders.get(index).getOrder_detail();
+        for(OrderInfo od : orderDetail){
+            String id = od.getId_p();
             //System.out.print(" " + id);
-            int qual = entry.getValue();
+            int qual = od.getQuantity();
+            int discount = od.getDiscount();
             int price = 0;
             String id_p=null;
             String name = null;
@@ -869,34 +1521,34 @@ public class MainFr extends javax.swing.JFrame {
                 }
             }
 
-            Object[] row = {id_p, name, qual, price, price*qual};
+            Object[] row = {id_p, name, qual, price, price*qual, discount};
             model.addRow(row);
             isEditMode = true;
         }
-    }//GEN-LAST:event_orderTableMouseReleased
+    }//GEN-LAST:event_table_orderMouseReleased
 
     private void addODActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addODActionPerformed
         DefaultTableModel m = (DefaultTableModel) orderdetail.getModel();
         m.addRow(new Object[]{null, null, null, null});      
     }//GEN-LAST:event_addODActionPerformed
 
-    private void nut_them_spActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nut_them_spActionPerformed
+    private void b_add_productActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_add_productActionPerformed
         productF pro = new productF();
         pro.setVisible(true);
-    }//GEN-LAST:event_nut_them_spActionPerformed
+    }//GEN-LAST:event_b_add_productActionPerformed
 
-    private void txt_tim_kiem_spActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_tim_kiem_spActionPerformed
+    private void txt_search_productActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_search_productActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txt_tim_kiem_spActionPerformed
+    }//GEN-LAST:event_txt_search_productActionPerformed
 
-    private void searchFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchFActionPerformed
+    private void txt_search_orderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_search_orderActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_searchFActionPerformed
+    }//GEN-LAST:event_txt_search_orderActionPerformed
 
-    private void addBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addBActionPerformed
+    private void b_addOrderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_addOrderActionPerformed
         addDefault();
         defaultOrder();
-        dateNow(date_o_f);
+        date_o_f.setText(getCurrentDate());
         cndb db = cndb.getInstance();
         db.open();
         try {
@@ -905,7 +1557,7 @@ public class MainFr extends javax.swing.JFrame {
             Logger.getLogger(MainFr.class.getName()).log(Level.SEVERE, null, ex);
         }
         db.close();
-    }//GEN-LAST:event_addBActionPerformed
+    }//GEN-LAST:event_b_addOrderActionPerformed
 
     private void orderdetailMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_orderdetailMouseReleased
 
@@ -913,44 +1565,49 @@ public class MainFr extends javax.swing.JFrame {
     }//GEN-LAST:event_orderdetailMouseReleased
 
     private void toShipActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_toShipActionPerformed
-        if(canEditDS){
+        if(canEditDelStt){
             defaultStt();
             toShip.setBackground(Color.pink);
-            saveB.setEnabled(true);
+            b_save_order.setEnabled(true);
             del_stt=1;
+
         }
     }//GEN-LAST:event_toShipActionPerformed
 
     private void toReceiveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_toReceiveActionPerformed
-        if(canEditDS){
+        if(canEditDelStt){
             defaultStt();
             toReceive.setBackground(Color.pink);
-            saveB.setEnabled(true);
+            b_save_order.setEnabled(true);
             del_stt=2;
+
         }
     }//GEN-LAST:event_toReceiveActionPerformed
 
     private void completedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_completedActionPerformed
-        if(canEditDS){
-            dateNow(date_d_f);
+        if(canEditDelStt){
+            date_d_f.setText(getCurrentDate());
 //            date_d_f.setEditable(false);
             defaultStt();
             completed.setBackground(Color.pink);
-            saveB.setEnabled(true);
+            b_save_order.setEnabled(true);
             del_stt=3;
+
         }
     }//GEN-LAST:event_completedActionPerformed
 
     private void cancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelActionPerformed
-        if(canEditDS){
+        if(canEditDelStt){
             defaultStt();
             cancel.setBackground(Color.pink);
-            saveB.setEnabled(true);
+            b_save_order.setEnabled(true);
             del_stt=0;
+
         }
     }//GEN-LAST:event_cancelActionPerformed
 
-    private void saveBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveBActionPerformed
+    private void b_save_orderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_save_orderActionPerformed
+
         String id_o = id_o_f.getText().trim();
         String name_c = name_c_f.getText().trim();
         String date_o = Handler.getDate(date_o_f);
@@ -967,88 +1624,123 @@ public class MainFr extends javax.swing.JFrame {
         String addr =addr_f.getText().trim();
         String pay = (String) pay_type.getSelectedItem();
         
-        //System.out.print(pay);
-        cndb db = cndb.getInstance();
-        db.open();
-        Map<String, Integer> order_detail = new HashMap<>();
+
+        List<OrderInfo> order_detail = new ArrayList<>();
         for (int row = 0; row < orderdetail.getRowCount(); row++) {
-            String keyO = (String) orderdetail.getValueAt(row, 0);
-            int value = Integer.parseInt(orderdetail.getValueAt(row, 2).toString());
-            //System.out.println("thunghiem "+keyO +"/"+value);
-            order_detail.put(keyO, value); 
-        } 
+            String id_p = orderdetail.getValueAt(row, 0) +"";
+            String qualS = orderdetail.getValueAt(row, 2) +"";
+            String discountS = orderdetail.getValueAt(row, 5) +"";
+            if(id_p == "" || qualS == "" ){
+                JOptionPane.showMessageDialog(rootPane, "Không Được Để Trống Cột Sản Phẩm Và Số Lưọng");
+            } else{                
+                int qual = Integer.parseInt(qualS);     
+                int discount = Integer.parseInt(discountS);   
+                //Nếu trạng thái giao hàng là 1 2 3 thì giảm tồn kho, từ 1 2 3 thành 0 thì tăng tồn kho
+                if(deStockCheck(id_o_f) ==1 ){
+                    cndb db = cndb.getInstance();
+                    db.open();  
+                    db.stockUpdate(id_p, qual);
+                    db.close();
+                }else if(deStockCheck(id_o_f) ==2){
+                    cndb db = cndb.getInstance();
+                    db.open();  
+                    db.stockUpdate(id_p, -qual);
+                    db.close();         
+                }
+                //System.out.println("thunghiem "+keyO +"/"+value);
+                if (qual != 0) {
+                    boolean found = false;
+                    for (OrderInfo od : order_detail) {
+                        if (od.getId_p().equals(id_p) && od.getDiscount() == discount) {
+                            // Nếu đã tồn tại OrderInfo với cùng id_p và discount, cập nhật qual
+                            od.setQuantity(od.getQuantity() + qual);
+                            found = true;
+                            break;
+                        }
+                    }
+                    // Nếu không tìm thấy OrderInfo với cùng id_p và discount, thêm mới vào danh sách
+                    if (!found) {
+                        order_detail.add(new OrderInfo(id_p, qual, discount));
+                    }
+                }
+
+            }
+        }
+        deStock =0;
         
         if(isEditMode){
+            cndb db = cndb.getInstance();
+            db.open();
             int f = db.orderEdit(id_o, name_c, date_o, date_d, addr, pay, del_stt , order_detail);
+            db.close();
             RefreshTables();
             if(f != -1){
-                JOptionPane.showMessageDialog(rootPane, "CHỈNH SỬA SẢN PHẨM THÀNH CÔNG! ");
+                JOptionPane.showMessageDialog(rootPane, "CHỈNH SỬA ĐƠN HÀNG THÀNH CÔNG! ");
             }
             addDefault();
             defaultOrder();
             isEditMode=false;
-        }else{
-        if (date_d == null) {
-            System.out.print("null");
-        }
+        } else{
+            cndb db = cndb.getInstance();
+            db.open();           
             int f = db.orderInsert(id_o, name_c, date_o, date_d, addr, pay, del_stt , order_detail);
-            RefreshTables();
-            if(f != -1){
-                JOptionPane.showMessageDialog(rootPane, "THÊM SẢN PHẨM THÀNH CÔNG! ");
-            }            
+            db.close();
+             RefreshTables();
+             if(f != -1){
+                 JOptionPane.showMessageDialog(rootPane, "THÊM ĐƠN HÀNG THÀNH CÔNG! ");
+            } 
         }
-        System.out.println(del_stt);
-        db.close();
-//        RefreshTables();
-    }//GEN-LAST:event_saveBActionPerformed
+        del_stt = 1;
+//        System.out.println(del_stt);
+    }//GEN-LAST:event_b_save_orderActionPerformed
 
-    private void deleteBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteBActionPerformed
-        xoaDonHang(orderTable);
+    private void b_delete_orderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_delete_orderActionPerformed
+        xoaDonHang(table_order);
         
-    }//GEN-LAST:event_deleteBActionPerformed
+    }//GEN-LAST:event_b_delete_orderActionPerformed
 
-    private void editBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editBActionPerformed
+    private void b_edit_orderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_edit_orderActionPerformed
         addDefault();
         isEditMode = true;
-    }//GEN-LAST:event_editBActionPerformed
+    }//GEN-LAST:event_b_edit_orderActionPerformed
 
     private void date_d_fActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_date_d_fActionPerformed
         
     }//GEN-LAST:event_date_d_fActionPerformed
 
-    private void searchFKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchFKeyReleased
+    private void txt_search_orderKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_search_orderKeyReleased
         searchMode = true;
         if(evt.getKeyCode() == KeyEvent.VK_ENTER){
-            searchBActionPerformed(null);
+            b_search_orderActionPerformed(null);
         }
         else{
-            key = searchF.getText().trim();
-            option = searchOption.getSelectedIndex();
+            key = txt_search_order.getText().trim();
+            option = cb_search_option.getSelectedIndex();
             cndb db = cndb.getInstance();
             db.open();
             String sqlEx = db.creaSqlEx(false, option);
             List<Order> allOrders = db.allOrdersFilter(sqlEx, key, false);
-           orderTable.setModel(allOrdersT(allOrders));
+           table_order.setModel(allOrdersT(allOrders));
            db.close();           
         }
-    }//GEN-LAST:event_searchFKeyReleased
+    }//GEN-LAST:event_txt_search_orderKeyReleased
 
-    private void searchBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchBActionPerformed
+    private void b_search_orderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_search_orderActionPerformed
 
-        option = searchOption.getSelectedIndex();
+        option = cb_search_option.getSelectedIndex();
         searchMode = true;
-        key = searchF.getText().trim();
-        if(key.equals("")){
+        key = txt_search_order.getText().trim();
+        if(key.equals("")||key == null){
             JOptionPane.showMessageDialog(rootPane,"HÃY NHẬP VÀO GIÁ TRỊ CẦN TÌM");
         }else{
             cndb db = cndb.getInstance();
             db.open();
             String sqlEx = db.creaSqlEx(true, option);
             List<Order> allOrders = db.allOrdersFilter(sqlEx, key, true);
-           orderTable.setModel(allOrdersT(allOrders));
+           table_order.setModel(allOrdersT(allOrders));
            db.close();           
         }       
-    }//GEN-LAST:event_searchBActionPerformed
+    }//GEN-LAST:event_b_search_orderActionPerformed
 
     private void date_o_fKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_date_o_fKeyReleased
 
@@ -1062,92 +1754,52 @@ public class MainFr extends javax.swing.JFrame {
         errMess.setText(dateError(evt,date_d_f));
         defaultStt();       
         if(!date_d_f.getText().equals("")){
-            canEditDS = false;
+            canEditDelStt = false;
             completed.setBackground(Color.pink);
         }else{
-            canEditDS = true;
+            canEditDelStt = true;
         }
 
-        saveB.setEnabled(true);
+        b_save_order.setEnabled(true);
         del_stt=3;
     }//GEN-LAST:event_date_d_fKeyTyped
 
-    private void pie_chartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pie_chartActionPerformed
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         cndb db = cndb.getInstance();
         db.open();
-        DefaultPieDataset a= db.salesReportsdts("03", "2024",true, false);
+        DefaultPieDataset a= db.salesReportsdts("03", "2024",false, true);
         System.out.println(a.getValue(0));
- 
         ChartPanel chartP = new ChartPanel(createPieChart(a, "Thử nghiệm"));
-        chartPanel.add(chartP);
-        chartPanel.revalidate();
+        jPanel15.add(chartP);
+        jPanel15.revalidate();
         db.close();
-    }//GEN-LAST:event_pie_chartActionPerformed
+        
+        
+    }//GEN-LAST:event_jButton1ActionPerformed
 
-    private void nut_tim_kiem_spActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nut_tim_kiem_spActionPerformed
-        tro_lai.setVisible(true);
-        panel_sp.removeAll();
-        cndb db =  cndb.getInstance();
-        db.open();
-        List<Product> allPro = db.allProducts();      
-        List<proPanel> proPanels = allProP(allPro);        
-        String abc=txt_tim_kiem_sp.getText();
-        System.out.println(abc);
+    private void cb_monthActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cb_monthActionPerformed
 
-        for( JPanel a : proPanels){
-            if(db.tim_kiem_san_pham(a, abc)== 1){
-                System.out.println("abafdsa");
-                System.out.println(db.tim_kiem_san_pham(a, abc));
-                panel_sp.add(a);
-            }
-        }
-        panel_sp.revalidate();
-        panel_sp.repaint();
-        db.close();
-    }//GEN-LAST:event_nut_tim_kiem_spActionPerformed
+        setOverview();
+    }//GEN-LAST:event_cb_monthActionPerformed
 
-    private void panel_spAncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_panel_spAncestorAdded
+    private void cb_yearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cb_yearActionPerformed
 
-    }//GEN-LAST:event_panel_spAncestorAdded
+        setOverview();
+    }//GEN-LAST:event_cb_yearActionPerformed
 
-    private void txt_tim_kiem_spKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_tim_kiem_spKeyTyped
-        if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
-            tro_lai.setVisible(true);
-            panel_sp.removeAll();
-            cndb db =  cndb.getInstance();
-            db.open();
-            List<Product> allPro = db.allProducts();      
-            List<proPanel> proPanels = allProP(allPro);        
-            String abc=txt_tim_kiem_sp.getText();
-            System.out.println(abc);
+    private void cb_year1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cb_year1ActionPerformed
 
-            for( JPanel a : proPanels){
-                if(db.tim_kiem_san_pham(a, abc)== 1){
-                    System.out.println("abafdsa");
-                    System.out.println(db.tim_kiem_san_pham(a, abc));
-                    panel_sp.add(a);
-                }
-            }
-            panel_sp.revalidate();
-            panel_sp.repaint();
-            db.close();
-        }    
-    }//GEN-LAST:event_txt_tim_kiem_spKeyTyped
+        setTotalProfitChart();
+    }//GEN-LAST:event_cb_year1ActionPerformed
 
-    private void tro_laiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tro_laiActionPerformed
-            MainFr mfr = MainFr.getInstance();
-            mfr.RefreshProList();
-            tro_lai.setVisible(false);
-    }//GEN-LAST:event_tro_laiActionPerformed
-    private JFrame mainFrame;
-    private JTextField passwordField;
-    private JButton changeButton;
-    protected void getpass(JTextField a){
-        this.passwordField=a;
-    }
-    protected JTextField setpass(){
-        return passwordField;
-    }
+    private void cb_yearModeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cb_yearModeActionPerformed
+        setTotalProfitChart();
+    }//GEN-LAST:event_cb_yearModeActionPerformed
+
+    private void cb_qarterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cb_qarterActionPerformed
+        setTotalProfitChart();
+    }//GEN-LAST:event_cb_qarterActionPerformed
+
 
     /**
      * @param args the command line arguments
@@ -1167,58 +1819,104 @@ public class MainFr extends javax.swing.JFrame {
             }
         });
     }
-    
-     
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTabbedPane MENU;
-    private javax.swing.JButton addB;
     private javax.swing.JButton addOD;
     private javax.swing.JTextField addr_f;
+    private javax.swing.JButton b_addOrder;
+    private javax.swing.JButton b_add_product;
+    private javax.swing.JButton b_delete_order;
+    private javax.swing.JButton b_edit_order;
+    private javax.swing.JButton b_filter_order;
+    private javax.swing.JButton b_save_order;
+    private javax.swing.JButton b_search_order;
+    private javax.swing.JButton b_search_product;
     private javax.swing.JButton cancel;
-    private javax.swing.JPanel chartPanel;
+    private javax.swing.JComboBox<String> cb_month;
+    private javax.swing.JComboBox<String> cb_qarter;
+    private javax.swing.JComboBox<String> cb_search_option;
+    private javax.swing.JComboBox<String> cb_year;
+    private javax.swing.JComboBox<String> cb_year1;
+    private javax.swing.JComboBox<String> cb_yearMode;
     private javax.swing.JButton completed;
     private javax.swing.JTextField date_d_f;
     private javax.swing.JTextField date_o_f;
-    private javax.swing.JButton deleteB;
     private javax.swing.JPanel donhang;
-    private javax.swing.JButton editB;
     private javax.swing.JLabel errMess;
-    private javax.swing.JButton filterB;
     private javax.swing.JTextField id_o_f;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel20;
+    private javax.swing.JLabel jLabel22;
+    private javax.swing.JLabel jLabel24;
+    private javax.swing.JLabel jLabel26;
+    private javax.swing.JLabel jLabel27;
+    private javax.swing.JLabel jLabel28;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel10;
+    private javax.swing.JPanel jPanel11;
+    private javax.swing.JPanel jPanel12;
+    private javax.swing.JPanel jPanel13;
+    private javax.swing.JPanel jPanel14;
+    private javax.swing.JPanel jPanel15;
+    private javax.swing.JPanel jPanel16;
+    private javax.swing.JPanel jPanel18;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel7;
+    private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JSplitPane jSplitPane1;
+    private javax.swing.JLabel l_bestSalePro;
+    private javax.swing.JLabel l_cancel;
+    private javax.swing.JLabel l_completed;
+    private javax.swing.JLabel l_highQualPro;
+    private javax.swing.JLabel l_lowQualPro;
+    private javax.swing.JLabel l_noQualPro;
+    private javax.swing.JLabel l_noSalePro;
+    private javax.swing.JLabel l_toReceive;
+    private javax.swing.JLabel l_toShip;
+    private javax.swing.JLabel l_totalCapital;
     private javax.swing.JTextField name_c_f;
-    private javax.swing.JButton nut_them_sp;
-    private javax.swing.JButton nut_tim_kiem_sp;
-    private javax.swing.JTable orderTable;
     private javax.swing.JTable orderdetail;
+    private javax.swing.JPanel p_analysis;
+    private javax.swing.JPanel p_analysis_product;
+    private javax.swing.JPanel p_analysis_profit;
+    private javax.swing.JPanel p_categoryChart;
+    private javax.swing.JPanel p_overview;
     private javax.swing.JPanel panel_sp;
     private javax.swing.JComboBox<String> pay_type;
-    private javax.swing.JButton pie_chart;
     private javax.swing.JPanel sanpham;
-    private javax.swing.JButton saveB;
-    private javax.swing.JButton searchB;
-    private javax.swing.JTextField searchF;
-    private javax.swing.JComboBox<String> searchOption;
+    private javax.swing.JTable table_order;
     private javax.swing.JPanel thongke;
     private javax.swing.JButton toReceive;
     private javax.swing.JButton toShip;
-    private javax.swing.JButton tro_lai;
-    private javax.swing.JTextField txt_tim_kiem_sp;
+    private javax.swing.JTextField txt_search_order;
+    private javax.swing.JTextField txt_search_product;
     // End of variables declaration//GEN-END:variables
 }

@@ -3,13 +3,7 @@ package demo;
 
 //import static demo.MainFr.pass_change;
 import java.awt.event.KeyEvent;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
 import javax.swing.JOptionPane;
-import javax.swing.JTextField;
 
 
 public class passwordFr extends javax.swing.JFrame {
@@ -168,6 +162,7 @@ public class passwordFr extends javax.swing.JFrame {
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(passwordFr.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         java.awt.EventQueue.invokeLater(new Runnable() {

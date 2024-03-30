@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package structure;
+package models;
 
 /**
  *
@@ -11,17 +11,25 @@ package structure;
  */
     
 public class ProductEx{
+   private String id;
    private String name;
    private int qual;
    private int price_i;
    private int price_s;
+   private float discount;
 
-   public ProductEx(String name, int qual, int price_i, int price_s) {
-       this.name = name;
-       this.qual = qual;
-       this.price_i = price_i;
-       this.price_s = price_s;
-   }
+    public ProductEx(String id, String name, int qual, int price_i, int price_s, float discount) {
+        this.id = id;
+        this.name = name;
+        this.qual = qual;
+        this.price_i = price_i;
+        this.price_s = price_s;
+        this.discount = discount;
+    }
+
+    public String getId() {
+        return id;
+    }
 
     public String getName() {
         return name;
@@ -39,6 +47,14 @@ public class ProductEx{
         return price_s;
     }
 
+    public float getDiscount() {
+        return discount;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
     public void setName(String name) {
         this.name = name;
     }
@@ -54,9 +70,19 @@ public class ProductEx{
     public void setPrice_s(int price_s) {
         this.price_s = price_s;
     }
+
+    public void setDiscount(float discount) {
+        this.discount = discount;
+    }
+
+       public double getRevenue(){
+       double revenue = qual*price_s*discount/100;
+       return revenue;
+   }
    
-   public int getProfit(){
-       int profit = qual*(price_s-price_i);
+   
+   public double getProfit(){
+       double profit = qual*(price_s*discount/100-price_i);
        return profit;
    }
    
