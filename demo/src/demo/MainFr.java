@@ -46,6 +46,7 @@ import demo.Handler.HighlightPanel;
 import demo.Handler.HighlightLabel;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import javax.swing.JPanel;
 import org.jfree.data.category.DefaultCategoryDataset;
 /**
  *
@@ -56,6 +57,8 @@ public class MainFr extends javax.swing.JFrame {
         initComponents();
         //Giao diện lớn bằng cả màn hình 
         setExtendedState(MainFr.MAXIMIZED_BOTH);
+        tro_lai.setVisible(false);
+
     }
     //triển khai một pattern Singleton để đảm bảo rằng một lớp chỉ có một thể hiện duy nhất
     private static MainFr instance;
@@ -366,9 +369,10 @@ public class MainFr extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         panel_sp = new javax.swing.JPanel();
         jPanel6 = new javax.swing.JPanel();
-        b_add_product = new javax.swing.JButton();
-        b_search_product = new javax.swing.JButton();
-        txt_search_product = new javax.swing.JTextField();
+        nut_them_sp = new javax.swing.JButton();
+        nut_tim_kiem_sp = new javax.swing.JButton();
+        txt_tim_kiem_sp = new javax.swing.JTextField();
+        tro_lai = new javax.swing.JButton();
         donhang = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         jSplitPane1 = new javax.swing.JSplitPane();
@@ -457,9 +461,6 @@ public class MainFr extends javax.swing.JFrame {
         cb_yearMode = new javax.swing.JComboBox<>();
         cb_qarter = new javax.swing.JComboBox<>();
         p_categoryChart = new javax.swing.JPanel();
-        jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
-        jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setPreferredSize(new java.awt.Dimension(800, 641));
@@ -474,29 +475,41 @@ public class MainFr extends javax.swing.JFrame {
         panel_sp.setLayout(new java.awt.GridLayout(0, 6));
         jScrollPane2.setViewportView(panel_sp);
 
-        b_add_product.setText("Thêm");
-        b_add_product.setFocusable(false);
-        b_add_product.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        b_add_product.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        b_add_product.addActionListener(new java.awt.event.ActionListener() {
+        nut_them_sp.setText("Thêm");
+        nut_them_sp.setFocusable(false);
+        nut_them_sp.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        nut_them_sp.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        nut_them_sp.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                b_add_productActionPerformed(evt);
+                nut_them_spActionPerformed(evt);
             }
         });
 
-        b_search_product.setText("Tìm kiếm");
-        b_search_product.setFocusable(false);
-        b_search_product.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        b_search_product.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        b_search_product.addActionListener(new java.awt.event.ActionListener() {
+        nut_tim_kiem_sp.setText("Tìm kiếm");
+        nut_tim_kiem_sp.setFocusable(false);
+        nut_tim_kiem_sp.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        nut_tim_kiem_sp.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        nut_tim_kiem_sp.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                b_search_productActionPerformed(evt);
+                nut_tim_kiem_spActionPerformed(evt);
             }
         });
 
-        txt_search_product.addActionListener(new java.awt.event.ActionListener() {
+        txt_tim_kiem_sp.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txt_search_productActionPerformed(evt);
+                txt_tim_kiem_spActionPerformed(evt);
+            }
+        });
+        txt_tim_kiem_sp.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txt_tim_kiem_spKeyTyped(evt);
+            }
+        });
+
+        tro_lai.setText("Home");
+        tro_lai.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tro_laiActionPerformed(evt);
             }
         });
 
@@ -506,37 +519,50 @@ public class MainFr extends javax.swing.JFrame {
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(b_add_product)
-                .addGap(276, 276, 276)
-                .addComponent(b_search_product)
+                .addComponent(nut_them_sp)
+                .addGap(192, 192, 192)
+                .addComponent(tro_lai)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(nut_tim_kiem_sp)
                 .addGap(18, 18, 18)
-                .addComponent(txt_search_product, javax.swing.GroupLayout.PREFERRED_SIZE, 478, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(txt_tim_kiem_sp, javax.swing.GroupLayout.PREFERRED_SIZE, 478, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(83, Short.MAX_VALUE))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addGap(3, 3, 3)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(b_search_product, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(b_add_product)
-                    .addComponent(txt_search_product, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(nut_tim_kiem_sp, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(nut_them_sp)
+                    .addComponent(txt_tim_kiem_sp, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addComponent(tro_lai)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout sanphamLayout = new javax.swing.GroupLayout(sanpham);
         sanpham.setLayout(sanphamLayout);
         sanphamLayout.setHorizontalGroup(
             sanphamLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2)
-            .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(sanphamLayout.createSequentialGroup()
+                .addGroup(sanphamLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(sanphamLayout.createSequentialGroup()
+                        .addGap(24, 24, 24)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 977, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, sanphamLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         sanphamLayout.setVerticalGroup(
             sanphamLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, sanphamLayout.createSequentialGroup()
+                .addContainerGap()
                 .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 560, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 586, Short.MAX_VALUE))
         );
 
         MENU.addTab("SẢN PHÂM", sanpham);
@@ -689,7 +715,7 @@ public class MainFr extends javax.swing.JFrame {
                             .addComponent(completed, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(cancel, javax.swing.GroupLayout.DEFAULT_SIZE, 85, Short.MAX_VALUE))
                         .addContainerGap())
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 842, Short.MAX_VALUE)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 914, Short.MAX_VALUE)
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -705,7 +731,7 @@ public class MainFr extends javax.swing.JFrame {
                             .addComponent(name_c_f)
                             .addComponent(date_o_f)
                             .addComponent(addr_f)
-                            .addComponent(pay_type, 0, 682, Short.MAX_VALUE)
+                            .addComponent(pay_type, 0, 747, Short.MAX_VALUE)
                             .addGroup(jPanel5Layout.createSequentialGroup()
                                 .addComponent(addOD)
                                 .addGap(0, 0, Short.MAX_VALUE))
@@ -754,7 +780,7 @@ public class MainFr extends javax.swing.JFrame {
                     .addComponent(jLabel2)
                     .addComponent(addOD))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 123, Short.MAX_VALUE))
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 170, Short.MAX_VALUE))
         );
 
         errMess.getAccessibleContext().setAccessibleName("errMess");
@@ -1436,28 +1462,20 @@ public class MainFr extends javax.swing.JFrame {
         thongke.setLayout(thongkeLayout);
         thongkeLayout.setHorizontalGroup(
             thongkeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 941, Short.MAX_VALUE)
+            .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 1013, Short.MAX_VALUE)
         );
         thongkeLayout.setVerticalGroup(
             thongkeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 610, Short.MAX_VALUE)
+            .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 636, Short.MAX_VALUE)
         );
 
         MENU.addTab("THỐNG KÊ", thongke);
-
-        jMenu1.setText("File");
-        jMenuBar1.add(jMenu1);
-
-        jMenu2.setText("Edit");
-        jMenuBar1.add(jMenu2);
-
-        setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(MENU)
+            .addComponent(MENU, javax.swing.GroupLayout.DEFAULT_SIZE, 1100, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1551,15 +1569,6 @@ public class MainFr extends javax.swing.JFrame {
         DefaultTableModel m = (DefaultTableModel) orderdetail.getModel();
         m.addRow(new Object[]{null, null, null, null});      
     }//GEN-LAST:event_addODActionPerformed
-
-    private void b_add_productActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_add_productActionPerformed
-        productF pro = new productF();
-        pro.setVisible(true);
-    }//GEN-LAST:event_b_add_productActionPerformed
-
-    private void txt_search_productActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_search_productActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txt_search_productActionPerformed
 
     private void txt_search_orderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_search_orderActionPerformed
         // TODO add your handling code here:
@@ -1854,9 +1863,66 @@ public class MainFr extends javax.swing.JFrame {
         db.close();
     }//GEN-LAST:event_cb_year2ActionPerformed
 
-    private void b_search_productActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_search_productActionPerformed
-        
-    }//GEN-LAST:event_b_search_productActionPerformed
+    private void nut_them_spActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nut_them_spActionPerformed
+        productF pro = new productF();
+        pro.setVisible(true);
+    }//GEN-LAST:event_nut_them_spActionPerformed
+
+    private void nut_tim_kiem_spActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nut_tim_kiem_spActionPerformed
+        tro_lai.setVisible(true);
+        panel_sp.removeAll();
+        cndb db =  cndb.getInstance();
+        db.open();
+        List<Product> allPro = db.allProducts();
+        List<proPanel> proPanels = allProP(allPro);
+        String abc=txt_tim_kiem_sp.getText();
+        System.out.println(abc);
+
+        for( JPanel a : proPanels){
+            if(db.tim_kiem_san_pham(a, abc)== 1){
+                System.out.println("abafdsa");
+                System.out.println(db.tim_kiem_san_pham(a, abc));
+                panel_sp.add(a);
+            }
+        }
+        panel_sp.revalidate();
+        panel_sp.repaint();
+        db.close();
+    }//GEN-LAST:event_nut_tim_kiem_spActionPerformed
+
+    private void txt_tim_kiem_spActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_tim_kiem_spActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txt_tim_kiem_spActionPerformed
+
+    private void txt_tim_kiem_spKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_tim_kiem_spKeyTyped
+        if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
+            tro_lai.setVisible(true);
+            panel_sp.removeAll();
+            cndb db =  cndb.getInstance();
+            db.open();
+            List<Product> allPro = db.allProducts();
+            List<proPanel> proPanels = allProP(allPro);
+            String abc=txt_tim_kiem_sp.getText();
+            System.out.println(abc);
+
+            for( JPanel a : proPanels){
+                if(db.tim_kiem_san_pham(a, abc)== 1){
+                    System.out.println("abafdsa");
+                    System.out.println(db.tim_kiem_san_pham(a, abc));
+                    panel_sp.add(a);
+                }
+            }
+            panel_sp.revalidate();
+            panel_sp.repaint();
+            db.close();
+        }
+    }//GEN-LAST:event_txt_tim_kiem_spKeyTyped
+
+    private void tro_laiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tro_laiActionPerformed
+        MainFr mfr = MainFr.getInstance();
+        mfr.RefreshProList();
+        tro_lai.setVisible(false);
+    }//GEN-LAST:event_tro_laiActionPerformed
 
 
     /**
@@ -1883,13 +1949,11 @@ public class MainFr extends javax.swing.JFrame {
     private javax.swing.JButton addOD;
     private javax.swing.JTextField addr_f;
     private javax.swing.JButton b_addOrder;
-    private javax.swing.JButton b_add_product;
     private javax.swing.JButton b_delete_order;
     private javax.swing.JButton b_edit_order;
     private javax.swing.JButton b_filter_order;
     private javax.swing.JButton b_save_order;
     private javax.swing.JButton b_search_order;
-    private javax.swing.JButton b_search_product;
     private javax.swing.JButton cancel;
     private javax.swing.JComboBox<String> cb_month;
     private javax.swing.JComboBox<String> cb_month1;
@@ -1926,9 +1990,6 @@ public class MainFr extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
-    private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel11;
@@ -1962,6 +2023,8 @@ public class MainFr extends javax.swing.JFrame {
     private javax.swing.JLabel l_totalCapital;
     private javax.swing.JPanel loss_graph;
     private javax.swing.JTextField name_c_f;
+    private javax.swing.JButton nut_them_sp;
+    private javax.swing.JButton nut_tim_kiem_sp;
     private javax.swing.JTable orderdetail;
     private javax.swing.JPanel p_analysis;
     private javax.swing.JPanel p_analysis_product;
@@ -1976,7 +2039,8 @@ public class MainFr extends javax.swing.JFrame {
     private javax.swing.JPanel thongke;
     private javax.swing.JButton toReceive;
     private javax.swing.JButton toShip;
+    private javax.swing.JButton tro_lai;
     private javax.swing.JTextField txt_search_order;
-    private javax.swing.JTextField txt_search_product;
+    private javax.swing.JTextField txt_tim_kiem_sp;
     // End of variables declaration//GEN-END:variables
 }
