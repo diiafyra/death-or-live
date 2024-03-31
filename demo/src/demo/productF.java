@@ -131,7 +131,7 @@ public class productF extends javax.swing.JFrame {
                 jTextField1KeyPressed(evt);
             }
         });
-        jPanel4.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 260, 90, -1));
+        jPanel4.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 260, 90, 20));
 
         ngaynhapL.setText("Ngày nhập");
         jPanel4.add(ngaynhapL, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 110, -1, -1));
@@ -140,6 +140,9 @@ public class productF extends javax.swing.JFrame {
         errorMess.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jPanel4.add(errorMess, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 20, 320, 20));
 
+        maspF.setMinimumSize(new java.awt.Dimension(6, 19));
+        maspF.setPreferredSize(new java.awt.Dimension(6, 19));
+        maspF.setRequestFocusEnabled(false);
         maspF.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 maspFActionPerformed(evt);
@@ -153,7 +156,7 @@ public class productF extends javax.swing.JFrame {
                 maspFKeyTyped(evt);
             }
         });
-        jPanel4.add(maspF, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 80, 210, 20));
+        jPanel4.add(maspF, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 80, 210, 25));
 
         ngaynhapF.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -168,21 +171,26 @@ public class productF extends javax.swing.JFrame {
                 ngaynhapFKeyTyped(evt);
             }
         });
-        jPanel4.add(ngaynhapF, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 140, 210, 20));
+        jPanel4.add(ngaynhapF, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 140, 210, 25));
 
+        tenspF.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tenspFActionPerformed(evt);
+            }
+        });
         tenspF.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 tenspFKeyPressed(evt);
             }
         });
-        jPanel4.add(tenspF, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 80, 210, 20));
+        jPanel4.add(tenspF, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 80, 210, 25));
 
         khonhapF.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 khonhapFKeyPressed(evt);
             }
         });
-        jPanel4.add(khonhapF, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 200, 210, 20));
+        jPanel4.add(khonhapF, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 200, 210, 25));
 
         gianhapF.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
@@ -192,7 +200,7 @@ public class productF extends javax.swing.JFrame {
                 gianhapFKeyTyped(evt);
             }
         });
-        jPanel4.add(gianhapF, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 260, 210, 20));
+        jPanel4.add(gianhapF, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 260, 210, 25));
 
         tonkhoF.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
@@ -202,7 +210,7 @@ public class productF extends javax.swing.JFrame {
                 tonkhoFKeyTyped(evt);
             }
         });
-        jPanel4.add(tonkhoF, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 200, 210, 20));
+        jPanel4.add(tonkhoF, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 200, 210, 25));
 
         giaF.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
@@ -212,7 +220,7 @@ public class productF extends javax.swing.JFrame {
                 giaFKeyTyped(evt);
             }
         });
-        jPanel4.add(giaF, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 140, 210, 20));
+        jPanel4.add(giaF, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 140, 210, 25));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -353,6 +361,10 @@ public class productF extends javax.swing.JFrame {
     private void giaFKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_giaFKeyPressed
         Handler.enter(evt,ngaynhapF);
     }//GEN-LAST:event_giaFKeyPressed
+
+    private void tenspFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tenspFActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tenspFActionPerformed
 
        
     ImageIcon currentImage;

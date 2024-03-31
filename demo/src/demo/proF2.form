@@ -132,7 +132,7 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="chua_hinh_anh" min="-2" pref="161" max="-2" attributes="0"/>
                       <Group type="102" alignment="1" attributes="0">
-                          <Component id="txt_hinh_anh" min="-2" max="-2" attributes="0"/>
+                          <Component id="txt_hinh_anh" min="-2" pref="27" max="-2" attributes="0"/>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
                           <Component id="brower" min="-2" max="-2" attributes="0"/>
                           <EmptySpace min="-2" pref="31" max="-2" attributes="0"/>
