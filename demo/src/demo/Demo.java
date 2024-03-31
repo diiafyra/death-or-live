@@ -30,6 +30,9 @@ public class Demo {
         UIManager.put("TabbedPane.foreground", new Color(0, 0, 0));   // Màu nền của TabbedPane
         UIManager.put("Button.foreground", Color.WHITE);                      // Màu chữ của Button
         UIManager.put("Label.foreground", new Color(0, 0, 0));            // Màu chữ của Label
+        UIManager.put("Table.foreground", new Color(0, 0, 0));
+        UIManager.put("TextField.foreground", new Color(0, 0, 0));
+        UIManager.put("Button.foreground", new Color(0, 0, 0)); 
         UIManager.put("MenuBar.foreground", new Color(0, 0, 0));             // Màu chữ của Menu
         UIManager.put("MenuBar.background", new Color(250, 215, 160));
     }

@@ -292,19 +292,20 @@ public class cndb {
             }
             return eYear;
         }
+        
         public List<ProductEx> salesReports(String month, String year){
                         List<ProductEx> proExs = new ArrayList<>();
             try {
-                String sql = "SELECT od.ID_P, \n" +
-                "       p.NAME_P, \n" +
-                "       SUM(od.QUAL) AS total_QUAL, \n" +
-                "       p.PRICE_S, \n" +
-                "       p.PRICE_I, \n" +
-                "       od.DISCOUNT\n" +
-                "FROM ORDERS o \n" +
-                "JOIN ORDERS_DETAIL od ON o.ID_O = od.ID_O \n" +
-                "JOIN PRODUCTS p ON od.ID_P = p.ID_P \n" +
-                "WHERE strftime('%m', o.DATE_O) = ? AND strftime('%Y', o.DATE_O) = ?\n" +
+                String sql = "SELECT od.ID_P, " +
+                "       p.NAME_P, " +
+                "       SUM(od.QUAL) AS total_QUAL, " +
+                "       p.PRICE_S, " +
+                "       p.PRICE_I, " +
+                "       od.DISCOUNT " +
+                "FROM ORDERS o " +
+                "JOIN ORDERS_DETAIL od ON o.ID_O = od.ID_O " +
+                "JOIN PRODUCTS p ON od.ID_P = p.ID_P " +
+                "WHERE strftime('%m', o.DATE_O) = ? AND strftime('%Y', o.DATE_O) = ? " +
                 "GROUP BY od.ID_P, od.DISCOUNT;";
                 pre = conn.prepareStatement(sql); //pre một lệnh truy vấn sql select chuẩn bị thực thi trên database
                 pre.setString(1, month);
@@ -384,20 +385,12 @@ public class cndb {
     }        
 //        
     public DefaultPieDataset salesReportsdts( String month, String year, boolean profitMode, boolean checkProfit){
+        System.out.println(month+"thu"+ year);  
         List<ProductEx> proExs = salesReports(month, year);
+        System.out.println(proExs.size() + "size proEx");  
         DefaultPieDataset profitDataset = new DefaultPieDataset();
         DefaultPieDataset qualDataset = new DefaultPieDataset();     
         DefaultPieDataset lossDataset = new DefaultPieDataset();     
-//        Map<String,Integer> salesProfitReport = new HashMap<>();
-//        Map<String,Integer> salesQualReport = new HashMap<>();
-//
-//            for(ProductEx pro : proExs){
-//                String name = pro.getName();
-//                int profit = pro.getProfit();
-//                int qual = pro.getQual();
-//                salesProfitReport.put(name, profit);
-//                salesQualReport.put(name, qual);
-//            }
 
             int totalQual = 0;
             int totalProfit = 0;
@@ -405,12 +398,15 @@ public class cndb {
             for (ProductEx pro : proExs) {
                 totalQual += pro.getQual();
                 if(pro.checkProfit()){
+                    System.out.println(pro.getProfit() + " wth");  
                     totalProfit += pro.getProfit();
                 } else {
                     totalLoss -= pro.getProfit();
+                    System.out.println(pro.getProfit() + " wtf");  
                 }
             }
-            
+            System.out.println(totalLoss + "hihi");  
+            System.out.println(totalProfit + "haha");
             int otherProfit = 0;
             int otherLoss = 0;
             int otherQual =0;
@@ -423,24 +419,27 @@ public class cndb {
                     otherQual += productQual;
                 } else{
                         qualDataset.setValue(productName, productQual);
-//                        System.out.println(productName+"/"+profitQual);                    
+                        System.out.println(productName+"/"+productQual);                    
                 }
                 
                 if(pro.checkProfit()){
                     double productProfit = pro.getProfit();
+                    System.out.println("profit " +productProfit);
                     double profitPercentage = ((double) productProfit / totalProfit) * 100;                
                     if (profitPercentage < 1) {
                         otherProfit += productProfit;
                     } else {
                         profitDataset.setValue(productName, productProfit);
-//                        System.out.println(productName+"/"+profitPercentage);
+                        System.out.println(productName+"/"+profitPercentage);
                     }
                 } else {
                     double productLoss = - pro.getProfit();
+//                    System.out.println("loss " +productLoss + productName);
                     double lossPercentage = ((double) productLoss / totalLoss)*100;
                     if(lossPercentage <1){
                         otherLoss += productLoss;
                     } else{
+                        
                         lossDataset.setValue(productName, productLoss);
                     }
                 }
@@ -449,9 +448,10 @@ public class cndb {
             qualDataset.setValue("Other", otherQual);
             profitDataset.setValue("Other", otherProfit);
             lossDataset.setValue("Other", otherLoss);
+            
+            System.out.println(otherLoss +" other loss");
 
-
-//                 for (Map.Entry<String, Integer> entry : salesQualReport.entrySet()) {
+//                 for () {
 //                    System.out.println(entry.getKey()+"/"+entry.getValue());
 //                    
 //                }               
@@ -466,6 +466,7 @@ public class cndb {
             }
 
     }
+    
 public List<Order> OrdersFilterByDS(String month, String year, int del_stt){
         List<Order> allOrders = new ArrayList<>();
         

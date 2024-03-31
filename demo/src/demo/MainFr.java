@@ -360,7 +360,6 @@ public class MainFr extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-        java.awt.GridBagConstraints gridBagConstraints;
 
         MENU = new javax.swing.JTabbedPane();
         sanpham = new javax.swing.JPanel();
@@ -448,8 +447,10 @@ public class MainFr extends javax.swing.JFrame {
         jLabel28 = new javax.swing.JLabel();
         p_analysis_product = new javax.swing.JPanel();
         jLabel8 = new javax.swing.JLabel();
-        jPanel15 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
+        profit_graph = new HighlightPanel();
+        loss_graph = new HighlightPanel();
+        cb_month1 = new javax.swing.JComboBox<>();
+        cb_year2 = new javax.swing.JComboBox<>(getYear().toArray(new String[0]));
         p_analysis_profit = new javax.swing.JPanel();
         jLabel10 = new javax.swing.JLabel();
         cb_year1 = new javax.swing.JComboBox<>(getYear().toArray(new String[0]));
@@ -487,6 +488,11 @@ public class MainFr extends javax.swing.JFrame {
         b_search_product.setFocusable(false);
         b_search_product.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         b_search_product.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        b_search_product.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                b_search_productActionPerformed(evt);
+            }
+        });
 
         txt_search_product.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -919,7 +925,7 @@ public class MainFr extends javax.swing.JFrame {
         jLabel9.setText("Tổng Quan");
 
         jPanel1.setPreferredSize(new java.awt.Dimension(1500, 201));
-        jPanel1.setLayout(new java.awt.GridLayout());
+        jPanel1.setLayout(new java.awt.GridLayout(1, 0));
 
         jPanel4.addMouseListener(new MouseAdapter() {
             @Override
@@ -1054,7 +1060,7 @@ public class MainFr extends javax.swing.JFrame {
             }
         });
 
-        jPanel16.setLayout(new java.awt.GridLayout());
+        jPanel16.setLayout(new java.awt.GridLayout(1, 0));
 
         jPanel11.addMouseListener(new MouseAdapter() {
             @Override
@@ -1285,7 +1291,7 @@ public class MainFr extends javax.swing.JFrame {
                 .addComponent(jLabel28)
                 .addGap(32, 32, 32)
                 .addComponent(jPanel16, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(33, Short.MAX_VALUE))
+                .addContainerGap(107, Short.MAX_VALUE))
         );
 
         cb_month.getAccessibleContext().setAccessibleName("");
@@ -1300,12 +1306,20 @@ public class MainFr extends javax.swing.JFrame {
         jLabel8.setForeground(new java.awt.Color(102, 51, 0));
         jLabel8.setText("Thống Kê Doanh Thu Theo Từng Sản Phẩm");
 
-        jPanel15.setLayout(new javax.swing.BoxLayout(jPanel15, javax.swing.BoxLayout.LINE_AXIS));
+        profit_graph.setLayout(new javax.swing.BoxLayout(profit_graph, javax.swing.BoxLayout.LINE_AXIS));
 
-        jButton1.setText("jButton1");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        loss_graph.setLayout(new javax.swing.BoxLayout(loss_graph, javax.swing.BoxLayout.LINE_AXIS));
+
+        cb_month1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12" }));
+        cb_month1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                cb_month1ActionPerformed(evt);
+            }
+        });
+
+        cb_year2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cb_year2ActionPerformed(evt);
             }
         });
 
@@ -1314,31 +1328,37 @@ public class MainFr extends javax.swing.JFrame {
         p_analysis_productLayout.setHorizontalGroup(
             p_analysis_productLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(p_analysis_productLayout.createSequentialGroup()
+                .addGap(32, 32, 32)
                 .addGroup(p_analysis_productLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(p_analysis_productLayout.createSequentialGroup()
-                        .addGap(32, 32, 32)
-                        .addComponent(jLabel8))
+                        .addComponent(profit_graph, javax.swing.GroupLayout.DEFAULT_SIZE, 675, Short.MAX_VALUE)
+                        .addGap(80, 80, 80)
+                        .addComponent(loss_graph, javax.swing.GroupLayout.DEFAULT_SIZE, 681, Short.MAX_VALUE)
+                        .addGap(32, 32, 32))
                     .addGroup(p_analysis_productLayout.createSequentialGroup()
-                        .addGap(60, 60, 60)
-                        .addComponent(jPanel15, javax.swing.GroupLayout.PREFERRED_SIZE, 356, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(47, 47, 47)
-                        .addComponent(jButton1)))
-                .addContainerGap(958, Short.MAX_VALUE))
+                        .addGroup(p_analysis_productLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(p_analysis_productLayout.createSequentialGroup()
+                                .addComponent(cb_month1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(50, 50, 50)
+                                .addComponent(cb_year2, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jLabel8))
+                        .addGap(33, 33, 33))))
         );
         p_analysis_productLayout.setVerticalGroup(
             p_analysis_productLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(p_analysis_productLayout.createSequentialGroup()
                 .addGap(25, 25, 25)
-                .addComponent(jLabel8)
-                .addGroup(p_analysis_productLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(p_analysis_productLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(loss_graph, javax.swing.GroupLayout.PREFERRED_SIZE, 337, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(p_analysis_productLayout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton1)
-                        .addGap(185, 185, 185))
-                    .addGroup(p_analysis_productLayout.createSequentialGroup()
-                        .addGap(50, 50, 50)
-                        .addComponent(jPanel15, javax.swing.GroupLayout.PREFERRED_SIZE, 269, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(354, Short.MAX_VALUE))))
+                        .addComponent(jLabel8)
+                        .addGap(21, 21, 21)
+                        .addGroup(p_analysis_productLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(cb_month1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(cb_year2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(27, 27, 27)
+                        .addComponent(profit_graph, javax.swing.GroupLayout.PREFERRED_SIZE, 337, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(0, 266, Short.MAX_VALUE))
         );
 
         p_analysis.add(p_analysis_product);
@@ -1764,19 +1784,6 @@ public class MainFr extends javax.swing.JFrame {
         del_stt=3;
     }//GEN-LAST:event_date_d_fKeyTyped
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        cndb db = cndb.getInstance();
-        db.open();
-        DefaultPieDataset a= db.salesReportsdts("03", "2024",false, true);
-        System.out.println(a.getValue(0));
-        ChartPanel chartP = new ChartPanel(createPieChart(a, "Thử nghiệm"));
-        jPanel15.add(chartP);
-        jPanel15.revalidate();
-        db.close();
-        
-        
-    }//GEN-LAST:event_jButton1ActionPerformed
-
     private void cb_monthActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cb_monthActionPerformed
 
         setOverview();
@@ -1799,6 +1806,57 @@ public class MainFr extends javax.swing.JFrame {
     private void cb_qarterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cb_qarterActionPerformed
         setTotalProfitChart();
     }//GEN-LAST:event_cb_qarterActionPerformed
+
+    private void cb_month1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cb_month1ActionPerformed
+        profit_graph.removeAll();
+        loss_graph.removeAll();
+        cndb db = cndb.getInstance();
+        db.open();
+
+        String selectedMonth = (String) cb_month1.getSelectedItem();
+        String selectedYear = (String) cb_year2.getSelectedItem();
+
+        DefaultPieDataset year_profit = db.salesReportsdts(selectedMonth,selectedYear, false, true);
+        System.out.println(year_profit.getValue(0));
+        ChartPanel chart_profit = new ChartPanel(createPieChart(year_profit, "Lãi"));
+        profit_graph.add(chart_profit);
+        profit_graph.revalidate();
+        DefaultPieDataset year_loss = db.salesReportsdts(selectedMonth,selectedYear, false, false);
+        System.out.println(year_loss.getValue(0));
+        ChartPanel chart_loss = new ChartPanel(createPieChart(year_loss, "Lỗ"));
+        loss_graph.add(chart_loss);
+        loss_graph.revalidate();
+
+        db.close();
+    }//GEN-LAST:event_cb_month1ActionPerformed
+
+    private void cb_year2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cb_year2ActionPerformed
+        
+        profit_graph.removeAll();
+        loss_graph.removeAll();
+        cndb db = cndb.getInstance();
+        db.open();
+
+        String selectedMonth = (String) cb_month1.getSelectedItem();
+        String selectedYear = (String) cb_year2.getSelectedItem();
+
+        DefaultPieDataset year_profit = db.salesReportsdts(selectedMonth,selectedYear, true, true);
+        System.out.println(year_profit.getValue(0) + "abcsd");
+        ChartPanel chart_profit = new ChartPanel(createPieChart(year_profit, "Lãi"));
+        profit_graph.add(chart_profit);
+        profit_graph.revalidate();
+        DefaultPieDataset year_loss = db.salesReportsdts(selectedMonth, selectedYear, true, false);
+        System.out.println(year_loss.getValue(1)+ "xyz");
+        ChartPanel chart_loss = new ChartPanel(createPieChart(year_loss, "Lỗ"));
+        loss_graph.add(chart_loss);
+        loss_graph.revalidate();
+
+        db.close();
+    }//GEN-LAST:event_cb_year2ActionPerformed
+
+    private void b_search_productActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_search_productActionPerformed
+        
+    }//GEN-LAST:event_b_search_productActionPerformed
 
 
     /**
@@ -1834,10 +1892,12 @@ public class MainFr extends javax.swing.JFrame {
     private javax.swing.JButton b_search_product;
     private javax.swing.JButton cancel;
     private javax.swing.JComboBox<String> cb_month;
+    private javax.swing.JComboBox<String> cb_month1;
     private javax.swing.JComboBox<String> cb_qarter;
     private javax.swing.JComboBox<String> cb_search_option;
     private javax.swing.JComboBox<String> cb_year;
     private javax.swing.JComboBox<String> cb_year1;
+    private javax.swing.JComboBox<String> cb_year2;
     private javax.swing.JComboBox<String> cb_yearMode;
     private javax.swing.JButton completed;
     private javax.swing.JTextField date_d_f;
@@ -1845,7 +1905,6 @@ public class MainFr extends javax.swing.JFrame {
     private javax.swing.JPanel donhang;
     private javax.swing.JLabel errMess;
     private javax.swing.JTextField id_o_f;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -1876,7 +1935,6 @@ public class MainFr extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel12;
     private javax.swing.JPanel jPanel13;
     private javax.swing.JPanel jPanel14;
-    private javax.swing.JPanel jPanel15;
     private javax.swing.JPanel jPanel16;
     private javax.swing.JPanel jPanel18;
     private javax.swing.JPanel jPanel2;
@@ -1902,6 +1960,7 @@ public class MainFr extends javax.swing.JFrame {
     private javax.swing.JLabel l_toReceive;
     private javax.swing.JLabel l_toShip;
     private javax.swing.JLabel l_totalCapital;
+    private javax.swing.JPanel loss_graph;
     private javax.swing.JTextField name_c_f;
     private javax.swing.JTable orderdetail;
     private javax.swing.JPanel p_analysis;
@@ -1911,6 +1970,7 @@ public class MainFr extends javax.swing.JFrame {
     private javax.swing.JPanel p_overview;
     private javax.swing.JPanel panel_sp;
     private javax.swing.JComboBox<String> pay_type;
+    private javax.swing.JPanel profit_graph;
     private javax.swing.JPanel sanpham;
     private javax.swing.JTable table_order;
     private javax.swing.JPanel thongke;
