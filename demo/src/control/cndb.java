@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package demo;
+package control;
 
 import java.awt.Component;
 import java.awt.Image;
@@ -28,11 +28,12 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import models.OrderInfo.Order;
+import models.OrderInfo.Order_detail;
+import models.ProductInfo.Product;
+import models.ProductInfo.ProductEx;
 import org.jfree.data.general.DefaultPieDataset;
-import models.Order;
-import models.OrderInfo;
-import models.Product;
-import models.ProductEx;
+
 import org.jfree.data.category.DefaultCategoryDataset;
 
 /**
@@ -40,10 +41,7 @@ import org.jfree.data.category.DefaultCategoryDataset;
  * @author DELL
  */
 public class cndb {
-
-//        String url = "jdbc:mariadb://localhost:3306/QLBH";
-//        String user = "root";
-//        String password = "Hyun@IOIGOT7";    
+  
     String driver = "org.sqlite.JDBC";
     String url = "jdbc:sqlite:QLBH_DOL.db";
     Connection conn = null;
@@ -57,15 +55,6 @@ public class cndb {
             Logger.getLogger(cndb.class.getName()).log(Level.SEVERE, null, ex);
         }   
 
-
-//        try {
-//            // Kết nối đến cơ sở dữ liệu
-//            Connection conn = DriverManager.getConnection(url, user, password);
-//            System.out.println("Kết nối đến MariaDB thành công!");
-//
-//        } catch (SQLException e) {
-//            System.err.println("Lỗi khi kết nối đến MariaDB: " + e.getMessage());
-//        }
     }
     
 //singleton pattern nhằm chỉ tạo ra 1 đối tượng cndb duy nhất trong quá trình chạy
@@ -109,7 +98,7 @@ public class cndb {
         List<Order> allOrders = new ArrayList<>();
         
          try{
-            String sql = "SELECT o.ID_O, o.NAME_C, o.DATE_O, o.DATE_D, o.ADDR, o.PAY_TYPE, o.DEL_STT, od.ID_P, od.ID_P, od.QUAL, p.PRICE_S, od.DISCOUNT "
+            String sql = "SELECT o.ID_O, o.NAME_C, o.DATE_O, o.DATE_D, o.ADDR, o.PAY_TYPE, o.DEL_STT, od.ID_P, od.ID_P, od.QUAL, od.DISCOUNT "
                     + "FROM ORDERS o "
                     + "JOIN ORDERS_DETAIL od ON o.ID_O = od.ID_O "
                     + "JOIN PRODUCTS p ON od.ID_P = p.ID_P";//truy vấn sql 
@@ -131,9 +120,9 @@ public class cndb {
                 String productId = rlt.getString("ID_P");
                 int quantity = rlt.getInt("QUAL");
                 int discount= rlt.getInt("DISCOUNT"); 
-                order.setTotal_amount(order.getTotal_amount() + quantity * rlt.getInt("PRICE_S"));
-                List<OrderInfo> orderDetail = order.getOrder_detail();
-                orderDetail.add(new OrderInfo(productId,quantity, discount));
+                order.setTotal_amount(order.getTotal_amount() + quantity * rlt.getInt("DISCOUNT"));
+                List<Order_detail> orderDetail = order.getOrder_detail();
+                orderDetail.add(new Order_detail(productId,quantity, discount));
             }
             allOrders.addAll(orderMap.values());
         } catch (SQLException e) {
@@ -170,7 +159,7 @@ public class cndb {
     }
 
 
-        public int orderInsert(String id_o, String name_c, String date_o, String date_d, String addr, String pay_type, int del_stt, List<OrderInfo> order_detail){
+    public int orderInsert(String id_o, String name_c, String date_o, String date_d, String addr, String pay_type, int del_stt, List<Order_detail> order_detail){
             
         int status = 0;
         try {
@@ -197,9 +186,9 @@ public class cndb {
         }
 
         return status;
-        }
+    }
      //Phương thức chỉnh sửa đơn hàng
-        public int orderEdit(String id_o, String name_c, String date_o, String date_d, String addr, String pay_type, int del_stt, List<OrderInfo> order_detail){
+    public int orderEdit(String id_o, String name_c, String date_o, String date_d, String addr, String pay_type, int del_stt, List<Order_detail> order_detail){
             
         int status = 0;
         try {
@@ -232,150 +221,152 @@ public class cndb {
         return status;
         }
         
-        public int insertOD(String id_o, List< OrderInfo> order_detail) {
-            int status = 0;       
-            try {
-            String orderDetailSql = "INSERT INTO orders_detail (ID_O, ID_O_D, ID_P, QUAL, DISCOUNT) VALUES (?, ?, ?, ?, ?)";
-            PreparedStatement orderDetailStmt = conn.prepareStatement(orderDetailSql);
-            for (OrderInfo od : order_detail) {
-                orderDetailStmt.setString(1, id_o); // ID của đơn hàng
-                orderDetailStmt.setString(2, generateOrderDetailId(id_o)); // ID chi tiết đơn hàng
-                orderDetailStmt.setString(3, od.getId_p()); // ID của sản phẩm
-                orderDetailStmt.setInt(4, od.getQuantity()); // Số lượng của sản phẩm
-                orderDetailStmt.setInt(5, od.getDiscount()); // Giảm giá của sản
+    public int insertOD(String id_o, List< Order_detail> order_detail) {
+        int status = 0;       
+        try {
+        String orderDetailSql = "INSERT INTO orders_detail (ID_O, ID_O_D, ID_P, QUAL, DISCOUNT) VALUES (?, ?, ?, ?, ?)";
+        PreparedStatement orderDetailStmt = conn.prepareStatement(orderDetailSql);
+        for (Order_detail od : order_detail) {
+            orderDetailStmt.setString(1, id_o); // ID của đơn hàng
+            orderDetailStmt.setString(2, generateOrderDetailId(id_o)); // ID chi tiết đơn hàng
+            orderDetailStmt.setString(3, od.getId_p()); // ID của sản phẩm
+            orderDetailStmt.setInt(4, od.getQuantity()); // Số lượng của sản phẩm
+            orderDetailStmt.setInt(5, od.getDiscount()); // Giảm giá của sản
 
-                orderDetailStmt.addBatch();
-            }
-            orderDetailStmt.executeBatch();
+            orderDetailStmt.addBatch();
+        }
+        orderDetailStmt.executeBatch();
 
         } catch (SQLException ex) {
             Logger.getLogger(cndb.class.getName()).log(Level.SEVERE, null, ex);
             status = -1;
         }            
         return status;
-        }
+    }
 
-        public int xoa_don_hang(String orderID) {
-            int status = 0;
-            
+    public int xoa_don_hang(String orderID) {
+        int status = 0;
 
-            try {
-                String query = "DELETE FROM orders WHERE id_o = ?";
-                PreparedStatement statement = conn.prepareStatement(query);
-                System.out.println(orderID);
-                statement.setString(1, orderID);
-                
-                System.out.println("1");
-                int rowsAffected = statement.executeUpdate();
-                if (rowsAffected > 0) {
-                    System.out.println("Xoá đơn hàng thành công!");
-                } else {
-                    System.out.println("Không tìm thấy đơn hàng để xoá!");
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-                status =-1;
+
+        try {
+            String query = "DELETE FROM orders WHERE id_o = ?";
+            PreparedStatement statement = conn.prepareStatement(query);
+            System.out.println(orderID);
+            statement.setString(1, orderID);
+
+            System.out.println("1");
+            int rowsAffected = statement.executeUpdate();
+            if (rowsAffected > 0) {
+                System.out.println("Xoá đơn hàng thành công!");
+            } else {
+                System.out.println("Không tìm thấy đơn hàng để xoá!");
             }
-            return status;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            status =-1;
+        }
+        return status;
     }
         
-        public int getEarliestYear(){
-            int eYear = 0;
-            try {
-                String sql = "SELECT MIN(strftime('%Y', DATE_O)) AS EARLIEST_YEAR FROM ORDERS";
+    public int getEarliestYear(){
+        int eYear = 0;
+        try {
+            String sql = "SELECT MIN(strftime('%Y', DATE_O)) AS EARLIEST_YEAR FROM ORDERS";
 
-                pre = conn.prepareStatement(sql);
-                ResultSet rlt = pre.executeQuery();
-                eYear = rlt.getInt("EARLIEST_YEAR");
-            } catch (SQLException ex) {
-                Logger.getLogger(cndb.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            return eYear;
+            pre = conn.prepareStatement(sql);
+            ResultSet rlt = pre.executeQuery();
+            eYear = rlt.getInt("EARLIEST_YEAR");
+        } catch (SQLException ex) {
+            Logger.getLogger(cndb.class.getName()).log(Level.SEVERE, null, ex);
         }
+        return eYear;
+    }
         
-        public List<ProductEx> salesReports(String month, String year){
-                        List<ProductEx> proExs = new ArrayList<>();
-            try {
-                String sql = "SELECT od.ID_P, " +
-                "       p.NAME_P, " +
-                "       SUM(od.QUAL) AS total_QUAL, " +
-                "       p.PRICE_S, " +
-                "       p.PRICE_I, " +
-                "       od.DISCOUNT " +
-                "FROM ORDERS o " +
-                "JOIN ORDERS_DETAIL od ON o.ID_O = od.ID_O " +
-                "JOIN PRODUCTS p ON od.ID_P = p.ID_P " +
-                "WHERE strftime('%m', o.DATE_O) = ? AND strftime('%Y', o.DATE_O) = ? " +
-                "GROUP BY od.ID_P, od.DISCOUNT;";
-                pre = conn.prepareStatement(sql); //pre một lệnh truy vấn sql select chuẩn bị thực thi trên database
-                pre.setString(1, month);
-                pre.setString(2, year);
-                ResultSet rlt = pre.executeQuery();//thực hiện việc truy vấn và trả kết quả vào 1 đối tượng ResultSet tên rlt
-                while (rlt.next()) {
-                    String proId = rlt.getString("ID_P");
-                    String proName = rlt.getString("NAME_P");
+    public List<ProductEx> salesReports(String month, String year){
+                    List<ProductEx> proExs = new ArrayList<>();
+        try {
+            String sql = "SELECT od.ID_P, " +
+            "       p.NAME_P, " +
+            "       SUM(od.QUAL) AS total_QUAL, " +
+            "       p.PRICE_S, " +
+            "       p.PRICE_I, " +
+            "       od.DISCOUNT " +
+            "FROM ORDERS o " +
+            "JOIN ORDERS_DETAIL od ON o.ID_O = od.ID_O " +
+            "JOIN PRODUCTS p ON od.ID_P = p.ID_P " +
+            "WHERE strftime('%m', o.DATE_O) = ? AND strftime('%Y', o.DATE_O) = ? " +
+            "GROUP BY od.ID_P, od.DISCOUNT;";
+            pre = conn.prepareStatement(sql); //pre một lệnh truy vấn sql select chuẩn bị thực thi trên database
+            pre.setString(1, month);
+            pre.setString(2, year);
+            ResultSet rlt = pre.executeQuery();//thực hiện việc truy vấn và trả kết quả vào 1 đối tượng ResultSet tên rlt
+            while (rlt.next()) {
+                String proId = rlt.getString("ID_P");
+                String proName = rlt.getString("NAME_P");
 //                    String pro = proId + proName;
-                    int price_s = rlt.getInt("PRICE_S");
-                    int price_i = rlt.getInt("PRICE_I");
-                    int qual = rlt.getInt("total_QUAL");
-                    int discount = rlt.getInt("DISCOUNT");
-                    ProductEx proEx = new ProductEx(proId, proName , qual, price_i, price_s, discount);
-                    proExs.add(proEx);
-                }            
-            } catch (SQLException ex) {
-                Logger.getLogger(cndb.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            return proExs;
+                int price_s = rlt.getInt("PRICE_S");
+                int price_i = rlt.getInt("PRICE_I");
+                int qual = rlt.getInt("total_QUAL");
+                int discount = rlt.getInt("DISCOUNT");
+                ProductEx proEx = new ProductEx(proId, proName , qual, price_i, price_s, discount);
+                proExs.add(proEx);
+            }            
+        } catch (SQLException ex) {
+            Logger.getLogger(cndb.class.getName()).log(Level.SEVERE, null, ex);
         }
+        return proExs;
+    }
         
-        public double getTotalProfit(String month, String year){
-            double totalProfit = 0;
-            List<ProductEx> proExs = salesReports(month, year);
-            for(ProductEx proEx: proExs){
-                totalProfit += proEx.getProfit();
-            }
-            return totalProfit;
+        
+    public double getProfit(String month, String year){
+//        System.out.println(month +"?"+year);
+        double totalProfit = 0;
+        List<ProductEx> proExs = salesReports(month, year);
+//        System.out.println(proExs.size() + " size");
+        for(ProductEx proEx: proExs){
+//            System.out.println("Sản phẩm : "+ proEx.getProfit());
+            totalProfit += proEx.getProfit();
         }
-        
-        public double getRavenue(String month, String year){
-            double totalProfit = 0;
-            List<ProductEx> proExs = salesReports(month, year);
-            for(ProductEx proEx: proExs){
-                totalProfit += proEx.getProfit();
-            }
-            return totalProfit;
-        }        
-        
+        return totalProfit;
+    }        
+
     public DefaultCategoryDataset salesTotalProfitdts(String year, boolean yearMode, String qarter){
         DefaultCategoryDataset profitDataset = new DefaultCategoryDataset();
         if(yearMode){
             for(int i = 1; i<=12; i++){ 
-                double totalProfit = getTotalProfit(String.valueOf(i), year);
+                String month = String.format("%02d",i);
+//                System.out.println("Tháng: "+ month);
+                double totalProfit = getProfit(month, year);
+                
                 profitDataset.setValue(totalProfit, "Lợi Nhuận", "Tháng " +i);
             }
         }else{
             switch(qarter){
                 case "Quý 1":
                     for(int i = 1; i<=3; i++){ 
-                        double totalProfit = getTotalProfit(String.valueOf(i), year);
+                        String month = String.format("%02d",i);
+                        double totalProfit = getProfit(month, year);
                         profitDataset.setValue(totalProfit, "Lợi Nhuận", "Tháng " +i);
                     } 
                     break;
                 case "Quý 2":
                     for(int i = 4; i<=6; i++){ 
-                        double totalProfit = getTotalProfit(String.valueOf(i), year);
+                        String month = String.format("%02d",i);
+                        double totalProfit = getProfit(month, year);
                         profitDataset.setValue(totalProfit, "Lợi Nhuận", "Tháng " +i);
                     } 
                     break;
                 case "Quý 3":
                     for(int i = 7; i<=9; i++){ 
-                        double totalProfit = getTotalProfit(String.valueOf(i), year);
+                        String month = String.format("%02d",i);
+                        double totalProfit = getProfit(month, year);
                         profitDataset.setValue(totalProfit, "Lợi Nhuận", "Tháng " +i);
                     }
                     break;
                 case "Quý 4":
                     for(int i = 10; i<=12; i++){ 
-                        double totalProfit = getTotalProfit(String.valueOf(i), year);
+                        String month = String.format("%02d",i);
+                        double totalProfit = getProfit(month, year);
                         profitDataset.setValue(totalProfit, "Lợi Nhuận", "Tháng " +i);
                     } 
                     break;
@@ -467,7 +458,7 @@ public class cndb {
 
     }
     
-public List<Order> OrdersFilterByDS(String month, String year, int del_stt){
+    public List<Order> OrdersFilterByDS(String month, String year, int del_stt){
         List<Order> allOrders = new ArrayList<>();
         
          try{
@@ -497,9 +488,9 @@ public List<Order> OrdersFilterByDS(String month, String year, int del_stt){
                 String productId = rlt.getString("ID_P");
                 int quantity = rlt.getInt("QUAL");
                 int discount= rlt.getInt("DISCOUNT"); 
-                order.setTotal_amount(order.getTotal_amount() + quantity * rlt.getInt("PRICE_S"));
-                List<OrderInfo> orderDetail = order.getOrder_detail();
-                orderDetail.add(new OrderInfo(productId,quantity, discount));
+                order.setTotal_amount(order.getTotal_amount() + quantity * rlt.getInt("DISCOUNT"));
+                List<Order_detail> orderDetail = order.getOrder_detail();
+                orderDetail.add(new Order_detail(productId,quantity, discount));
             }
             allOrders.addAll(orderMap.values());
         } catch (SQLException e) {
@@ -542,7 +533,7 @@ public List<Order> OrdersFilterByDS(String month, String year, int del_stt){
                 String productId = rlt.getString("ID_P");
                 int quantity = rlt.getInt("QUAL");
                 int discount = rlt.getInt("DISCOUNT");
-                order.getOrder_detail().add(new OrderInfo(productId, quantity, discount));
+                order.getOrder_detail().add(new Order_detail(productId, quantity, discount));
                 order.setTotal_amount(order.getTotal_amount() + quantity * rlt.getInt("PRICE_S")*discount);
             }
             allOrders.addAll(orderMap.values());
@@ -606,29 +597,29 @@ public List<Order> OrdersFilterByDS(String month, String year, int del_stt){
 
  
     //phương thức thêm sản phẩm vào database
-        public int productInsert(String id_p, String name_p, int stock , String desc, byte[] image,int price_i, int price_s, String depot, String date){
-            int status = 0;
-            try {
-                String sql = "Insert Into products(ID_P, NAME_P, STOCK, DESC, IMAGE, PRICE_I, PRICE_S, depot, date_p) values(?, ?, ?, ?, ?, ?, ?, ?, ?)";
-                pre = conn.prepareStatement(sql);
-                pre.setString(1, id_p);
-                pre.setString(2, name_p);
-                pre.setInt(3, stock);
-                pre.setString(4, desc);
-                pre.setBytes(5, image);
-                pre.setInt(6, price_i);
-                pre.setInt(7, price_s);
-                pre.setString(8, depot);
+    public int productInsert(String id_p, String name_p, int stock , String desc, byte[] image,int price_i, int price_s, String depot, String date){
+        int status = 0;
+        try {
+            String sql = "Insert Into products(ID_P, NAME_P, STOCK, DESC, IMAGE, PRICE_I, PRICE_S, depot, date_p) values(?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            pre = conn.prepareStatement(sql);
+            pre.setString(1, id_p);
+            pre.setString(2, name_p);
+            pre.setInt(3, stock);
+            pre.setString(4, desc);
+            pre.setBytes(5, image);
+            pre.setInt(6, price_i);
+            pre.setInt(7, price_s);
+            pre.setString(8, depot);
 
-                pre.setString(9, date);
-                status = pre.executeUpdate();
-            } catch (Exception e) {
-                System.err.println("customerInsert Error : " + e);
-                JOptionPane.showMessageDialog(null, "Lỗi: " + e.getMessage(), "Thông báo lỗi", JOptionPane.ERROR_MESSAGE);
-                status = -1;
-            }
-            return status;
+            pre.setString(9, date);
+            status = pre.executeUpdate();
+        } catch (Exception e) {
+            System.err.println("customerInsert Error : " + e);
+            JOptionPane.showMessageDialog(null, "Lỗi: " + e.getMessage(), "Thông báo lỗi", JOptionPane.ERROR_MESSAGE);
+            status = -1;
         }
+        return status;
+    }
  
     //truy vấn tất cả các sản phẩm từ cơ sở dữ liệu và trả về một danh sách các đối tượng Product 
     public List<Product> allProducts() {
@@ -882,36 +873,6 @@ public List<Order> OrdersFilterByDS(String month, String year, int del_stt){
         return status;
     }
     
-//public List<Product> allProducts() {
-//        List<Product> proList = new ArrayList<>();
-//
-//        try {
-//            String sql = "SELECT * FROM PRODUCTS";
-//            try (PreparedStatement pre = conn.prepareStatement(sql);
-//                 ResultSet rlt = pre.executeQuery()) {
-//                while (rlt.next()) {
-//                    String id = rlt.getString("ID_P");
-//                    String name = rlt.getString("NAME_P");
-//                    int instock = rlt.getInt("STOCK");
-//                    String desc = rlt.getString("DESC");
-//                    byte[] image = rlt.getBytes("image"); // Đảm bảo cột image đúng kiểu dữ liệu
-//                    int price_i = rlt.getInt("PRICE_I");
-//                    int price_s = rlt.getInt("PRICE_S");
-//                    String date = rlt.getString("date_p");
-//                    String depot = rlt.getString("depot");
-//                    Product pro = new Product(id, name, instock, desc, image, price_i, price_s, date, depot);
-//                    proList.add(pro);
-//                }
-//            }
-//        } catch (SQLException e) {
-//            System.err.println("SQL Error: " + e.getMessage());
-//            // Xử lý ngoại lệ hoặc thông báo cho người dùng về lỗi
-//        } catch (Exception e) {
-//            System.err.println("Error: " + e.getMessage());
-//        }
-//
-//        return proList;
-//    }
     
 }
 

@@ -3,11 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package demo;
+package control;
 
-import java.awt.AlphaComposite;
-import java.awt.Color;
-import java.awt.Graphics;
+import view.productF;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Toolkit;
@@ -15,8 +13,6 @@ import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -33,9 +29,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.event.TableModelEvent;
@@ -43,90 +37,15 @@ import javax.swing.table.DefaultTableModel;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.data.general.DefaultPieDataset;
-import models.Order;
-import models.Product;
-import models.ProductEx;
-import models.proPanel;
+import models.OrderInfo.Order;
+import models.Panel.proPanel;
+import models.ProductInfo.Product;
+import models.ProductInfo.ProductEx;
+
 import org.jfree.data.category.DefaultCategoryDataset;
 
 public class Handler {
-    public static class HighlightPanel extends JPanel {
-    private boolean isHighlighted = false;
-
-    public HighlightPanel() {
-        setBackground(new Color(140, 204, 185));
-        addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                setHighlighted(true);
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-                setHighlighted(false);
-            }
-        });
-    }
-
-    @Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        if (isHighlighted) {
-            g.setColor(new Color(255, 255, 255, 100)); // Màu trắng với độ trong suốt 100
-            g.fillRect(0, 0, getWidth(), getHeight()); // Vẽ một hình chữ nhật đậm nguyên màu trên toàn bộ panel
-        }
-    }
-
-    public void setHighlighted(boolean highlighted) {
-        isHighlighted = highlighted;
-        repaint(); // Vẽ lại panel để hiển thị trạng thái mới
-    }
-    }
-    public static class CustomBgPanel extends HighlightPanel {
-        public CustomBgPanel() {
-            super(); // Gọi constructor của lớp cha
-            // Thiết lập màu nền tùy chỉnh
-            setBackground(new Color(255, 230, 191)); // Ví dụ: Màu xanh lá cây
-        }
-    }    
     
-    public static class HighlightLabel extends JLabel {
-        private Color highlightColor = new Color(255, 255, 255, 100); // Màu nền mờ khi highlight
-        private boolean highlighted = false;
-
-        public HighlightLabel() {
-            super();
-            setOpaque(false); // Bỏ chế độ đục của JLabel để vẽ nền
-            addMouseListener(new MouseAdapter() {
-                @Override
-                public void mouseEntered(MouseEvent e) {
-                    setHighlighted(true);
-                }
-
-                @Override
-                public void mouseExited(MouseEvent e) {
-                    setHighlighted(false);
-                }
-            });
-        }
-
-        public void setHighlighted(boolean highlighted) {
-            this.highlighted = highlighted;
-            repaint(); // Vẽ lại label để hiển thị trạng thái mới
-        }
-
-        @Override
-        protected void paintComponent(Graphics g) {
-            super.paintComponent(g);
-            if (highlighted) {
-                Graphics2D g2d = (Graphics2D) g.create();
-                g2d.setColor(highlightColor);
-                g2d.setComposite(AlphaComposite.SrcOver.derive(0.5f)); // Điều chỉnh độ trong suốt
-                g2d.fillRect(0, 0, getWidth(), getHeight()); // Vẽ hình chữ nhật mờ
-                g2d.dispose();
-            }
-        }
-    }
 //phương thức hiển thị tất cả sản phẩm hiện có trong list vào bảng đơn hàng trong ứng dụng
     public static DefaultTableModel allOrdersT(List<Order> allOrders){
         DefaultTableModel dTM = new DefaultTableModel();
@@ -268,33 +187,88 @@ public class Handler {
     static boolean check = false;   
     
     public static String dateError(KeyEvent evt, JTextField date) {
+        String str = date.getText();
         char ch = evt.getKeyChar();
-        String errorMessage = intError(evt);
-        if (!errorMessage.equals("")) {
-            errorMessage += ". Nhập đúng định dạng dd/mm/yyyy";
-        }
-        
-        if ((date.getText().length() == 1 || date.getText().length() == 4) && ch != '\b') {
-            date.setText(date.getText() + ch + "/");
+        String errorMessage = "";
+        if(!Character.isDigit(ch)){
+            errorMessage = "Hãy nhập vào số. Nhập đúng định dạng dd/mm/yyyy";
+            if(Character.toString(ch).equals("\b")  ) {
+                errorMessage = "";
+            }   
             evt.consume();
+        }else{
+            if(str.length() == 1 && Character.isDigit(str.charAt(0)) ){
+                int num = Integer.parseInt(str + ch);
+                if (num < 1 || num > 31) {
+                    errorMessage = "Hãy sai định dạng ngày. Nhập đúng định dạng dd/mm/yyyy";
+                    evt.consume();
+                } else{
+                    date.setText(str + ch + "/");
+                    evt.consume();                    
+                }
+            } else if(str.length() == 4 && str.substring(0, 2).matches("\\d{2}") && str.charAt(2) == '/' && Character.isDigit(str.charAt(3))){
+                int[] month = {1, 3, 5, 7, 8, 10, 12};
+                int num = Integer.parseInt(str.substring(3, 4) + ch);
+                if(str.substring(0, 2).equals("31")){
+                    boolean isValid = false;
+                    for (int allowedMonth : month) {
+                        if (num == allowedMonth) {
+                            isValid = true;
+                            date.setText(str + ch + "/");
+                            evt.consume();                        
+                            break;
+                        }
+                    }
+                    if (!isValid) {
+                        errorMessage = "Không hợp lệ. Nhập đúng định dạng dd/mm/yyyy";                    
+                        evt.consume();
+                    }
+                }else if(str.substring(0, 2).equals("30")){
+                    if(num == 2){
+                        errorMessage = "Không hợp lệ. Nhập đúng định dạng dd/mm/yyyy";                    
+                        evt.consume();                        
+                    } else{
+                        date.setText(str + ch + "/");
+                        evt.consume();                          
+                    }
+                } else{
+                    if(num==0 || num >12){
+                        errorMessage = "Không hợp lệ. Nhập đúng định dạng dd/mm/yyyy";
+                        evt.consume();
+                    }else{
+                        date.setText(str + ch + "/");
+                        evt.consume();  
+                    }
+                }
+            }
+
+            if ((date.getText().length() == 2 || date.getText().length() == 5) && ch == '\b') {
+                check = true;
+            } else if (check && ch != '\b' && (date.getText().length() == 2 || date.getText().length() == 5)) {
+                date.setText(date.getText() + "/" + ch);
+                evt.consume();
+                check = false;
+            }
+
+            if (date.getText().length() == 9) {
+                if(str.substring(0,2).equals("29") && str.substring(3, 5).equals("02")){
+                    if(Integer.parseInt(str.substring(6)+ch)%4 ==0 && Integer.parseInt(str.substring(6)+ch)%100 !=0){
+                    } else{
+                        errorMessage = "Không hợp lệ. Nhập đúng định dạng dd/mm/yyyy";
+                        date.setText(str.substring(0, 6));
+                        evt.consume();
+                    }
+                }
+            }
+
+            if (date.getText().length() == 10) {
+                errorMessage = "Nhập quá nhiều ký tự. Nhập đúng định dạng dd/mm/yyyy";
+                evt.consume();
+            }
         }
-        
-        if ((date.getText().length() == 2 || date.getText().length() == 5) && ch == '\b') {
-            check = true;
-        } else if (check && ch != '\b' && (date.getText().length() == 2 || date.getText().length() == 5)) {
-            date.setText(date.getText() + "/" + ch);
-            evt.consume();
-            check = false;
-        }
-        
-        if (date.getText().length() == 10) {
-            errorMessage = "Nhập quá nhiều ký tự. Nhập đúng định dạng dd/mm/yyyy";
-            evt.consume();
-        }
-        
-        
         return errorMessage;
     }
+    
     //PT lấy ngày hiện tại 
     public static String getCurrentDate() {
         // Định dạng ngày tháng
@@ -373,14 +347,18 @@ public class Handler {
 
         String dateString = label.getText();
 
-        try {
-            // Chuyển đổi từ định dạng đầu vào sang định dạng chuẩn ISO 8601
-            java.util.Date utilDate = inputDateFormat.parse(dateString);
-            return outputDateFormat.format(utilDate);
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null, "Lỗi: " + ex.getMessage(), "Sai định dạng ngày", JOptionPane.ERROR_MESSAGE);
-            Logger.getLogger(productF.class.getName()).log(Level.SEVERE, null, ex);
-            return null; // Trả về null nếu có lỗi xảy ra
+        if(dateString.isEmpty()){
+            return null;
+        } else{
+            try {
+                // Chuyển đổi từ định dạng đầu vào sang định dạng chuẩn ISO 8601
+                java.util.Date utilDate = inputDateFormat.parse(dateString);
+                return outputDateFormat.format(utilDate);
+            } catch (ParseException ex) {
+                JOptionPane.showMessageDialog(null, "Lỗi: " + ex.getMessage(), "Sai định dạng ngày", JOptionPane.ERROR_MESSAGE);
+                Logger.getLogger(productF.class.getName()).log(Level.SEVERE, null, ex);
+                return null; // Trả về null nếu có lỗi xảy ra
+            }
         }
     }
     
@@ -431,7 +409,18 @@ public class Handler {
         return chart;
     }
     
-    
+    public static ArrayList<String> getYear(){
+        ArrayList<String> years = new ArrayList<>();
+        cndb db = cndb.getInstance();
+        db.open();
+        int eYear = db.getEarliestYear();
+        LocalDate currentDate = LocalDate.now();
+        int lYear = currentDate.getYear();
+        for(int i=lYear; i>=eYear; i--){
+            years.add(String.valueOf(i));
+        }
+        return years;
+    }
 
     
      //Phương thức khi nhấn enter thì chuyẻn từ jtextField này sang jtextField khác

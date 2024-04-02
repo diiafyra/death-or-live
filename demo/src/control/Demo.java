@@ -1,5 +1,6 @@
-package demo;
+package control;
 
+import view.passwordFr;
 import java.awt.Color;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -10,8 +11,7 @@ public class Demo {
     private static void setColor() {
         UIManager.put("TabbedPane.background", new Color(250, 215, 160));  // Màu nền của TabbedPane
         UIManager.put("TabbedPane.focusColor", new Color(222, 153, 155));
-        UIManager.put("Button.background", new Color(222, 153, 155));         // Màu nền của Button
-        UIManager.put("Button.foreground", Color.WHITE);                     // Màu chữ của Button
+        UIManager.put("Button.background", new Color(222, 153, 155));         // Màu nền của Button  
         UIManager.put("TextField.background", new Color(255, 182, 158));     // Màu nền của TextField
         UIManager.put("ComboBox.background", new Color(140, 204, 185));      // Màu nền của ComboBox
         UIManager.put("Panel.background", new Color(255, 230, 191));         // Màu nền của Panel
@@ -40,9 +40,6 @@ public class Demo {
 
 
     public static void main(String[] args) {
-        // Đặt màu cho các thành phần giao diện
-
-
 //         Sử dụng giao diện FlatLaf
         try {
             UIManager.setLookAndFeel(new com.formdev.flatlaf.FlatDarkLaf());

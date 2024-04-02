@@ -1,22 +1,16 @@
-package demo;
+package view;
 
-import static demo.Handler.getByteArray;
-import static demo.Handler.getDate;
-import static demo.Handler.*;
-import static demo.Handler.pasteImageFromClipboard;
-import java.sql.Date;
+import control.Handler;
+import control.cndb;
+
+import javax.swing.*;
 import java.awt.event.KeyEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
-import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.ImageIcon;
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
+
+import static control.Handler.*;
 
 public class productF extends javax.swing.JFrame {
     public productF() {

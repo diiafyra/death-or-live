@@ -1,9 +1,10 @@
 
-package demo;
+package view;
 
 //import static demo.MainFr.pass_change;
+
+import javax.swing.*;
 import java.awt.event.KeyEvent;
-import javax.swing.JOptionPane;
 
 
 public class passwordFr extends javax.swing.JFrame {

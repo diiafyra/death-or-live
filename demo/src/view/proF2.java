@@ -1,28 +1,16 @@
-package demo;
+package view;
 
-import static demo.Handler.convertToBufferedImage;
-import static demo.Handler.dateError;
-import static demo.Handler.getByteArray;
-import static demo.Handler.intError;
-import static demo.Handler.pasteImageFromClipboard;
-import java.awt.Image;
+import control.Handler;
+import control.cndb;
+
+import javax.swing.*;
 import java.awt.event.KeyEvent;
-import java.awt.image.BufferedImage;
-import java.awt.image.ImageProducer;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.sql.Date;
-import javax.swing.ImageIcon;
-import javax.swing.JTextField;
-import models.proPanel;
-import java.sql.Date;
-import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.Icon;
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
+
+import static control.Handler.*;
 
 public class proF2 extends javax.swing.JFrame {
 
