@@ -49,6 +49,7 @@ public class MainFr extends javax.swing.JFrame {
         setExtendedState(MainFr.MAXIMIZED_BOTH);
         tro_lai.setVisible(false);
         b_filter_order.setVisible(false);
+        b_save_edit.setVisible(false);
 
     }
     //triển khai một pattern Singleton để đảm bảo rằng một lớp chỉ có một thể hiện duy nhất
@@ -117,7 +118,7 @@ public class MainFr extends javax.swing.JFrame {
         addr_f.setEditable(true);
         pay_type.setEnabled(true);
         orderdetail.setEnabled(true);
-        b_save_order.setEnabled(true);
+        b_save_add.setEnabled(true);
         addOD.setEnabled(true);
         date_d_f.setEditable(true);
         
@@ -130,7 +131,7 @@ public class MainFr extends javax.swing.JFrame {
         addr_f.setEditable(false);
         pay_type.setEnabled(false);
         orderdetail.setEnabled(false);
-        b_save_order.setEnabled(false);
+        b_save_add.setEnabled(false);
         addOD.setEnabled(false);
         date_d_f.setEditable(false);
     }
@@ -145,7 +146,9 @@ public class MainFr extends javax.swing.JFrame {
         date_d_f.setText(null);
         DefaultTableModel model = (DefaultTableModel) orderdetail.getModel();
         model.setRowCount(0);
-        model.addRow(new Object[]{null, null, null, null});      
+        model.addRow(new Object[]{null, null, null, null}); 
+        int newRow = orderdetail.getRowCount() - 1;
+        orderdetail.setRowSelectionInterval(newRow, newRow);
     }
     
     private  JComboBox<String> createProComboBox(JTable table) {
@@ -365,7 +368,8 @@ public class MainFr extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
         date_d_f = new javax.swing.JTextField();
         errMess = new javax.swing.JLabel();
-        b_save_order = new javax.swing.JButton();
+        b_save_add = new javax.swing.JButton();
+        b_save_edit = new javax.swing.JButton();
         jPanel9 = new javax.swing.JPanel();
         b_addOrder = new javax.swing.JButton();
         b_delete_order = new javax.swing.JButton();
@@ -748,10 +752,17 @@ public class MainFr extends javax.swing.JFrame {
 
         errMess.getAccessibleContext().setAccessibleName("errMess");
 
-        b_save_order.setText("Lưu");
-        b_save_order.addActionListener(new java.awt.event.ActionListener() {
+        b_save_add.setText("Thêm Đơn Hàng");
+        b_save_add.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                b_save_orderActionPerformed(evt);
+                b_save_addActionPerformed(evt);
+            }
+        });
+
+        b_save_edit.setText("Lưu Chỉnh Sửa");
+        b_save_edit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                b_save_editActionPerformed(evt);
             }
         });
 
@@ -762,10 +773,12 @@ public class MainFr extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(b_save_order))
-                    .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(b_save_edit)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(b_save_add)))
                 .addGap(30, 30, 30))
         );
         jPanel2Layout.setVerticalGroup(
@@ -774,7 +787,9 @@ public class MainFr extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
-                .addComponent(b_save_order)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(b_save_add)
+                    .addComponent(b_save_edit))
                 .addGap(35, 35, 35))
         );
 
@@ -834,7 +849,7 @@ public class MainFr extends javax.swing.JFrame {
         cb_search_option.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Tên khách hàng", "ID đơn hàng", "Sản phẩm" }));
 
         b_filter_order.setText("Home");
-        b_filter_order.setBorder(null);
+        b_filter_order.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         b_filter_order.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 b_filter_orderActionPerformed(evt);
@@ -1579,7 +1594,9 @@ public class MainFr extends javax.swing.JFrame {
 
     private void addODActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addODActionPerformed
         DefaultTableModel m = (DefaultTableModel) orderdetail.getModel();
-        m.addRow(new Object[]{null, null, null, null});      
+        m.addRow(new Object[]{null, null, null, null});  
+        int newRow = orderdetail.getRowCount() - 1;
+        orderdetail.setRowSelectionInterval(newRow, newRow);
     }//GEN-LAST:event_addODActionPerformed
 
     private void txt_search_orderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_search_orderActionPerformed
@@ -1589,6 +1606,8 @@ public class MainFr extends javax.swing.JFrame {
     private void b_addOrderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_addOrderActionPerformed
         addDefault();
         defaultOrder();
+        b_save_add.setVisible(true);
+        b_save_edit.setVisible(false);
         date_o_f.setText(getCurrentDate());
         cndb db = cndb.getInstance();
         db.open();
@@ -1607,9 +1626,10 @@ public class MainFr extends javax.swing.JFrame {
 
     private void toShipActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_toShipActionPerformed
         if(canEditDelStt){
+            date_d_f.setText("");
             defaultStt();
             toShip.setBackground(Color.pink);
-            b_save_order.setEnabled(true);
+            b_save_add.setEnabled(true);
             del_stt=1;
 
         }
@@ -1617,9 +1637,10 @@ public class MainFr extends javax.swing.JFrame {
 
     private void toReceiveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_toReceiveActionPerformed
         if(canEditDelStt){
+            date_d_f.setText("");
             defaultStt();
             toReceive.setBackground(Color.pink);
-            b_save_order.setEnabled(true);
+            b_save_add.setEnabled(true);
             del_stt=2;
 
         }
@@ -1631,7 +1652,7 @@ public class MainFr extends javax.swing.JFrame {
 //            date_d_f.setEditable(false);
             defaultStt();
             completed.setBackground(Color.pink);
-            b_save_order.setEnabled(true);
+            b_save_add.setEnabled(true);
             del_stt=3;
 
         }
@@ -1639,18 +1660,18 @@ public class MainFr extends javax.swing.JFrame {
 
     private void cancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelActionPerformed
         if(canEditDelStt){
+            date_d_f.setText("");
             defaultStt();
             cancel.setBackground(Color.pink);
-            b_save_order.setEnabled(true);
+            b_save_add.setEnabled(true);
             del_stt=0;
 
         }
     }//GEN-LAST:event_cancelActionPerformed
 
-    private void b_save_orderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_save_orderActionPerformed
-        if(date_o_f.getText().isEmpty() || name_c_f.getText().isEmpty() || addr_f.getText().isEmpty()){
-            JOptionPane.showMessageDialog(rootPane, "Không Được Để Trống Thông Tin Đơn Hàng");
-        } else if(date_o_f.getText().toString().length()!=10){
+    private void b_save_addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_save_addActionPerformed
+        boolean check = true;
+        if(date_o_f.getText().toString().length()!=10){
             JOptionPane.showMessageDialog(rootPane, "Nhập đúng định dạng ngày tháng");
         }else{
             String id_o = id_o_f.getText().trim();
@@ -1663,22 +1684,21 @@ public class MainFr extends javax.swing.JFrame {
 
             List<Order_detail> order_detail = new ArrayList<>();
             for (int row = 0; row < orderdetail.getRowCount(); row++) {
-            String id_p = (String) orderdetail.getValueAt(row, 0);
-            String qualS = (String) orderdetail.getValueAt(row, 2);
-            String discountS = (String) orderdetail.getValueAt(row, 5);
+                String id_p = (String) orderdetail.getValueAt(row, 0);
+                String qualS = (String) orderdetail.getValueAt(row, 2);
+                String discountS = (String) orderdetail.getValueAt(row, 5);
 
-            if (id_p == null || qualS == null) {
-                JOptionPane.showMessageDialog(rootPane, "Không Được Để Trống Bảng Chi Tiết Đơn Hàng");
-            } else {
-                int qual = 0;
-                if (!qualS.equals("")) {
-                    qual = Integer.parseInt(qualS);
-                }
+                if (id_p == null || qualS == null || discountS == null) {
+                    check = false;
+                    break;
+                } else {
+                    int qual = Integer.parseInt(qualS);
 
-                int discount = (int) orderdetail.getValueAt(row, 3);
-                if (discountS != null) {
-                    discount = Integer.parseInt(discountS);
-                }
+                    int discount = (int) orderdetail.getValueAt(row, 3);
+                    if (discountS != null) {
+                        discount = Integer.parseInt(discountS);
+                    }
+
                     //Nếu trạng thái giao hàng là 1 2 3 thì giảm tồn kho, từ 1 2 3 thành 0 thì tăng tồn kho
                     if(deStockCheck(id_o_f) ==1 ){
                         cndb db = cndb.getInstance();
@@ -1707,24 +1727,11 @@ public class MainFr extends javax.swing.JFrame {
                             order_detail.add(new Order_detail(id_p, qual, discount));
                         }
                     }
-
                 }
             }
             deStock =0;
 
-            if(isEditMode){
-                cndb db = cndb.getInstance();
-                db.open();
-                int f = db.orderEdit(id_o, name_c, date_o, date_d, addr, pay, del_stt , order_detail);
-                db.close();
-                RefreshTables();
-                if(f != -1){
-                    JOptionPane.showMessageDialog(rootPane, "CHỈNH SỬA ĐƠN HÀNG THÀNH CÔNG! ");
-                }
-                addDefault();
-                defaultOrder();
-                isEditMode=false;
-            } else{
+            if(check){
                 cndb db = cndb.getInstance();
                 db.open();           
                 int f = db.orderInsert(id_o, name_c, date_o, date_d, addr, pay, del_stt , order_detail);
@@ -1732,12 +1739,15 @@ public class MainFr extends javax.swing.JFrame {
                  RefreshTables();
                  if(f != -1){
                      JOptionPane.showMessageDialog(rootPane, "THÊM ĐƠN HÀNG THÀNH CÔNG! ");
-                } 
+                 } else{
+                     JOptionPane.showMessageDialog(rootPane, "LỖI");
+                 }
+                del_stt = 1;
+            } else {
+                JOptionPane.showMessageDialog(rootPane, "KHÔNG ĐƯỢC ĐỂ TRỐNG THÔNG TIN ĐƠN HÀNG ");
             }
-            del_stt = 1;
-    //        System.out.println(del_stt);
         }
-    }//GEN-LAST:event_b_save_orderActionPerformed
+    }//GEN-LAST:event_b_save_addActionPerformed
 
     private void b_delete_orderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_delete_orderActionPerformed
         int selectedRow = table_order.getSelectedRow();
@@ -1762,8 +1772,14 @@ public class MainFr extends javax.swing.JFrame {
     }//GEN-LAST:event_b_delete_orderActionPerformed
 
     private void b_edit_orderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_edit_orderActionPerformed
-        addDefault();
-        isEditMode = true;
+        if(table_order.getSelectedRow()==-1){
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn 1 đơn hàng để chỉnh sửa");
+        } else{
+            addDefault();
+            b_save_add.setVisible(false);
+            b_save_edit.setVisible(true);
+            isEditMode = true;
+        }
     }//GEN-LAST:event_b_edit_orderActionPerformed
 
     private void date_d_fActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_date_d_fActionPerformed
@@ -1822,7 +1838,7 @@ public class MainFr extends javax.swing.JFrame {
             canEditDelStt = true;
         }
 
-        b_save_order.setEnabled(true);
+        b_save_add.setEnabled(true);
         del_stt=3;
     }//GEN-LAST:event_date_d_fKeyTyped
 
@@ -1959,6 +1975,90 @@ public class MainFr extends javax.swing.JFrame {
         b_filter_order.setVisible(false);
     }//GEN-LAST:event_b_filter_orderActionPerformed
 
+    private void b_save_editActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_b_save_editActionPerformed
+        boolean check = true;
+        if(date_o_f.getText().toString().length()!=10){
+            JOptionPane.showMessageDialog(rootPane, "Nhập đúng định dạng ngày tháng");
+        }else{
+            String id_o = id_o_f.getText().trim();
+            String name_c = name_c_f.getText().trim();
+            String date_o = Handler.getDate(date_o_f);
+            String date_d = Handler.getDate(date_d_f);
+
+            String addr =addr_f.getText().trim();
+            String pay = (String) pay_type.getSelectedItem();
+
+            List<Order_detail> order_detail = new ArrayList<>();
+            for (int row = 0; row < orderdetail.getRowCount(); row++) {
+                String id_p = (String) orderdetail.getValueAt(row, 0);
+                String qualS = (String) orderdetail.getValueAt(row, 2);
+                String discountS = (String) orderdetail.getValueAt(row, 5);
+
+                if (id_p == null || qualS == null || discountS == null) {
+                    check = false;
+                    break;
+                } else {
+                    int qual = Integer.parseInt(qualS);
+
+                    int discount = (int) orderdetail.getValueAt(row, 3);
+                    if (discountS != null) {
+                        discount = Integer.parseInt(discountS);
+                    }
+
+                    //Nếu trạng thái giao hàng là 1 2 3 thì giảm tồn kho, từ 1 2 3 thành 0 thì tăng tồn kho
+                    if(deStockCheck(id_o_f) ==1 ){
+                        cndb db = cndb.getInstance();
+                        db.open();  
+                        db.stockUpdate(id_p, qual);
+                        db.close();
+                    }else if(deStockCheck(id_o_f) ==2){
+                        cndb db = cndb.getInstance();
+                        db.open();  
+                        db.stockUpdate(id_p, -qual);
+                        db.close();         
+                    }
+                    //System.out.println("thunghiem "+keyO +"/"+value);
+                    if (qual != 0) {
+                        boolean found = false;
+                        for (Order_detail od : order_detail) {
+                            if (od.getId_p().equals(id_p) && od.getDiscount() == discount) {
+                                // Nếu đã tồn tại OrderInfo với cùng id_p và discount, cập nhật qual
+                                od.setQuantity(od.getQuantity() + qual);
+                                found = true;
+                                break;
+                            }
+                        }
+                        // Nếu không tìm thấy OrderInfo với cùng id_p và discount, thêm mới vào danh sách
+                        if (!found) {
+                            order_detail.add(new Order_detail(id_p, qual, discount));
+                        }
+                    }
+                }
+            }
+            deStock = 0;
+
+            if(check){
+                cndb db = cndb.getInstance();
+                db.open();
+                int f = db.orderEdit(id_o, name_c, date_o, date_d, addr, pay, del_stt , order_detail);
+                db.close();
+                RefreshTables();
+                if(f != -1){
+                    JOptionPane.showMessageDialog(rootPane, "CHỈNH SỬA ĐƠN HÀNG THÀNH CÔNG! ");
+                    addDefault();
+                    defaultOrder();
+                    isEditMode=false;
+                    b_save_edit.setVisible(false);
+                }else{
+                    JOptionPane.showMessageDialog(rootPane, "LỖI");
+                }
+            }else{
+                JOptionPane.showMessageDialog(rootPane, "KHÔNG ĐƯỢC DỂ TRỐNG THÔNG TIN ĐƠN HÀNG ");
+            }
+        }
+            
+    }//GEN-LAST:event_b_save_editActionPerformed
+
 
     /**
      * @param args the command line arguments
@@ -1987,7 +2087,8 @@ public class MainFr extends javax.swing.JFrame {
     private javax.swing.JButton b_delete_order;
     private javax.swing.JButton b_edit_order;
     private javax.swing.JButton b_filter_order;
-    private javax.swing.JButton b_save_order;
+    private javax.swing.JButton b_save_add;
+    private javax.swing.JButton b_save_edit;
     private javax.swing.JButton b_search_order;
     private javax.swing.JButton cancel;
     private javax.swing.JComboBox<String> cb_month;

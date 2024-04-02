@@ -269,11 +269,13 @@
                               <Group type="102" alignment="1" attributes="0">
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="1" attributes="0">
+                                      <Component id="jPanel5" max="32767" attributes="0"/>
                                       <Group type="102" attributes="0">
                                           <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                                          <Component id="b_save_order" min="-2" max="-2" attributes="0"/>
+                                          <Component id="b_save_edit" min="-2" max="-2" attributes="0"/>
+                                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                          <Component id="b_save_add" min="-2" max="-2" attributes="0"/>
                                       </Group>
-                                      <Component id="jPanel5" max="32767" attributes="0"/>
                                   </Group>
                                   <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
                               </Group>
@@ -285,7 +287,10 @@
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Component id="jPanel5" max="32767" attributes="0"/>
                                   <EmptySpace type="separate" max="-2" attributes="0"/>
-                                  <Component id="b_save_order" min="-2" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="3" attributes="0">
+                                      <Component id="b_save_add" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="b_save_edit" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  </Group>
                                   <EmptySpace min="-2" pref="35" max="-2" attributes="0"/>
                               </Group>
                           </Group>
@@ -576,12 +581,20 @@
                             </Component>
                           </SubComponents>
                         </Container>
-                        <Component class="javax.swing.JButton" name="b_save_order">
+                        <Component class="javax.swing.JButton" name="b_save_add">
                           <Properties>
-                            <Property name="text" type="java.lang.String" value="L&#x1b0;u"/>
+                            <Property name="text" type="java.lang.String" value="Th&#xea;m &#x110;&#x1a1;n H&#xe0;ng"/>
                           </Properties>
                           <Events>
-                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="b_save_orderActionPerformed"/>
+                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="b_save_addActionPerformed"/>
+                          </Events>
+                        </Component>
+                        <Component class="javax.swing.JButton" name="b_save_edit">
+                          <Properties>
+                            <Property name="text" type="java.lang.String" value="L&#x1b0;u Ch&#x1ec9;nh S&#x1eed;a"/>
+                          </Properties>
+                          <Events>
+                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="b_save_editActionPerformed"/>
                           </Events>
                         </Component>
                       </SubComponents>
@@ -699,7 +712,9 @@
                       <Properties>
                         <Property name="text" type="java.lang.String" value="Home"/>
                         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-                          <Border info="null"/>
+                          <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
+                            <LineBorder/>
+                          </Border>
                         </Property>
                       </Properties>
                       <Events>
