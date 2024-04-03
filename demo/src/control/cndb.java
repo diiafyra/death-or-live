@@ -133,7 +133,6 @@ public class cndb {
     }
     
     
-//phương thức thêm đơn hàng vào database
     private Map<String, Integer> orderDetailIdCounters = new HashMap<>();
 
     private String generateOrderDetailId(String id_o) {

@@ -6,7 +6,7 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 
-public class Demo {
+public class Design {
 
     private static void setColor() {
         UIManager.put("TabbedPane.background", new Color(250, 215, 160));  // Màu nền của TabbedPane

@@ -28,7 +28,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import models.ProductInfo.Product;
 
-public class Panel {
+public class CustomPanel {
     public static class RoundedPanel extends JPanel {
         private int arcWidth = 20; // Độ cong của góc
         private int arcHeight = 20; // Độ cong của góc

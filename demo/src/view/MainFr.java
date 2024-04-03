@@ -32,10 +32,10 @@ import java.util.logging.Logger;
 import static control.Handler.*;
 import models.OrderInfo.Order;
 import models.OrderInfo.Order_detail;
-import models.Panel.HighlightLabel;
-import models.Panel.HighlightPanel;
-import models.Panel.RoundedPanel;
-import models.Panel.proPanel;
+import models.CustomPanel.HighlightLabel;
+import models.CustomPanel.HighlightPanel;
+import models.CustomPanel.RoundedPanel;
+import models.CustomPanel.proPanel;
 import models.ProductInfo.Product;
 import models.ProductInfo.ProductEx;
 /**
@@ -1686,19 +1686,13 @@ public class MainFr extends javax.swing.JFrame {
             for (int row = 0; row < orderdetail.getRowCount(); row++) {
                 String id_p = (String) orderdetail.getValueAt(row, 0);
                 String qualS = (String) orderdetail.getValueAt(row, 2);
-                String discountS = (String) orderdetail.getValueAt(row, 5);
 
-                if (id_p == null || qualS == null || discountS == null) {
+                if (id_p == null || qualS == null|| orderdetail.getValueAt(row, 5).toString().isEmpty()) {
                     check = false;
                     break;
                 } else {
                     int qual = Integer.parseInt(qualS);
-
-                    int discount = (int) orderdetail.getValueAt(row, 3);
-                    if (discountS != null) {
-                        discount = Integer.parseInt(discountS);
-                    }
-
+                    int discount = (int) orderdetail.getValueAt(row, 5);
                     //Nếu trạng thái giao hàng là 1 2 3 thì giảm tồn kho, từ 1 2 3 thành 0 thì tăng tồn kho
                     if(deStockCheck(id_o_f) ==1 ){
                         cndb db = cndb.getInstance();
@@ -1992,19 +1986,13 @@ public class MainFr extends javax.swing.JFrame {
             for (int row = 0; row < orderdetail.getRowCount(); row++) {
                 String id_p = (String) orderdetail.getValueAt(row, 0);
                 String qualS = (String) orderdetail.getValueAt(row, 2);
-                String discountS = (String) orderdetail.getValueAt(row, 5);
 
-                if (id_p == null || qualS == null || discountS == null) {
+                if (id_p == null || qualS == null|| orderdetail.getValueAt(row, 5).toString().isEmpty()) {
                     check = false;
                     break;
                 } else {
                     int qual = Integer.parseInt(qualS);
-
-                    int discount = (int) orderdetail.getValueAt(row, 3);
-                    if (discountS != null) {
-                        discount = Integer.parseInt(discountS);
-                    }
-
+                    int discount = (int) orderdetail.getValueAt(row, 5);
                     //Nếu trạng thái giao hàng là 1 2 3 thì giảm tồn kho, từ 1 2 3 thành 0 thì tăng tồn kho
                     if(deStockCheck(id_o_f) ==1 ){
                         cndb db = cndb.getInstance();
@@ -2035,7 +2023,7 @@ public class MainFr extends javax.swing.JFrame {
                     }
                 }
             }
-            deStock = 0;
+            deStock =0;
 
             if(check){
                 cndb db = cndb.getInstance();

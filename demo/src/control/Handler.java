@@ -38,7 +38,7 @@ import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.data.general.DefaultPieDataset;
 import models.OrderInfo.Order;
-import models.Panel.proPanel;
+import models.CustomPanel.proPanel;
 import models.ProductInfo.Product;
 import models.ProductInfo.ProductEx;
 
