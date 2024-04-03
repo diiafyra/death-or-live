@@ -1589,6 +1589,8 @@ public class MainFr extends javax.swing.JFrame {
             Object[] row = {id_p, name, qual, price, price*qual, discount};
             model.addRow(row);
             isEditMode = true;
+            b_save_add.setVisible(false);
+            b_save_edit.setVisible(true);
         }
     }//GEN-LAST:event_table_orderMouseReleased
 
@@ -1985,7 +1987,7 @@ public class MainFr extends javax.swing.JFrame {
             List<Order_detail> order_detail = new ArrayList<>();
             for (int row = 0; row < orderdetail.getRowCount(); row++) {
                 String id_p = (String) orderdetail.getValueAt(row, 0);
-                String qualS = (String) orderdetail.getValueAt(row, 2);
+                String qualS = orderdetail.getValueAt(row, 2).toString();
 
                 if (id_p == null || qualS == null|| orderdetail.getValueAt(row, 5).toString().isEmpty()) {
                     check = false;
