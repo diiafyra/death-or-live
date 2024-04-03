@@ -30,7 +30,6 @@ public class passwordFr extends javax.swing.JFrame {
     private void initComponents() {
 
         password = new javax.swing.JPasswordField();
-        jLabel1 = new javax.swing.JLabel();
         LoginBtn = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
 
@@ -48,9 +47,6 @@ public class passwordFr extends javax.swing.JFrame {
             }
         });
 
-        jLabel1.setFont(new java.awt.Font("MingLiU-ExtB", 3, 36)); // NOI18N
-        jLabel1.setText("Login");
-
         LoginBtn.setText("OK");
         LoginBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -66,26 +62,21 @@ public class passwordFr extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addGap(91, 91, 91)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(53, 53, 53)
-                        .addComponent(jLabel1))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(136, 136, 136)
                         .addComponent(jLabel2)
                         .addGap(35, 35, 35)
                         .addComponent(password, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(226, 226, 226)
+                        .addGap(90, 90, 90)
                         .addComponent(LoginBtn)))
-                .addContainerGap(182, Short.MAX_VALUE))
+                .addContainerGap(139, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(46, 46, 46)
-                .addComponent(jLabel1)
-                .addGap(89, 89, 89)
+                .addGap(179, 179, 179)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(password, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2))
@@ -175,7 +166,6 @@ public class passwordFr extends javax.swing.JFrame {
     protected String originalPassword ="abc" ; // Thay đổi chuỗi này thành mật khẩu 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton LoginBtn;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPasswordField password;
     // End of variables declaration//GEN-END:variables

@@ -1154,12 +1154,12 @@ public class MainFr extends javax.swing.JFrame {
             jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel11Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(l_noQualPro, javax.swing.GroupLayout.DEFAULT_SIZE, 81, Short.MAX_VALUE)
+                .addComponent(l_noQualPro, javax.swing.GroupLayout.DEFAULT_SIZE, 76, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(l_lowQualPro, javax.swing.GroupLayout.DEFAULT_SIZE, 82, Short.MAX_VALUE)
+                .addComponent(l_lowQualPro, javax.swing.GroupLayout.DEFAULT_SIZE, 75, Short.MAX_VALUE)
                 .addContainerGap())
             .addGroup(jPanel11Layout.createSequentialGroup()
-                .addGap(78, 78, 78)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel20)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -1323,7 +1323,7 @@ public class MainFr extends javax.swing.JFrame {
                                     .addGap(39, 39, 39)
                                     .addComponent(cb_year, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGap(0, 0, Short.MAX_VALUE))
-                                .addComponent(jPanel16, javax.swing.GroupLayout.DEFAULT_SIZE, 777, Short.MAX_VALUE)))
+                                .addComponent(jPanel16, javax.swing.GroupLayout.DEFAULT_SIZE, 731, Short.MAX_VALUE)))
                         .addGap(35, 35, 35))))
         );
         p_overviewLayout.setVerticalGroup(
@@ -1385,9 +1385,9 @@ public class MainFr extends javax.swing.JFrame {
                 .addGap(32, 32, 32)
                 .addGroup(p_analysis_productLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(p_analysis_productLayout.createSequentialGroup()
-                        .addComponent(profit_graph, javax.swing.GroupLayout.DEFAULT_SIZE, 675, Short.MAX_VALUE)
+                        .addComponent(profit_graph, javax.swing.GroupLayout.DEFAULT_SIZE, 324, Short.MAX_VALUE)
                         .addGap(80, 80, 80)
-                        .addComponent(loss_graph, javax.swing.GroupLayout.DEFAULT_SIZE, 681, Short.MAX_VALUE)
+                        .addComponent(loss_graph, javax.swing.GroupLayout.DEFAULT_SIZE, 329, Short.MAX_VALUE)
                         .addGap(32, 32, 32))
                     .addGroup(p_analysis_productLayout.createSequentialGroup()
                         .addGroup(p_analysis_productLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1412,7 +1412,7 @@ public class MainFr extends javax.swing.JFrame {
                             .addComponent(cb_year2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(27, 27, 27)
                         .addComponent(profit_graph, javax.swing.GroupLayout.PREFERRED_SIZE, 337, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(0, 266, Short.MAX_VALUE))
+                .addGap(0, 62, Short.MAX_VALUE))
         );
 
         p_analysis.add(p_analysis_product);
@@ -1463,7 +1463,7 @@ public class MainFr extends javax.swing.JFrame {
                                 .addComponent(cb_qarter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
                                 .addComponent(cb_year1, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 1122, Short.MAX_VALUE)))
+                        .addGap(0, 418, Short.MAX_VALUE)))
                 .addGap(49, 49, 49))
         );
         p_analysis_profitLayout.setVerticalGroup(
@@ -1478,7 +1478,7 @@ public class MainFr extends javax.swing.JFrame {
                     .addComponent(cb_qarter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(48, 48, 48)
                 .addComponent(p_categoryChart, javax.swing.GroupLayout.PREFERRED_SIZE, 374, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(187, Short.MAX_VALUE))
+                .addContainerGap(92, Short.MAX_VALUE))
         );
 
         p_analysis.add(p_analysis_profit);
@@ -1866,12 +1866,12 @@ public class MainFr extends javax.swing.JFrame {
         String selectedMonth = (String) cb_month1.getSelectedItem();
         String selectedYear = (String) cb_year2.getSelectedItem();
 
-        DefaultPieDataset year_profit = db.salesReportsdts(selectedMonth,selectedYear, false, true);
+        DefaultPieDataset year_profit = db.salesReportsdts(selectedMonth,selectedYear, true, true);
         System.out.println(year_profit.getValue(0));
         ChartPanel chart_profit = new ChartPanel(createPieChart(year_profit, "Lãi"));
         profit_graph.add(chart_profit);
         profit_graph.revalidate();
-        DefaultPieDataset year_loss = db.salesReportsdts(selectedMonth,selectedYear, false, false);
+        DefaultPieDataset year_loss = db.salesReportsdts(selectedMonth,selectedYear, true, false);
         System.out.println(year_loss.getValue(0));
         ChartPanel chart_loss = new ChartPanel(createPieChart(year_loss, "Lỗ"));
         loss_graph.add(chart_loss);
